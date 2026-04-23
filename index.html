@@ -1533,7 +1533,7 @@ function renderDashDuplaJinetes() {
         <div style="display:flex;align-items:center;gap:16px;">
           <!-- Card A -->
           <div style="position:relative;width:70px;height:92px;border-radius:7px;overflow:hidden;flex-shrink:0;box-shadow:0 4px 16px rgba(0,0,0,0.6);">
-            <img src="${bestPair.a ? getCardBg(computeRating(bestPair.a.id)??0) : FUT_BG}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;">
+            <img src="${bestPair.a ? getCardBg(computeOVR(bestPair.a.id)) : FUT_BG}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;">
             <div style="position:absolute;top:7%;left:8%;width:84%;height:54%;z-index:1;overflow:hidden;">${photoA}</div>
             <div style="position:absolute;bottom:0;left:0;right:0;z-index:2;background:linear-gradient(to top,rgba(0,0,0,0.85) 0%,transparent 100%);padding:3px;text-align:center;">
               <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:900;color:#fff;">${bestPair.a.name.split(' ')[0]}</div>
@@ -1548,7 +1548,7 @@ function renderDashDuplaJinetes() {
           </div>
           <!-- Card B -->
           <div style="position:relative;width:70px;height:92px;border-radius:7px;overflow:hidden;flex-shrink:0;box-shadow:0 4px 16px rgba(0,0,0,0.6);">
-            <img src="${bestPair.b ? getCardBg(computeRating(bestPair.b.id)??0) : FUT_BG}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;">
+            <img src="${bestPair.b ? getCardBg(computeOVR(bestPair.b.id)) : FUT_BG}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;">
             <div style="position:absolute;top:7%;left:8%;width:84%;height:54%;z-index:1;overflow:hidden;">${photoB}</div>
             <div style="position:absolute;bottom:0;left:0;right:0;z-index:2;background:linear-gradient(to top,rgba(0,0,0,0.85) 0%,transparent 100%);padding:3px;text-align:center;">
               <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:900;color:#fff;">${bestPair.b.name.split(' ')[0]}</div>
@@ -1590,7 +1590,7 @@ function renderDashDuplaJinetes() {
         ?'<img src="'+p.photo+'" style="width:100%;height:100%;object-fit:cover;object-position:top center;">'
         :'<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;"><span style="font-family:Barlow Condensed,sans-serif;font-size:22px;font-weight:900;color:rgba(255,255,255,0.2);">'+initials(p.name)+'</span></div>';
       const mkCard2=(p)=>'<div style="position:relative;width:70px;height:92px;border-radius:7px;overflow:hidden;flex-shrink:0;box-shadow:0 4px 16px rgba(0,0,0,0.6);">'
-        +'<img src="'+(p.isRandom?FUT_BG:getCardBg(computeRating(p.id)??0))+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;">'
+        +'<img src="'+(p.isRandom?FUT_BG:getCardBg(computeOVR(p.id)))+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;">'
         +'<div style="position:absolute;top:7%;left:8%;width:84%;height:54%;z-index:1;overflow:hidden;">'+mkP2(p)+'</div>'
         +'<div style="position:absolute;bottom:0;left:0;right:0;z-index:2;background:linear-gradient(to top,rgba(0,0,0,0.85) 0%,transparent 100%);padding:3px;text-align:center;">'
         +'<div style="font-family:Barlow Condensed,sans-serif;font-size:11px;font-weight:900;color:#fff;">'+p.name.split(' ')[0]+'</div></div></div>';
@@ -1674,7 +1674,7 @@ function renderDashEnfermeria() {
           : '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;"><span style="font-family:Barlow Condensed,sans-serif;font-size:22px;font-weight:900;color:rgba(255,255,255,0.2);">'+initials(p.name)+'</span></div>';
         return '<div style="background:var(--surface);border:1px solid '+st.border+';border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:14px;">'
           + '<div style="position:relative;width:56px;height:74px;border-radius:7px;overflow:hidden;flex-shrink:0;box-shadow:0 3px 10px rgba(0,0,0,0.5);">'
-          + '<img src="'+(p.isRandom?FUT_BG:getCardBg(computeRating(p.id)??0))+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;">'
+          + '<img src="'+(p.isRandom?FUT_BG:getCardBg(computeOVR(p.id)))+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;">'
           + '<div style="position:absolute;top:7%;left:8%;width:84%;height:54%;z-index:1;overflow:hidden;">'+ph+'</div>'
           + (abs>=7
               ? '<div style="position:absolute;top:3px;right:4px;font-size:14px;z-index:10;">⚰️</div>'
@@ -1766,12 +1766,12 @@ function renderDashExtra() {
             <div style="font-size:10px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;">⚔️ ENEMIGOS JURADOS</div>
             <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:8px;">
               <div style="position:relative;width:44px;height:58px;border-radius:6px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.5);">
-                <img src="${topRivalPair?.a ? getCardBg(computeRating(topRivalPair.a.id)??0) : FUT_BG}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;">
+                <img src="${topRivalPair?.a ? getCardBg(computeOVR(topRivalPair.a.id)) : FUT_BG}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;">
                 <div style="position:absolute;top:7%;left:8%;width:84%;height:54%;z-index:1;overflow:hidden;">${photoA}</div>
               </div>
               <div style="font-family:'Barlow Condensed',sans-serif;font-size:18px;color:var(--red);font-weight:900;">VS</div>
               <div style="position:relative;width:44px;height:58px;border-radius:6px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.5);">
-                <img src="${topRivalPair?.b ? getCardBg(computeRating(topRivalPair.b.id)??0) : FUT_BG}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;">
+                <img src="${topRivalPair?.b ? getCardBg(computeOVR(topRivalPair.b.id)) : FUT_BG}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;">
                 <div style="position:absolute;top:7%;left:8%;width:84%;height:54%;z-index:1;overflow:hidden;">${photoB}</div>
               </div>
             </div>
@@ -2265,7 +2265,7 @@ function renderInicio() {
           return `<div style="flex:1;background:var(--surface2);border:1px solid ${borderColor};border-radius:10px;padding:12px;text-align:center;box-shadow:0 0 20px ${glowColor};">
             <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:${borderColor};margin-bottom:8px;">${icon} ${label}</div>
             <div style="position:relative;width:56px;height:74px;border-radius:6px;overflow:hidden;margin:0 auto 8px;box-shadow:0 3px 12px rgba(0,0,0,0.5);">
-              <img src="${player ? getCardBg(computeRating(player.id)??0) : FUT_BG}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">${ph}
+              <img src="${player ? getCardBg(computeOVR(player.id)) : FUT_BG}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">${ph}
             </div>
             <div style="font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:900;">${player.name}</div>
             <div style="font-size:11px;color:${borderColor};font-weight:600;margin-top:2px;">${sublabel}</div>
@@ -2294,7 +2294,7 @@ function awardCardFull(icon, label, player, sub) {
 
   const futCard = player ? `
     <div style="position:relative;width:90px;height:118px;border-radius:8px;overflow:hidden;margin:0 auto 12px;box-shadow:0 4px 20px rgba(0,0,0,0.6);">
-      <img src="${getCardBg(computeRating(player.id)??0)}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;">
+      <img src="${getCardBg(computeOVR(player.id))}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;">
       <!-- Photo in top 62% like real FUT card -->
       <div style="position:absolute;top:7%;left:8%;width:84%;height:54%;z-index:1;overflow:hidden;">
         ${photoContent}
@@ -6989,6 +6989,11 @@ function computeGKRating(pid) {
   const r = _getCache()[pid]?.gkRatings;
   if (!r || !r.length) return null;
   return r.reduce((a,b)=>a+b,0) / r.length;
+}
+function computeOVR(pid) {
+  const f = computeRating(pid) ?? 0;
+  const g = computeGKRating(pid) ?? 0;
+  return f > 0 && g > 0 ? f * 0.85 + g * 0.15 : f > 0 ? f : g > 0 ? g : 0;
 }
 function getRacha(pid) {
   const history = [];
