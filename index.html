@@ -479,12 +479,22 @@ input:focus,select:focus{border-color:var(--green);}
   #toast{bottom:16px;right:12px;left:12px;text-align:center;font-size:13px;}
 }
 
-    .admin-section { border:1px solid var(--border); border-radius:10px; margin-bottom:10px; overflow:hidden; }
-    .admin-section-header { display:flex; align-items:center; justify-content:space-between; padding:14px 16px; cursor:pointer; background:var(--surface); font-weight:700; font-size:14px; user-select:none; transition:background .15s; }
-    .admin-section-header:hover { background:var(--surface2); }
-    .admin-chevron { font-size:18px; color:var(--muted); transition:transform .2s; }
-    .admin-chevron.open { transform:rotate(90deg); }
-    .admin-section-body { padding:12px 0 4px; }
+    .admin-layout { display:flex; gap:0; min-height:60vh; }
+    .admin-sidebar { width:190px; flex-shrink:0; border-right:1px solid var(--border); padding:4px 0; }
+    .admin-sidebar-item { display:flex; align-items:center; gap:10px; padding:11px 14px; cursor:pointer; font-size:13px; color:var(--muted); transition:background .15s, color .15s; border-left:3px solid transparent; user-select:none; }
+    .admin-sidebar-item:hover { background:var(--surface2); color:var(--text); }
+    .admin-sidebar-item.active { background:var(--surface2); color:var(--green); border-left:3px solid var(--green); font-weight:700; }
+    .admin-sidebar-item .aside-icon { font-size:16px; flex-shrink:0; }
+    .admin-content { flex:1; padding-left:24px; min-width:0; }
+    .admin-section-body { padding:4px 0; }
+    @media(max-width:600px){
+      .admin-layout { flex-direction:column; }
+      .admin-sidebar { width:100%; display:flex; flex-wrap:nowrap; overflow-x:auto; border-right:none; border-bottom:1px solid var(--border); padding:0 0 6px; gap:4px; scrollbar-width:none; }
+      .admin-sidebar::-webkit-scrollbar { display:none; }
+      .admin-sidebar-item { flex-shrink:0; flex-direction:column; gap:3px; border-left:none; border-bottom:3px solid transparent; border-radius:8px; font-size:10px; padding:7px 10px; text-align:center; }
+      .admin-sidebar-item.active { border-left:none; border-bottom:3px solid var(--green); background:var(--surface2); }
+      .admin-content { padding-left:0; padding-top:12px; }
+    }
 </style>
 
   <!-- Firebase -->
@@ -610,66 +620,51 @@ input:focus,select:focus{border-color:var(--green);}
     </div>
   </div>
 
-  <!-- Accordion sections -->
-  <div id="admin-accordion">
+  <!-- Sidebar layout -->
+  <div class="admin-layout">
 
-    <div class="admin-section" id="asec-votos">
-      <div class="admin-section-header" onclick="toggleAdminSection('votos')">
-        <span>🗳️ Votos pendientes</span><span class="admin-chevron" id="chev-votos">▼</span>
+    <div class="admin-sidebar">
+      <div class="admin-sidebar-item active" id="aside-votos" onclick="navAdminSection('votos')">
+        <span class="aside-icon">🗳️</span><span>Votos</span>
       </div>
-      <div class="admin-section-body" id="abody-votos">
-        <div id="admin-votes-summary"></div>
+      <div class="admin-sidebar-item" id="aside-partidos" onclick="navAdminSection('partidos')">
+        <span class="aside-icon">⚽</span><span>Jornadas</span>
+      </div>
+      <div class="admin-sidebar-item" id="aside-jugadores" onclick="navAdminSection('jugadores')">
+        <span class="aside-icon">👥</span><span>Jugadores</span>
+      </div>
+      <div class="admin-sidebar-item" id="aside-simulaciones" onclick="navAdminSection('simulaciones')">
+        <span class="aside-icon">🧪</span><span>Simulaciones</span>
+      </div>
+      <div class="admin-sidebar-item" id="aside-utilidades" onclick="navAdminSection('utilidades')">
+        <span class="aside-icon">🛠️</span><span>Utilidades</span>
+      </div>
+      <div class="admin-sidebar-item" id="aside-temporadas" onclick="navAdminSection('temporadas')">
+        <span class="aside-icon">🏆</span><span>Temporadas</span>
+      </div>
+      <div class="admin-sidebar-item" id="aside-ajustes" onclick="navAdminSection('ajustes')">
+        <span class="aside-icon">⚙️</span><span>Ajustes</span>
       </div>
     </div>
 
-    <div class="admin-section" id="asec-partidos">
-      <div class="admin-section-header" onclick="toggleAdminSection('partidos')">
-        <span>⚽ Gestión de jornadas</span><span class="admin-chevron" id="chev-partidos">›</span>
+    <div class="admin-content">
+      <div class="admin-section-body" id="abody-votos">
+        <div id="admin-votes-summary"></div>
       </div>
       <div class="admin-section-body" id="abody-partidos" style="display:none;">
         <div id="admin-matches-list"></div>
       </div>
-    </div>
-
-    <div class="admin-section" id="asec-jugadores">
-      <div class="admin-section-header" onclick="toggleAdminSection('jugadores')">
-        <span>👥 Gestión de jugadores</span><span class="admin-chevron" id="chev-jugadores">›</span>
-      </div>
       <div class="admin-section-body" id="abody-jugadores" style="display:none;">
         <div id="admin-players-list"></div>
-      </div>
-    </div>
-
-    <div class="admin-section" id="asec-simulaciones">
-      <div class="admin-section-header" onclick="toggleAdminSection('simulaciones')">
-        <span>🧪 Simulaciones</span><span class="admin-chevron" id="chev-simulaciones">›</span>
       </div>
       <div class="admin-section-body" id="abody-simulaciones" style="display:none;">
         <div id="admin-simulaciones"></div>
       </div>
-    </div>
-
-    <div class="admin-section" id="asec-utilidades">
-      <div class="admin-section-header" onclick="toggleAdminSection('utilidades')">
-        <span>🛠️ Utilidades & Backup</span><span class="admin-chevron" id="chev-utilidades">›</span>
-      </div>
       <div class="admin-section-body" id="abody-utilidades" style="display:none;">
         <div id="admin-utilidades"></div>
       </div>
-    </div>
-
-    <div class="admin-section" id="asec-temporadas">
-      <div class="admin-section-header" onclick="toggleAdminSection('temporadas')">
-        <span>🏆 Temporadas</span><span class="admin-chevron" id="chev-temporadas">›</span>
-      </div>
       <div class="admin-section-body" id="abody-temporadas" style="display:none;">
         <div id="admin-seasons"></div>
-      </div>
-    </div>
-
-    <div class="admin-section" id="asec-ajustes">
-      <div class="admin-section-header" onclick="toggleAdminSection('ajustes')">
-        <span>⚙️ Ajustes & Contraseña</span><span class="admin-chevron" id="chev-ajustes">›</span>
       </div>
       <div class="admin-section-body" id="abody-ajustes" style="display:none;">
         <div id="admin-settings"></div>
@@ -1279,26 +1274,21 @@ function migrateVotesScale() {
   });
   if (changed) { invalidateStatsCache(); }
 }
-function toggleAdminSection(id) {
-  const body = document.getElementById('abody-' + id);
-  const chev = document.getElementById('chev-' + id);
-  if (!body) return;
-  const isOpen = body.style.display !== 'none';
-  body.style.display = isOpen ? 'none' : 'block';
-  if (chev) {
-    chev.textContent = isOpen ? '›' : '▼';
-    chev.classList.toggle('open', !isOpen);
-  }
-  // Re-render the section content when opening
-  if (!isOpen) {
-    if (id === 'votos') renderAdminVotes();
-    if (id === 'partidos') renderAdminMatches();
-    if (id === 'jugadores') renderAdminPlayers();
-    if (id === 'simulaciones') renderAdminSimulaciones();
-    if (id === 'utilidades') renderAdminUtilidades();
-    if (id === 'temporadas') renderAdminSeasons();
-    if (id === 'ajustes') renderAdminSettings();
-  }
+const _adminSections = ['votos','partidos','jugadores','simulaciones','utilidades','temporadas','ajustes'];
+function navAdminSection(id) {
+  _adminSections.forEach(s => {
+    const body = document.getElementById('abody-' + s);
+    const item = document.getElementById('aside-' + s);
+    if (body) body.style.display = s === id ? 'block' : 'none';
+    if (item) item.classList.toggle('active', s === id);
+  });
+  if (id === 'votos') renderAdminVotes();
+  if (id === 'partidos') renderAdminMatches();
+  if (id === 'jugadores') renderAdminPlayers();
+  if (id === 'simulaciones') renderAdminSimulaciones();
+  if (id === 'utilidades') renderAdminUtilidades();
+  if (id === 'temporadas') renderAdminSeasons();
+  if (id === 'ajustes') renderAdminSettings();
 }
 
 let _saveTimer = null;
@@ -4872,8 +4862,7 @@ function confirmDeleteMatch(){
 // ============================================================
 function renderAdmin() {
   if (!S.isAdmin) { nav('inicio'); return; }
-  // Only render votos by default, rest are lazy-loaded when accordion opens
-  renderAdminVotes();
+  navAdminSection('votos');
 }
 
 function renderAdminSettings() {
