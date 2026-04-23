@@ -6060,7 +6060,15 @@ function resetEverythingAndSeasons() {
       const kept = { settings: S.settings || {}, dashboardOrder: S.dashboardOrder || [] };
       S.players = []; S.matches = []; S.seasons = [];
       S.settings = kept.settings; S.dashboardOrder = kept.dashboardOrder; S.isAdmin = false;
-      save(); renderAll(); applySettings(); nav('inicio');
+      // Write to Firebase immediately (bypass debounce) so onValue doesn't restore old data
+      const data = { players: [], matches: [], seasons: [], settings: S.settings, dashboardOrder: S.dashboardOrder };
+      try { localStorage.setItem('pfcv2', JSON.stringify(data)); } catch(e) {}
+      clearTimeout(_saveTimer);
+      if (window._fbReady) window._fbSet(window._fbRef(window._fbDb, 'pfcv2'), data).catch(e => console.warn(e));
+      invalidateStatsCache();
+      renderAll(); applySettings();
+      const el = document.getElementById('admin-seasons'); if (el) renderAdminSeasons();
+      nav('inicio');
       toast('💣 Reset total — todo borrado');
     }
   );
