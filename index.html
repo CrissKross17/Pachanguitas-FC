@@ -3571,17 +3571,17 @@ function openMatch(mid) {
               <div style="font-size:10px;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">⬜ ${getCfg('teamWhite')}</div>
               <input type="number" id="fin-score-a" min="0" value="${typeof m.scoreA==='number'?m.scoreA:''}"
                 style="text-align:center;font-size:36px;font-family:'Barlow Condensed',sans-serif;font-weight:900;width:100%;padding:8px 0;${typeof m.scoreA==='number'?'opacity:0.65;pointer-events:none;':''}"
-                ${typeof m.scoreA==='number'?'readonly':''} oninput="autoSaveScore('${m.id}')">
+                ${typeof m.scoreA==='number'?'readonly':''} onchange="autoSaveScore('${m.id}')">
             </div>
             <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;color:var(--muted);padding-top:20px;">—</div>
             <div>
               <div style="font-size:10px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">⬛ ${getCfg('teamBlack')}</div>
               <input type="number" id="fin-score-b" min="0" value="${typeof m.scoreB==='number'?m.scoreB:''}"
                 style="text-align:center;font-size:36px;font-family:'Barlow Condensed',sans-serif;font-weight:900;width:100%;padding:8px 0;${typeof m.scoreB==='number'?'opacity:0.65;pointer-events:none;':''}"
-                ${typeof m.scoreB==='number'?'readonly':''} oninput="autoSaveScore('${m.id}')">
+                ${typeof m.scoreB==='number'?'readonly':''} onchange="autoSaveScore('${m.id}')">
             </div>
           </div>
-          ${typeof m.scoreA!=='number'?`<div style="font-size:11px;color:var(--muted);text-align:center;margin-bottom:10px;font-style:italic;">Escribe los dos marcadores — se guardan solos</div>`:'<div style="font-size:11px;color:var(--green);text-align:center;margin-bottom:10px;">🔒 Resultado P1 guardado</div>'}
+          ${typeof m.scoreA!=='number'?`<div style="font-size:11px;color:var(--muted);text-align:center;margin-bottom:10px;font-style:italic;">Escribe los dos marcadores y pulsa Enter o sal del campo</div>`:'<div style="font-size:11px;color:var(--green);text-align:center;margin-bottom:10px;">🔒 Resultado P1 guardado</div>'}
 
           <!-- PARTIDO 2 toggle -->
           <div style="border-top:1px solid var(--border);padding-top:12px;margin-top:4px;">
@@ -3599,17 +3599,17 @@ function openMatch(mid) {
                   <div style="font-size:10px;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">⬜ ${getCfg('teamWhite')}</div>
                   <input type="number" id="fin-score-a2" min="0" value="${m.scoreA2!==undefined?m.scoreA2:''}"
                     style="text-align:center;font-size:32px;font-family:'Barlow Condensed',sans-serif;font-weight:900;width:100%;padding:6px 0;${m.scoreA2!==undefined?'opacity:0.65;pointer-events:none;':''}"
-                    ${m.scoreA2!==undefined?'readonly':''} oninput="autoSaveScoreP2('${m.id}')">
+                    ${m.scoreA2!==undefined?'readonly':''} onchange="autoSaveScoreP2('${m.id}')">
                 </div>
                 <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;color:var(--muted);padding-top:20px;">—</div>
                 <div>
                   <div style="font-size:10px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">⬛ ${getCfg('teamBlack')}</div>
                   <input type="number" id="fin-score-b2" min="0" value="${m.scoreB2!==undefined?m.scoreB2:''}"
                     style="text-align:center;font-size:32px;font-family:'Barlow Condensed',sans-serif;font-weight:900;width:100%;padding:6px 0;${m.scoreB2!==undefined?'opacity:0.65;pointer-events:none;':''}"
-                    ${m.scoreB2!==undefined?'readonly':''} oninput="autoSaveScoreP2('${m.id}')">
+                    ${m.scoreB2!==undefined?'readonly':''} onchange="autoSaveScoreP2('${m.id}')">
                 </div>
               </div>
-              ${m.scoreA2===undefined?`<div style="font-size:11px;color:var(--muted);text-align:center;margin-top:8px;font-style:italic;">Escribe los dos marcadores — se guardan solos</div>`:'<div style="font-size:11px;color:var(--green);text-align:center;margin-top:8px;">🔒 Resultado P2 guardado</div>'}
+              ${m.scoreA2===undefined?`<div style="font-size:11px;color:var(--muted);text-align:center;margin-top:8px;font-style:italic;">Escribe los dos marcadores y pulsa Enter o sal del campo</div>`:'<div style="font-size:11px;color:var(--green);text-align:center;margin-top:8px;">🔒 Resultado P2 guardado</div>'}
             </div>
           </div>
         </div>
