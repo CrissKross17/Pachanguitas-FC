@@ -3074,9 +3074,11 @@ function renderPartidos() {
 
     // bloque de score (derecha) — ambos marcadores en el mismo tamaño
     const scoreCol = (()=>{
-      if (m.status==='playing' && m.scoreA===null)
+      if (m.status==='playing' && m.scoreA==null)
         return `<div id="list-timer-${m.id}" style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:var(--green);letter-spacing:2px;line-height:1;text-align:right;">00:00</div>`;
-      if (m.scoreA===null)
+      if (m.status==='pending' && m.scoreA==null)
+        return `<div style="font-size:11px;color:var(--accent);text-align:right;font-weight:700;line-height:1.4;">⏳ A punto de<br>comenzar</div>`;
+      if (m.scoreA==null)
         return `<div style="font-size:13px;color:var(--muted);text-align:right;">—</div>`;
       const row = (a,b,lbl) => `
         <div style="text-align:right;">
@@ -3956,15 +3958,17 @@ let listTimerIntervals = {};
 
 function startLiveTimer(mid) {
   clearInterval(liveTimerInterval);
-  liveTimerInterval = setInterval(() => {
+  const tick = () => {
     const m = gm(mid);
     if (!m || m.status !== 'playing') { clearInterval(liveTimerInterval); return; }
-    const elapsed = Math.floor((Date.now() - m.startTime) / 1000);
+    const elapsed = Math.max(0, Math.floor((Date.now() - (m.startTime || Date.now())) / 1000));
     const mm = String(Math.floor(elapsed / 60)).padStart(2, '0');
     const ss = String(elapsed % 60).padStart(2, '0');
     const el = document.getElementById('live-timer-' + mid);
     if (el) el.textContent = mm + ':' + ss;
-  }, 1000);
+  };
+  tick();
+  liveTimerInterval = setInterval(tick, 1000);
 }
 
 function startListTimer(mid) {
@@ -3972,7 +3976,7 @@ function startListTimer(mid) {
   const tick = () => {
     const m = gm(mid);
     if (!m || m.status !== 'playing') { clearInterval(listTimerIntervals[mid]); return; }
-    const elapsed = Math.floor((Date.now() - m.startTime) / 1000);
+    const elapsed = Math.max(0, Math.floor((Date.now() - (m.startTime || Date.now())) / 1000));
     const mm = String(Math.floor(elapsed / 60)).padStart(2, '0');
     const ss = String(elapsed % 60).padStart(2, '0');
     const timeStr = mm + ':' + ss;
