@@ -853,6 +853,7 @@ input:focus,select:focus{border-color:var(--green);}
     <div class="btn-row">
       <button class="btn btn-secondary" onclick="closeModal('modal-voting')">Cancelar</button>
       <button id="vote-test-btn" class="btn btn-secondary" onclick="fillTestVote()" style="padding:10px 14px;display:none;">🎲 TEST</button>
+      <button id="vote-test-pro-btn" class="btn btn-secondary" onclick="fillTestVoteAll()" style="padding:10px 14px;display:none;">⚡ TEST PRO</button>
       <button class="btn btn-primary" id="submit-vote-btn" onclick="submitVote()">Enviar puntuaciones</button>
     </div>
   </div>
@@ -4216,6 +4217,8 @@ function openVoting(mid) {
   }
   const testBtn = document.getElementById('vote-test-btn');
   if (testBtn) testBtn.style.display = S.isAdmin ? 'inline-flex' : 'none';
+  const testProBtn = document.getElementById('vote-test-pro-btn');
+  if (testProBtn) testProBtn.style.display = S.isAdmin ? 'inline-flex' : 'none';
   openModal('modal-voting');
 }
 
@@ -4484,6 +4487,51 @@ function fillTestVote() {
   });
 
   toast('🎲 Test rellenado — revisa los goles y envía');
+}
+
+function fillTestVoteAll() {
+  const m = gm(activeVotingMatchId);
+  if (!m) return;
+  if (!m.votes) m.votes = {};
+  if (!m.funData) m.funData = { picados:{}, tardones:{}, fairplay:{}, guarros:{} };
+  if (!m.funData.fairplay) m.funData.fairplay = {};
+  if (!m.funData.guarros) m.funData.guarros = {};
+  if (!m.matchStats) m.matchStats = {};
+
+  const eligible = m.players.filter(pid => !gp(pid)?.isRandom);
+
+  eligible.forEach(voterId => {
+    if (m.votes[voterId]) return; // skip already voted
+    const others = m.players.filter(pid => pid !== voterId);
+    const field = {}, gk = {};
+    others.forEach(pid => {
+      field[pid] = Math.floor(Math.random() * 5) + 1;
+      gk[pid] = Math.floor(Math.random() * 5) + 1;
+    });
+    m.votes[voterId] = { field, gk };
+    m.matchStats[voterId] = { goles: Math.random() < 0.4 ? Math.floor(Math.random() * 3) + 1 : 0 };
+
+    // Fun data — random picks
+    const shuffled = [...m.players].sort(() => Math.random() - 0.5);
+    const picadoId = shuffled.find(pid => pid !== voterId);
+    if (picadoId) m.funData.picados[picadoId] = (m.funData.picados[picadoId] || 0) + 1;
+    const guarroId = shuffled.reverse().find(pid => pid !== voterId);
+    if (guarroId) m.funData.guarros[guarroId] = (m.funData.guarros[guarroId] || 0) + 1;
+    if (Math.random() < 0.3) {
+      const tardon = others[Math.floor(Math.random() * others.length)];
+      if (tardon) m.funData.tardones[tardon] = (m.funData.tardones[tardon] || 0) + 1;
+    }
+    if (Math.random() < 0.3) {
+      const fp = others[Math.floor(Math.random() * others.length)];
+      if (fp) m.funData.fairplay[fp] = (m.funData.fairplay[fp] || 0) + 1;
+    }
+  });
+
+  if (m.status === 'pending') m.status = 'voting';
+  save();
+  closeModal('modal-voting');
+  renderAll();
+  toast('⚡ TEST PRO — votos de todos los jugadores enviados');
 }
 
 function setField(pid,val){
