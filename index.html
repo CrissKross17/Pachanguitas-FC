@@ -1512,7 +1512,7 @@ function renderDashDuplaJinetes() {
             const same=(aInA&&bInA)||(aInB&&bInB);
             if(!same) return;
             together++;
-            const won=(aInA&&bInA)?(m.scoreA>m.scoreB):(m.scoreB>m.scoreA);
+            const won=(aInA&&bInA)?(matchWinner(m)==='A'):(matchWinner(m)==='B');
             if(won) wins++;
           });
           if(wins>bestWins||(wins===bestWins&&together>(bestPair?.together||0))){
@@ -1785,8 +1785,8 @@ function renderDashExtra() {
           let streak=0, best=0, current=0;
           S.matches.filter(m=>m.status==='done'&&m.scoreA!==null&&m.scoreB!==null&&(m.players||[]).includes(p.id)).forEach(m=>{
             const inA=m.teamA.includes(p.id);
-            const won=(inA&&m.scoreA>m.scoreB)||(!inA&&m.scoreB>m.scoreA);
-            const drew=m.scoreA===m.scoreB;
+            const won=(inA&&matchWinner(m)==='A')||(!inA&&matchWinner(m)==='B');
+            const drew=matchWinner(m)==='D';
             if(won||drew){current++;best=Math.max(best,current);}
             else{current=0;}
           });
@@ -1881,9 +1881,9 @@ function renderDashPrediccion() {
   const diff = Math.abs(ovrA - ovrB).toFixed(2);
 
   // Historical win% for blancos vs negros overall
-  const bWins = doneMatches.filter(m=>m.scoreA>m.scoreB).length;
-  const nWins = doneMatches.filter(m=>m.scoreB>m.scoreA).length;
-  const total = bWins + nWins + doneMatches.filter(m=>m.scoreA===m.scoreB).length;
+  const bWins = doneMatches.filter(m=>matchWinner(m)==='A').length;
+  const nWins = doneMatches.filter(m=>matchWinner(m)==='B').length;
+  const total = bWins + nWins + doneMatches.filter(m=>matchWinner(m)==='D').length;
   const bPct = total ? Math.round(bWins/total*100) : 50;
   const nPct = total ? Math.round(nWins/total*100) : 50;
 
@@ -1993,9 +1993,9 @@ function renderInicio() {
 
   // ── Blancos vs Negros ──────────────────────────────────
   const doneWithScore = S.matches.filter(m=>m.status==='done'&&m.scoreA!==null&&m.scoreB!==null);
-  const blancosWins = doneWithScore.filter(m=>m.scoreA>m.scoreB).length;
-  const negrosWins  = doneWithScore.filter(m=>m.scoreB>m.scoreA).length;
-  const empates     = doneWithScore.filter(m=>m.scoreA===m.scoreB).length;
+  const blancosWins = doneWithScore.filter(m=>matchWinner(m)==='A').length;
+  const negrosWins  = doneWithScore.filter(m=>matchWinner(m)==='B').length;
+  const empates     = doneWithScore.filter(m=>matchWinner(m)==='D').length;
   const totalBN = blancosWins+negrosWins+empates;
   const bPct = totalBN?Math.round(blancosWins/totalBN*100):50;
   const nPct = totalBN?Math.round(negrosWins/totalBN*100):50;
@@ -3001,8 +3001,8 @@ function openPlayerDetail(pid) {
       if(!matchesWithRating.length) return '';
       const best = matchesWithRating.sort((a,b)=>b.ovr-a.ovr)[0];
       const bm = best.mx;
-      const won = bm.teamA.includes(p.id)?(bm.scoreA>bm.scoreB):(bm.scoreB>bm.scoreA);
-      const drew = bm.scoreA===bm.scoreB;
+      const won = bm.teamA.includes(p.id)?(matchWinner(bm)==='A'):(matchWinner(bm)==='B');
+      const drew = matchWinner(bm)==='D';
       const result = drew?'Empate':won?'Victoria':'Derrota';
       const resultColor = drew?'var(--muted)':won?'var(--green)':'var(--red)';
       const goals = bm.matchStats?.[p.id]?.goles||0;
@@ -6443,8 +6443,9 @@ function renderH2H() {
         const same=(aInA&&bInA)||(aInB&&bInB);
         if(same) return;
         if(!h2h[a.id][b.id]) h2h[a.id][b.id]={w:0,l:0,d:0};
-        const drew=m.scoreA===m.scoreB;
-        const aWon=(aInA&&m.scoreA>m.scoreB)||(aInB&&m.scoreB>m.scoreA);
+        const mw=matchWinner(m);
+        const drew=mw==='D';
+        const aWon=(aInA&&mw==='A')||(aInB&&mw==='B');
         if(drew) h2h[a.id][b.id].d++;
         else if(aWon) h2h[a.id][b.id].w++;
         else h2h[a.id][b.id].l++;
@@ -6844,6 +6845,17 @@ function gp(id){return S.players.find(p=>p.id===id);}
 function getFixedPlayers(){return S.players.filter(p=>!p.isRandom);}
 function getRandomPlayers(){return S.players.filter(p=>p.isRandom);}
 function gm(id){return S.matches.find(m=>m.id===id);}
+// 'A'=blancos gana jornada, 'B'=negros gana, 'D'=empate
+function matchWinner(m){
+  if(m.scoreA2!==undefined&&m.aMatchWins!==undefined){
+    if(m.aMatchWins>m.bMatchWins)return'A';
+    if(m.bMatchWins>m.aMatchWins)return'B';
+    return'D';
+  }
+  if(m.scoreA>m.scoreB)return'A';
+  if(m.scoreB>m.scoreA)return'B';
+  return'D';
+}
 function avgR(p){return p?.stats.ratingCount>0?p.stats.rating:0;}
 function avgGK(p){return p?.stats.gkCount>0?p.stats.gkRating:0;}
 function getCardStyle(ovr) {
