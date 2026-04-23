@@ -5138,12 +5138,12 @@ function renderAdminUtilidades() {
   if (!el) return;
   const lsSize = new Blob([localStorage.getItem('pfcv2')||'']).size;
   const lsKB = (lsSize/1024).toFixed(1);
-  const lsPct = Math.round(lsSize/51200*100);
+  const lsPct = Math.round(lsSize/5242880*100);
   el.innerHTML = `<div style="padding:0 4px;">
     <!-- Diagnóstico -->
     <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">🔍 Diagnóstico</div>
     <div style="background:var(--surface2);border-radius:8px;padding:12px;margin-bottom:14px;">
-      <div style="font-size:12px;margin-bottom:6px;">💾 LocalStorage: <strong>${lsKB} KB</strong> / ~50 KB</div>
+      <div style="font-size:12px;margin-bottom:6px;">💾 LocalStorage: <strong>${lsKB} KB</strong> / ~5 MB</div>
       <div style="height:6px;background:var(--surface3);border-radius:3px;overflow:hidden;margin-bottom:4px;">
         <div style="width:${lsPct}%;height:100%;background:${lsPct>80?'var(--red)':lsPct>60?'var(--accent)':'var(--green)'};border-radius:3px;"></div>
       </div>
@@ -5919,12 +5919,12 @@ function renderAdminUtilidades() {
   if (!el) return;
   const lsSize = new Blob([localStorage.getItem('pfcv2')||'']).size;
   const lsKB = (lsSize/1024).toFixed(1);
-  const lsPct = Math.round(lsSize/51200*100);
+  const lsPct = Math.round(lsSize/5242880*100);
   el.innerHTML = `<div style="padding:0 4px;">
     <!-- Diagnóstico -->
     <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">🔍 Diagnóstico</div>
     <div style="background:var(--surface2);border-radius:8px;padding:12px;margin-bottom:14px;">
-      <div style="font-size:12px;margin-bottom:6px;">💾 LocalStorage: <strong>${lsKB} KB</strong> / ~50 KB</div>
+      <div style="font-size:12px;margin-bottom:6px;">💾 LocalStorage: <strong>${lsKB} KB</strong> / ~5 MB</div>
       <div style="height:6px;background:var(--surface3);border-radius:3px;overflow:hidden;margin-bottom:4px;">
         <div style="width:${lsPct}%;height:100%;background:${lsPct>80?'var(--red)':lsPct>60?'var(--accent)':'var(--green)'};border-radius:3px;"></div>
       </div>
@@ -5956,7 +5956,7 @@ function renderAdminSeasons() {
   if (testDiv) {
     const lsSize = new Blob([localStorage.getItem('pfcv2')||'']).size;
     const lsKB = (lsSize/1024).toFixed(1);
-    const lsPct = Math.round(lsSize/51200*100);
+    const lsPct = Math.round(lsSize/5242880*100);
     testDiv.innerHTML = `
       <div class="card" style="margin-bottom:16px;">
         <div style="font-size:14px;font-weight:700;color:var(--accent);margin-bottom:16px;">🧪 Simulaciones & Utilidades</div>
@@ -5993,7 +5993,7 @@ function renderAdminSeasons() {
         <div style="border-top:1px solid var(--border);padding-top:14px;margin-bottom:14px;">
           <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">🔍 Diagnóstico</div>
           <div style="background:var(--surface2);border-radius:8px;padding:10px;margin-bottom:10px;">
-            <div style="font-size:12px;margin-bottom:4px;">💾 LocalStorage: <strong>${lsKB} KB</strong> / ~50 KB</div>
+            <div style="font-size:12px;margin-bottom:4px;">💾 LocalStorage: <strong>${lsKB} KB</strong> / ~5 MB</div>
             <div style="height:6px;background:var(--surface3);border-radius:3px;overflow:hidden;">
               <div style="width:${lsPct}%;height:100%;background:${lsPct>80?'var(--red)':lsPct>60?'var(--accent)':'var(--green)'};border-radius:3px;"></div>
             </div>
