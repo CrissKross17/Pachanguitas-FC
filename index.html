@@ -3314,7 +3314,7 @@ function createMatch() {
         const vals = ids.map(id=>getOVR(id)).filter(v=>v>0);
         return vals.length ? vals.reduce((a,b)=>a+b,0)/vals.length : 0;
       };
-      const recentMatches = [...S.matches].reverse().slice(0, 3);
+      const recentMatches = [...S.matches].reverse().slice(0, 6);
       const getPairPenalty = (tA, tB) => {
         let penalty = 0;
         [tA, tB].forEach(team => {
@@ -3324,7 +3324,7 @@ function createMatch() {
               recentMatches.forEach((m, idx) => {
                 if (!m.players?.includes(pidA)||!m.players?.includes(pidB)) return;
                 const tog=(m.teamA.includes(pidA)&&m.teamA.includes(pidB))||(m.teamB.includes(pidA)&&m.teamB.includes(pidB));
-                if (tog) penalty += (3 - idx);
+                if (tog) penalty += (6 - idx);
               });
             }
         });
@@ -3929,7 +3929,7 @@ function reshuffleMatch(mid) {
       const vals = ids.map(id=>getOVR(id)).filter(v=>v>0);
       return vals.length ? vals.reduce((a,b)=>a+b,0)/vals.length : 0;
     };
-    const recentMatches = [...S.matches].reverse().slice(0, 3);
+    const recentMatches = [...S.matches].reverse().slice(0, 6);
     const getPairPenalty = (tA, tB) => {
       let penalty = 0;
       [tA, tB].forEach(team => {
@@ -3939,7 +3939,7 @@ function reshuffleMatch(mid) {
             recentMatches.forEach((m, idx) => {
               if (!m.players?.includes(pidA)||!m.players?.includes(pidB)) return;
               const tog=(m.teamA.includes(pidA)&&m.teamA.includes(pidB))||(m.teamB.includes(pidA)&&m.teamB.includes(pidB));
-              if (tog) penalty += (3 - idx);
+              if (tog) penalty += (6 - idx);
             });
           }
       });
