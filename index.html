@@ -7222,13 +7222,13 @@ S.matches.filter(m=>m.status==='playing').forEach(m=>{
     </div>
     <div id="tut-slide-2" style="display:none;flex-direction:column;align-items:center;text-align:center;padding:28px 24px 16px;">
       <div style="font-size:60px;line-height:1;margin-bottom:12px;">📅</div>
-      <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:#60a5fa;margin-bottom:10px;line-height:1.1;">Crear un partido</div>
-      <div style="font-size:14px;color:var(--muted);line-height:1.6;">En Partidos se crea el partido seleccionando 10 o más jugadores. El sistema sortea los equipos equilibrando el OVR y evitando que siempre caigan los mismos juntos.</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:#60a5fa;margin-bottom:10px;line-height:1.1;">Crear una jornada</div>
+      <div style="font-size:14px;color:var(--muted);line-height:1.6;">En Jornadas se crea la jornada seleccionando 10 o más jugadores. El sistema sortea los equipos evitando que siempre caigan los mismos juntos y equilibrando el OVR.</div>
     </div>
     <div id="tut-slide-3" style="display:none;flex-direction:column;align-items:center;text-align:center;padding:28px 24px 16px;">
       <div style="font-size:60px;line-height:1;margin-bottom:12px;">🎯</div>
       <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:var(--green);margin-bottom:10px;line-height:1.1;">Criterio del sorteo</div>
-      <div style="font-size:14px;color:var(--muted);line-height:1.6;">El sorteo sigue dos criterios:<br><br><strong style='color:var(--text)'>1️⃣ OVR equilibrado</strong> — equipos con media de OVR lo más igualada posible.<br><br><strong style='color:var(--text)'>2️⃣ Rotación</strong> — se evita que jugadores que llevan 3+ partidos seguidos juntos vuelvan a caer en el mismo equipo.</div>
+      <div style="font-size:14px;color:var(--muted);line-height:1.6;">El sorteo sigue dos criterios:<br><br><strong style='color:var(--text)'>1️⃣ Rotación</strong> — prioridad máxima. Se penalizan las parejas que han coincidido en las últimas 6 jornadas (más peso a las más recientes).<br><br><strong style='color:var(--text)'>2️⃣ OVR equilibrado</strong> — desempate. Equipos con media de OVR lo más igualada posible.</div>
     </div>
     <div id="tut-slide-4" style="display:none;flex-direction:column;align-items:center;text-align:center;padding:28px 24px 16px;">
       <div style="font-size:60px;line-height:1;margin-bottom:12px;">🔢</div>
@@ -7237,7 +7237,7 @@ S.matches.filter(m=>m.status==='playing').forEach(m=>{
     </div>
     <div id="tut-slide-5" style="display:none;flex-direction:column;align-items:center;text-align:center;padding:28px 24px 16px;">
       <div style="font-size:60px;line-height:1;margin-bottom:12px;">⭐</div>
-      <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:var(--accent);margin-bottom:10px;line-height:1.1;">Votar después del partido</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:var(--accent);margin-bottom:10px;line-height:1.1;">Votar después de la jornada</div>
       <div style="font-size:14px;color:var(--muted);line-height:1.6;">Cada jugador recibe un enlace de WhatsApp. Puntúas a todos del 1 al 5 en campo y portería.</div>
     </div>
     <div id="tut-slide-6" style="display:none;flex-direction:column;align-items:center;text-align:center;padding:28px 24px 16px;">
