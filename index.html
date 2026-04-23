@@ -3330,6 +3330,7 @@ function createMatch() {
         });
         return penalty;
       };
+      players.sort(() => Math.random() - 0.5);
       const combos = [];
       const gen = (start, chosen) => {
         if (combos.length>=500) return;
@@ -3341,10 +3342,11 @@ function createMatch() {
         const tB = players.filter(p=>!tA.includes(p));
         const diff = Math.abs(avgOVR(tA)-avgOVR(tB));
         const penalty = getPairPenalty(tA, tB);
-        return { tA, tB, diff, penalty };
-      }).sort((a,b) => a.penalty !== b.penalty ? a.penalty - b.penalty : a.diff - b.diff);
+        return { tA, tB, diff, penalty, rand: Math.random() };
+      }).sort((a,b) => a.penalty !== b.penalty ? a.penalty - b.penalty : a.diff !== b.diff ? a.diff - b.diff : a.rand - b.rand);
       let best = scored[0];
-      teamA=best.tA; teamB=best.tB;
+      if (Math.random() < 0.5) { teamA=best.tA; teamB=best.tB; }
+      else { teamA=best.tB; teamB=best.tA; }
     }
   }
 
