@@ -6049,12 +6049,15 @@ function resetEverything() {
 }
 
 function openNewSeason() {
+  const name = prompt('Nombre para esta temporada (ej: Temporada 2025):');
+  if (name === null) return; // cancelled
   openConfirmAction(
     '¿Cerrar temporada actual?',
     'Se archivará el historial y se resetearán stats para empezar de cero. Los jugadores se mantienen.',
     () => {
       if (!S.seasons) S.seasons = [];
       S.seasons.push({
+        name: name.trim() || `Temporada ${S.seasons.length + 1}`,
         date: new Date().toLocaleDateString('es-ES'),
         matches: S.matches.length,
         players: S.players.length,
@@ -6634,9 +6637,26 @@ function renderRanking(){
     const seasons = S.seasons||[];
     const curVal = sel.value;
     sel.innerHTML = '<option value="current">Actual</option>' +
-      seasons.map((s,i)=>`<option value="${i}">Temporada ${i+1} (${s.date})</option>`).join('');
-    sel.value = curVal;
+      seasons.map((s,i)=>`<option value="${i}">${s.name||'Temporada '+(i+1)} (${s.date})</option>`).join('');
+    if ([...sel.options].some(o=>o.value===curVal)) sel.value = curVal;
   }
+
+  // Swap in archived season data if a past season is selected
+  const selVal = sel?.value || 'current';
+  const origPlayers = S.players;
+  const origMatches = S.matches;
+  if (selVal !== 'current') {
+    const idx = parseInt(selVal);
+    const season = (S.seasons||[])[idx];
+    if (season?.data) {
+      try { const d = JSON.parse(season.data); S.players = d.players||[]; S.matches = d.matches||[]; } catch(e) {}
+      invalidateStatsCache();
+    }
+  }
+
+  const _restoreSeasonData = () => {
+    if (selVal !== 'current') { S.players = origPlayers; S.matches = origMatches; invalidateStatsCache(); }
+  };
 
   // Racha mode
   if (rankMode === 'racha') {
@@ -6646,7 +6666,7 @@ function renderRanking(){
       .filter(x => x.racha !== null);
     if (!rachaData.length) {
       document.getElementById('rank-list').innerHTML = `<div class="empty"><div class="ei">🔥</div><p>Necesitas al menos 2 partidos para ver la racha</p></div>`;
-      return;
+      _restoreSeasonData(); return;
     }
     document.getElementById('rank-list').innerHTML = rachaData.map(({p, racha},i) => `
       <div class="rank-row">
@@ -6658,25 +6678,25 @@ function renderRanking(){
         </div>
         <div style="font-size:24px;">${racha.trend==='up'?'📈':racha.trend==='down'?'📉':'➡️'}</div>
       </div>`).join('');
-    return;
+    _restoreSeasonData(); return;
   }
 
   // H2H mode
   if (rankMode === 'h2h') {
     renderH2H();
-    return;
+    _restoreSeasonData(); return;
   }
 
   // Quimica mode
   if (rankMode === 'quimica') {
     renderQuimica();
-    return;
+    _restoreSeasonData(); return;
   }
 
   // Clasificacion mode
   if (rankMode === 'clasificacion') {
     renderClasificacion('rank-list');
-    return;
+    _restoreSeasonData(); return;
   }
 
   const inAnyMatch = new Set(S.matches.flatMap(m=>m.players||[]));
@@ -6690,7 +6710,7 @@ function renderRanking(){
 
   if(!sorted.length){
     document.getElementById('rank-list').innerHTML=`<div class="empty"><div class="ei">📊</div><p>Sin datos aún</p></div>`;
-    return;
+    _restoreSeasonData(); return;
   }
   document.getElementById('rank-list').innerHTML=sorted.map((p,i)=>{
     let val,sub;
@@ -6710,6 +6730,7 @@ function renderRanking(){
       <div class="rank-val" style="color:${color};">${val}</div>
     </div>`;
   }).join('');
+  _restoreSeasonData();
 }
 
 
