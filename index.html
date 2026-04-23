@@ -5175,8 +5175,10 @@ function renderAdminSeasons() {
       </div>`:''}
       <button class="btn btn-danger" onclick="openNewSeason()" style="width:100%;">🏆 Cerrar temporada y empezar nueva</button>
       <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border);">
-        <div style="font-size:11px;color:var(--muted);margin-bottom:8px;">⚠️ Esto borrará todos los jugadores y partidos pero mantendrá todos los ajustes, configuración y criterios.</div>
-        <button class="btn btn-danger" onclick="resetEverything()" style="width:100%;background:rgba(248,113,113,0.2);border-color:var(--red);">🗑️ Reset completo — Borrar todo y empezar de cero</button>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:8px;">⚠️ Mantiene ajustes, configuración y temporadas archivadas.</div>
+        <button class="btn btn-danger" onclick="resetEverything()" style="width:100%;background:rgba(248,113,113,0.2);border-color:var(--red);">🗑️ Reset temporada — Borrar jugadores y partidos</button>
+        <div style="font-size:11px;color:var(--muted);margin:8px 0;">☢️ Borra absolutamente todo el historial incluidas temporadas archivadas.</div>
+        <button class="btn btn-danger" onclick="resetEverythingAndSeasons()" style="width:100%;background:rgba(248,113,113,0.35);border-color:var(--red);">💣 Reset total — Borrar todo incluidas temporadas archivadas</button>
       </div>
     </div>
   `;
