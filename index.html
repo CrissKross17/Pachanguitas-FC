@@ -533,23 +533,24 @@ input:focus,select:focus{border-color:var(--green);}
         renderAll();
         applySettings();
         checkVotingHash();
-        // Restore last page and admin state — only on first Firebase load
-        if (!window._pfcRestored) {
-          window._pfcRestored = true;
-          try {
-            const savedAdmin = sessionStorage.getItem('pfc_admin');
-            if (savedAdmin === '1') { S.isAdmin = true; updateAdminUI(); }
-            const savedPage = sessionStorage.getItem('pfc_page');
-            const validPages = ['inicio','jugadores','partidos','ranking','admin'];
-            if (savedPage && validPages.includes(savedPage) && (savedPage !== 'admin' || S.isAdmin)) {
-              nav(savedPage);
-            }
-          } catch(e) {}
-        }
-        // Hide splash screen once Firebase data loads
-        const splash = document.getElementById('splash');
-        if (splash && splash.parentNode) { splash.style.opacity='0'; setTimeout(()=>{if(splash.parentNode)splash.remove();},500); }
       }
+      // Restore last page and admin state — only on first Firebase load
+      // Must be outside the data-diff check because localStorage pre-populates S
+      if (!window._pfcRestored) {
+        window._pfcRestored = true;
+        try {
+          const savedAdmin = sessionStorage.getItem('pfc_admin');
+          if (savedAdmin === '1') { S.isAdmin = true; updateAdminUI(); }
+          const savedPage = sessionStorage.getItem('pfc_page');
+          const validPages = ['inicio','jugadores','partidos','ranking','admin'];
+          if (savedPage && validPages.includes(savedPage) && (savedPage !== 'admin' || S.isAdmin)) {
+            nav(savedPage);
+          }
+        } catch(e) {}
+      }
+      // Hide splash screen once Firebase data loads
+      const splash = document.getElementById('splash');
+      if (splash && splash.parentNode) { splash.style.opacity='0'; setTimeout(()=>{if(splash.parentNode)splash.remove();},500); }
     });
   </script>
 </head>
