@@ -6006,7 +6006,7 @@ function renderAdminSeasons() {
         <div style="font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Temporadas archivadas (${seasons.length})</div>
         ${seasons.map((s,i)=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);">
           <div>
-            <div style="font-weight:600;">Temporada ${i+1}</div>
+            <div style="font-weight:600;">${s.name||'Temporada '+(i+1)}</div>
             <div style="font-size:11px;color:var(--muted);">${s.date} · ${s.matches} partidos · ${s.players} jugadores</div>
           </div>
           <button class="btn btn-secondary btn-sm" onclick="restoreSeason(${i})">Restaurar</button>
@@ -6014,8 +6014,10 @@ function renderAdminSeasons() {
       </div>`:''}
       <button class="btn btn-danger" onclick="openNewSeason()" style="width:100%;">🏆 Cerrar temporada y empezar nueva</button>
       <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border);">
-        <div style="font-size:11px;color:var(--muted);margin-bottom:8px;">⚠️ Esto borrará todos los jugadores y partidos pero mantendrá todos los ajustes, configuración y criterios.</div>
-        <button class="btn btn-danger" onclick="resetEverything()" style="width:100%;background:rgba(248,113,113,0.2);border-color:var(--red);">🗑️ Reset completo — Borrar todo y empezar de cero</button>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:8px;">⚠️ Mantiene ajustes, configuración y temporadas archivadas.</div>
+        <button class="btn btn-danger" onclick="resetEverything()" style="width:100%;background:rgba(248,113,113,0.2);border-color:var(--red);">🗑️ Reset temporada — Borrar jugadores y partidos</button>
+        <div style="font-size:11px;color:var(--muted);margin:8px 0;">☢️ Borra absolutamente todo el historial incluidas temporadas archivadas.</div>
+        <button class="btn btn-danger" onclick="resetEverythingAndSeasons()" style="width:100%;background:rgba(248,113,113,0.35);border-color:var(--red);">💣 Reset total — Borrar todo incluidas temporadas archivadas</button>
       </div>
     </div>
   `;
@@ -6044,6 +6046,20 @@ function resetEverything() {
       applySettings();
       nav('inicio');
       toast('✓ Reset completo — app lista para empezar de cero');
+    }
+  );
+}
+
+function resetEverythingAndSeasons() {
+  openConfirmAction(
+    '💣 ¿Borrar absolutamente todo?',
+    'Se borrarán jugadores, partidos Y todas las temporadas archivadas. Solo se mantienen ajustes y configuración. Esto no tiene vuelta atrás.',
+    () => {
+      const kept = { settings: S.settings || {}, dashboardOrder: S.dashboardOrder || [] };
+      S.players = []; S.matches = []; S.seasons = [];
+      S.settings = kept.settings; S.dashboardOrder = kept.dashboardOrder; S.isAdmin = false;
+      save(); renderAll(); applySettings(); nav('inicio');
+      toast('💣 Reset total — todo borrado');
     }
   );
 }
