@@ -6092,7 +6092,7 @@ function resetEverythingAndSeasons() {
 }
 
 function openNewSeason() {
-  const name = prompt('Nombre para esta temporada (ej: Temporada 2025):');
+  const name = prompt('Nombre para esta temporada:', getCfg('season') || '');
   if (name === null) return; // cancelled
   openConfirmAction(
     '¿Cerrar temporada actual?',
