@@ -3314,14 +3314,14 @@ function createMatch() {
         const vals = ids.map(id=>getOVR(id)).filter(v=>v>0);
         return vals.length ? vals.reduce((a,b)=>a+b,0)/vals.length : 0;
       };
-      const hasViolation = (tA, tB) => {
-        const check = (team) => {
+      const getPairPenalty = (tA, tB) => {
+        let penalty = 0;
+        [tA, tB].forEach(team => {
           for (let i=0;i<team.length;i++)
             for (let j=i+1;j<team.length;j++)
-              if (getConsecutiveTogether(team[i],team[j])>=3) return true;
-          return false;
-        };
-        return check(tA)||check(tB);
+              penalty += getConsecutiveTogether(team[i], team[j]);
+        });
+        return penalty;
       };
       const combos = [];
       const gen = (start, chosen) => {
@@ -3332,11 +3332,11 @@ function createMatch() {
       gen(0,[]);
       const scored = combos.map(tA => {
         const tB = players.filter(p=>!tA.includes(p));
-        return { tA, tB, diff: Math.abs(avgOVR(tA)-avgOVR(tB)), violation: hasViolation(tA,tB) };
-      }).sort((a,b)=>a.diff-b.diff);
-      const valid = scored.filter(s=>!s.violation);
-      let best = valid.length>0?valid[0]:scored[0];
-      if(!valid.length) warningMsg='⚠️ No hay sorteo sin repetir parejas — se ha priorizado el equilibrio';
+        const diff = Math.abs(avgOVR(tA)-avgOVR(tB));
+        const penalty = getPairPenalty(tA, tB);
+        return { tA, tB, diff, penalty };
+      }).sort((a,b) => a.penalty !== b.penalty ? a.penalty - b.penalty : a.diff - b.diff);
+      let best = scored[0];
       teamA=best.tA; teamB=best.tB;
     }
   }
@@ -3920,27 +3920,24 @@ function reshuffleMatch(mid) {
       const vals = ids.map(id=>getOVR(id)).filter(v=>v>0);
       return vals.length ? vals.reduce((a,b)=>a+b,0)/vals.length : 0;
     };
-    const hasViolation = (tA, tB) => {
-      const check = (team) => {
+    const getPairPenalty = (tA, tB) => {
+      let penalty = 0;
+      [tA, tB].forEach(team => {
         for (let i=0;i<team.length;i++)
           for (let j=i+1;j<team.length;j++)
-            if (getConsecutiveTogether(team[i],team[j]) >= 3) return true;
-        return false;
-      };
-      return check(tA) || check(tB);
+            penalty += getConsecutiveTogether(team[i], team[j]);
+      });
+      return penalty;
     };
 
     const scored = combos.map(tA => {
       const tB = players.filter(p=>!tA.includes(p));
-      // Add small noise so repeated reshuffles give different results
       const diff = Math.abs(avgOVR(tA)-avgOVR(tB)) + Math.random()*0.05;
-      return { tA, tB, diff, violation: hasViolation(tA,tB) };
-    }).sort((a,b)=>a.diff-b.diff);
+      const penalty = getPairPenalty(tA, tB);
+      return { tA, tB, diff, penalty };
+    }).sort((a,b) => a.penalty !== b.penalty ? a.penalty - b.penalty : a.diff - b.diff);
 
-    const valid = scored.filter(s=>!s.violation);
-    let best = valid.length > 0 ? valid[0] : scored[0];
-    if (!valid.length) warningMsg = '⚠️ No hay sorteo sin repetir parejas — se ha priorizado el equilibrio';
-
+    let best = scored[0];
     teamA = best.tA;
     teamB = best.tB;
   }
