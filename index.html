@@ -1610,7 +1610,7 @@ function renderDashDuplaJinetes() {
         +'<img src="'+(p.isRandom?FUT_BG:getCardBg(computeOVR(p.id)))+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;">'
         +'<div style="position:absolute;top:7%;left:8%;width:84%;height:54%;z-index:1;overflow:hidden;">'+mkP2(p)+'</div>'
         +'<div style="position:absolute;bottom:0;left:0;right:0;z-index:2;background:linear-gradient(to top,rgba(0,0,0,0.85) 0%,transparent 100%);padding:3px;text-align:center;">'
-        +'<div style="font-family:Barlow Condensed,sans-serif;font-size:11px;font-weight:900;color:#fff;">'+p.name.split(' ')[0]+'</div></div></div>';
+        +'<div style="font-family:Barlow Condensed,sans-serif;font-size:11px;font-weight:900;color:#fff;">'+esc(p.name.split(' ')[0])+'</div></div></div>';
       return `<div style="background:linear-gradient(135deg,var(--surface),var(--surface2));border:1px solid var(--red);border-radius:14px;padding:20px;position:relative;overflow:hidden;margin-top:12px;">
         <div style="position:absolute;top:-10px;right:-10px;font-size:100px;opacity:0.04;pointer-events:none;">🤡</div>
         <div style="font-size:10px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:2px;margin-bottom:14px;">🤡 LOS DOS JINETES DEL APOCALIPSIS</div>
@@ -1833,7 +1833,7 @@ function renderDashExtra() {
               ${photoContent}
             </div>
             <div style="flex:1;">
-              <div style="font-weight:700;font-size:14px;">${p.name.split(' ')[0]}</div>
+              <div style="font-weight:700;font-size:14px;">${esc(p.name.split(' ')[0])}</div>
               <div style="font-size:11px;color:var(--muted);">${p.pos}</div>
             </div>
             <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:var(--green);">${computePartidos(p.id)}</div>
@@ -1996,7 +1996,7 @@ function renderInicio() {
             ${photoContent}
           </div>
           <div style="flex:1;min-width:0;">
-            <div style="font-weight:700;font-size:14px;margin-bottom:4px;">${p.name.split(' ')[0]}</div>
+            <div style="font-weight:700;font-size:14px;margin-bottom:4px;">${esc(p.name.split(' ')[0])}</div>
             <div style="background:var(--surface2);border-radius:4px;height:5px;overflow:hidden;">
               <div style="height:100%;width:${pct}%;background:linear-gradient(90deg,var(--green),var(--accent));border-radius:4px;transition:width .4s;"></div>
             </div>
@@ -2193,7 +2193,7 @@ function renderInicio() {
     const p = gp(id); if(!p) return '';
     const g = last.matchStats?.[id]?.goles || 0;
     return `<div style="display:flex;align-items:center;justify-content:space-between;padding:3px 0;">
-      <div style="font-size:13px;">${p.name}</div>
+      <div style="font-size:13px;">${esc(p.name)}</div>
       ${g>0?`<div style="display:flex;align-items:center;gap:3px;">
         ${'⚽'.repeat(Math.min(g,5))}
         ${g>5?`<span style="font-size:11px;color:var(--green);font-weight:700;">+${g-5}</span>`:''}
@@ -2444,7 +2444,7 @@ function playerCardHtml(p,i) {
       <div style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:900;color:#fff;
                   text-align:center;letter-spacing:2px;text-transform:uppercase;
                   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-                  text-shadow:0 1px 8px rgba(0,0,0,1);margin-bottom:2px;flex-shrink:0;">${p.name.split(' ')[0]}</div>
+                  text-shadow:0 1px 8px rgba(0,0,0,1);margin-bottom:2px;flex-shrink:0;">${esc(p.name.split(' ')[0])}</div>
 
       <!-- 4-column stats -->
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;flex:1;min-height:0;
@@ -2903,7 +2903,7 @@ function openPlayerDetail(pid) {
     <div style="display:flex;gap:16px;align-items:center;margin-bottom:20px;">
       ${photoHtml}
       <div>
-        <div style="font-family:'Barlow Condensed',sans-serif;font-size:30px;font-weight:900;">${p.name}</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:30px;font-weight:900;">${esc(p.name)}</div>
         <div style="color:var(--muted);font-size:13px;">${p.pos}</div>
         ${(()=>{
           if (p.isRandom) return '';
@@ -3114,8 +3114,8 @@ function renderPartidos() {
     <div class="match-row" onclick="openMatch('${m.id}')">
       <div class="match-date-col">${fmtDate(m.date)}</div>
       <div class="match-teams-col">
-        <div class="match-team-line">⬜ ${m.teamA.map(id=>gp(id)?.name||'?').join(', ')}</div>
-        <div class="match-team-line">⬛ ${m.teamB.map(id=>gp(id)?.name||'?').join(', ')}</div>
+        <div class="match-team-line">⬜ ${m.teamA.map(id=>esc(gp(id)?.name||'?')).join(', ')}</div>
+        <div class="match-team-line">⬛ ${m.teamB.map(id=>esc(gp(id)?.name||'?')).join(', ')}</div>
         <div style="margin-top:5px;">${statusPill}</div>
       </div>
       <div style="display:flex;flex-direction:column;align-items:flex-end;justify-content:center;gap:4px;min-width:68px;">
@@ -3205,7 +3205,7 @@ function renderNMManualPanels() {
     const bg = team==='A' ? 'rgba(74,222,128,0.15)' : 'rgba(96,165,250,0.15)';
     const bc = team==='A' ? 'var(--green)' : 'var(--blue)';
     return `<div onclick="nmManualRemove('${pid}')" style="display:flex;align-items:center;gap:4px;padding:3px 8px;border-radius:12px;background:${bg};border:1px solid ${bc};font-size:11px;font-weight:600;cursor:pointer;" title="Click para quitar">
-      <span>${p.name.split(' ')[0]}</span><span style="opacity:0.5;font-size:10px;">✕</span>
+      <span>${esc(p.name.split(' ')[0])}</span><span style="opacity:0.5;font-size:10px;">✕</span>
     </div>`;
   };
   panelA.innerHTML = [...nmManualA].map(pid=>makeTeamChip(pid,'A')).join('') || `<div style="font-size:11px;color:var(--muted);padding:4px;">Sin jugadores</div>`;
@@ -3252,7 +3252,7 @@ function renderNMChips() {
       : `onclick="toggleNM('${p.id}')"`;
     return `<div class="chip ${sel?'selected':''} ${isRand?'chip-random':''}" style="position:relative;">
       <div class="chip-avatar" ${clickSel}>${ph}</div>
-      <span ${clickSel}>${p.name}${p.isRandom?' 🎲':''}${teamTag}</span>
+      <span ${clickSel}>${esc(p.name)}${p.isRandom?' 🎲':''}${teamTag}</span>
     </div>`;
   }).join('');
   document.getElementById('nm-sel-count').textContent = manualMode
@@ -3403,7 +3403,7 @@ function openMatchSummary(mid) {
     return `<div style="display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,0.05);">
       <div style="display:flex;align-items:center;gap:8px;">
         ${avatarSmall(p)}
-        <span style="font-size:13px;font-weight:600;">${p.name}</span>
+        <span style="font-size:13px;font-weight:600;">${esc(p.name)}</span>
       </div>
       <div style="display:flex;align-items:center;gap:10px;">
         ${g>0?`<span style="font-size:12px;">${'⚽'.repeat(Math.min(g,3))}${g>3?'+'+( g-3):''}</span>`:''}
@@ -3704,7 +3704,7 @@ function buildPitch(m) {
       : `<span>${initials(p.name)}</span>`;
     return `<div class="pitch-player ${team}">
       <div class="pitch-avatar">${ph}</div>
-      <div class="pitch-pname">${p.name.split(' ')[0]}</div>
+      <div class="pitch-pname">${esc(p.name.split(' ')[0])}</div>
     </div>`;
   };
 
@@ -4965,738 +4965,6 @@ function renderAdminVotes() {
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
         <div>
           <div style="font-weight:700;">${m.place||'Partido'} · ${fmtDate(m.date)}</div>
-          <div style="font-size:12px;color:var(--muted);">${voted.length}/${m.players.length} votos recibidos</div>
-        </div>
-        <span class="match-status-pill ${m.status==='playing'?'pill-voting':'pill-pending'}">${statusLabel(m.status,m)}</span>
-      </div>
-      ${missing.length?`<div style="margin-bottom:8px;">
-        <div style="font-size:11px;color:var(--red);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">⏳ Pendientes de votar</div>
-        <div style="display:flex;flex-wrap:wrap;gap:6px;">
-          ${missing.map(pid=>`<span style="background:rgba(248,113,113,0.15);color:var(--red);border:1px solid rgba(248,113,113,0.3);padding:3px 10px;border-radius:20px;font-size:12px;">${gp(pid)?.name||pid}</span>`).join('')}
-        </div>
-      </div>`:''}
-      ${voted.length?`<div>
-        <div style="font-size:11px;color:var(--green);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">✓ Han votado</div>
-        <div style="display:flex;flex-wrap:wrap;gap:6px;">
-          ${voted.map(pid=>`
-            <span style="background:rgba(74,222,128,0.1);color:var(--green);border:1px solid rgba(74,222,128,0.2);padding:3px 10px;border-radius:20px;font-size:12px;display:flex;align-items:center;gap:6px;">
-              ${gp(pid)?.name||pid}
-              <button onclick="deleteVote('${m.id}','${pid}')" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:13px;padding:0;line-height:1;" title="Borrar voto">×</button>
-            </span>`).join('')}
-        </div>
-      </div>`:''}
-    </div>`;
-  }).join('');
-}
-
-function deleteVote(mid, pid) {
-  const m = gm(mid);
-  if (!m) return;
-  delete m.votes[pid];
-  save(); renderAdmin();
-  toast(`Voto de ${gp(pid)?.name||pid} eliminado`);
-}
-
-function renderAdminMatches() {
-  if (!S.matches.length) {
-    document.getElementById('admin-matches-list').innerHTML = '<div style="color:var(--muted);font-size:13px;">No hay partidos</div>';
-    return;
-  }
-  document.getElementById('admin-matches-list').innerHTML = [...S.matches].reverse().map(m => `
-    <div class="card" style="margin-bottom:10px;">
-      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
-        <div style="flex:1;">
-          <div style="font-weight:700;">${m.place||'Sin lugar'} · ${fmtDate(m.date)}</div>
-          <div style="font-size:12px;color:var(--muted);">⬜ ${m.teamA.map(id=>gp(id)?.name||'?').join(', ')}</div>
-          <div style="font-size:12px;color:var(--muted);">⬛ ${m.teamB.map(id=>gp(id)?.name||'?').join(', ')}</div>
-        </div>
-        <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end;">
-          <button class="btn btn-secondary btn-sm" onclick="openEditMatch('${m.id}')">✏️ Editar</button>
-          <button class="btn btn-secondary btn-sm" onclick="openSwapPlayers('${m.id}')">🔀 Mover jugador</button>
-          ${m.status!=='done'?`<button class="btn btn-primary btn-sm" onclick="finalizeMatch('${m.id}');renderAdmin();">✓ Finalizar</button>`:''}
-        </div>
-      </div>
-    </div>
-  `).join('');
-}
-
-function renderAdminPlayers() {
-  const inAnyMatch = new Set(S.matches.flatMap(m=>m.players||[]));
-  const players = S.players.filter(p=>inAnyMatch.has(p.id));
-  if (!players.length) {
-    document.getElementById('admin-players-list').innerHTML = '<div style="color:var(--muted);font-size:13px;">No hay jugadores</div>';
-    return;
-  }
-  document.getElementById('admin-players-list').innerHTML = `<div class="card" style="padding:0;overflow:hidden;">
-    ${players.map(p => {
-      const ovr = (() => { const f=computeRating(p.id)??0,g=computeGKRating(p.id)??0; return f>0&&g>0?f*0.85+g*0.15:f>0?f:g>0?g:0; })();
-      return `<div style="display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--border);">
-        ${avatarSmall(p)}
-        <div style="flex:1;">
-          <div style="font-weight:700;">${p.name}${p.isRandom?' <span style="font-size:10px;background:rgba(250,204,21,0.15);color:var(--accent);padding:1px 6px;border-radius:8px;">🎲 random</span>':''}</div>
-          <div style="font-size:11px;color:var(--muted);">OVR: ${ovr>0?ovr.toFixed(1):'—'} · PJ: ${computePartidos(p.id)} · Goles: ${computeGoles(p.id)}</div>
-        </div>
-        <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;">
-          <button class="btn btn-secondary btn-sm" onclick="togglePlayerAdmin('${p.id}')">${p.isAdmin?'Quitar admin':'Hacer admin (contraseña)'}</button>
-          <button class="btn btn-secondary btn-sm" onclick="resetPlayerStats('${p.id}')">🔄 Reset stats</button>
-          <button class="btn btn-danger btn-sm" onclick="deletePlayer('${p.id}')">Eliminar</button>
-        </div>
-      </div>`;
-    }).join('')}
-  </div>`;
-}
-
-function makePlayerRandom(pid) {
-  const p = gp(pid);
-  if (!p) return;
-  openConfirmAction(
-    `¿Volver a random a ${p.name}?`,
-    'Dejará de contar en rankings, premios y estadísticas del grupo. Sus partidos anteriores como fijo seguirán en el historial.',
-    () => {
-      p.isRandom = true;
-      save(); renderAdminPlayers(); renderAll();
-      toast(`🎲 ${p.name} vuelve a ser jugador random`);
-    }
-  );
-}
-
-function makePlayerFixed(pid) {
-  const p = gp(pid);
-  if (!p) return;
-  openConfirmAction(
-    `¿Hacer fijo a ${p.name}?`,
-    'Pasará a contar en todos los rankings, premios y estadísticas. Sus partidos anteriores ya contarán.',
-    () => {
-      p.isRandom = false;
-      p.wasRandom = true;
-      save(); renderAdminPlayers(); renderAll();
-      toast(`⭐ ${p.name} ya es jugador fijo del grupo`);
-    }
-  );
-}
-
-function togglePlayerAdmin(pid) {
-  const p = gp(pid);
-  if (!p) return;
-  p.isAdmin = !p.isAdmin;
-  save(); renderAdmin(); renderAll();
-  toast(`${p.name} actualizado`);
-}
-
-function resetPlayerStats(pid) {
-  const p = gp(pid);
-  if (!p) return;
-  openConfirmAction(
-    `¿Resetear stats de ${p.name}?`,
-    'Se borrarán sus notas e historial. Los goles y partidos se recalculan desde los datos de partidos.',
-    () => {
-      p.stats.rating = 0; p.stats.ratingCount = 0;
-      p.stats.gkRating = 0; p.stats.gkCount = 0;
-      p.ratingHistory = []; p.gkHistory = [];
-      // Remove their votes from all matches
-      S.matches.forEach(m => { if(m.votes) delete m.votes[pid]; });
-      save(); renderAdmin(); renderAll();
-      toast(`Stats de ${p.name} reseteadas`);
-    }
-  );
-}
-
-function renderAdminSimulaciones() {
-  const el = document.getElementById('admin-simulaciones');
-  if (!el) return;
-  el.innerHTML = `<div style="padding:0 4px;">
-    <!-- Ausencias -->
-    <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">🏥 Ausencias</div>
-    <div style="font-size:11px;color:var(--muted);margin-bottom:8px;">Simula partidos sin un jugador para probar la cruz de lesión</div>
-    <select id="test-absent-player" style="width:100%;margin-bottom:8px;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:8px;border-radius:6px;">
-      ${S.players.filter(p=>!p.isRandom).map(p=>`<option value="${p.id}">${p.name}</option>`).join('')}
-    </select>
-    <div style="display:flex;gap:8px;margin-bottom:14px;">
-      <button class="btn btn-danger btn-sm" style="flex:1;" onclick="simulateAbsences()">➕ Simular 4 ausencias</button>
-      <button class="btn btn-secondary btn-sm" style="flex:1;" onclick="clearFakeMatches()">🗑️ Limpiar ficticios</button>
-    </div>
-    <div style="font-size:11px;color:var(--muted);margin-bottom:6px;">💊 Curar lesionado:</div>
-    <select id="test-cure-player" style="width:100%;margin-bottom:8px;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:8px;border-radius:6px;">
-      ${S.players.filter(p=>!p.isRandom).map(p=>`<option value="${p.id}">${p.name}</option>`).join('')}
-    </select>
-    <button class="btn btn-secondary btn-sm" style="width:100%;margin-bottom:14px;" onclick="simulateCure()">💊 Curar este jugador</button>
-
-    <!-- Partido simulado -->
-    <div style="border-top:1px solid var(--border);padding-top:14px;">
-      <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">🎲 Partido simulado</div>
-      <div style="font-size:11px;color:var(--muted);margin-bottom:8px;">Crea partidos aleatorios completos con votos y estadísticas</div>
-      <div style="display:flex;gap:8px;">
-        <button class="btn btn-secondary btn-sm" style="flex:1;" onclick="simulateFullMatch();renderAdminSimulaciones();">🎲 Simular 1 partido</button>
-        <button class="btn btn-secondary btn-sm" style="flex:1;" onclick="simulateSeason();renderAdminSimulaciones();">📊 Simular 5 partidos</button>
-      </div>
-    </div>
-  </div>`;
-}
-
-function renderAdminUtilidades() {
-  const el = document.getElementById('admin-utilidades');
-  if (!el) return;
-  const lsSize = new Blob([localStorage.getItem('pfcv2')||'']).size;
-  const lsKB = (lsSize/1024).toFixed(1);
-  const lsPct = Math.round(lsSize/5242880*100);
-  el.innerHTML = `<div style="padding:0 4px;">
-    <!-- Diagnóstico -->
-    <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">🔍 Diagnóstico</div>
-    <div style="background:var(--surface2);border-radius:8px;padding:12px;margin-bottom:14px;">
-      <div style="font-size:12px;margin-bottom:6px;">💾 LocalStorage: <strong>${lsKB} KB</strong> / ~5 MB</div>
-      <div style="height:6px;background:var(--surface3);border-radius:3px;overflow:hidden;margin-bottom:4px;">
-        <div style="width:${lsPct}%;height:100%;background:${lsPct>80?'var(--red)':lsPct>60?'var(--accent)':'var(--green)'};border-radius:3px;"></div>
-      </div>
-      <div style="font-size:10px;color:var(--muted);">${lsPct}% usado · ${S.matches.length} partidos · ${S.players.length} jugadores</div>
-    </div>
-
-    <!-- Recompress photos -->
-    <div style="border-top:1px solid var(--border);padding-top:14px;margin-bottom:14px;">
-      <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">🖼️ Fotos</div>
-      <div style="font-size:11px;color:var(--muted);margin-bottom:8px;">Recomprime todas las fotos existentes para reducir el tamaño del localStorage</div>
-      <button class="btn btn-secondary btn-sm" style="width:100%;" onclick="recompressAllPhotos()">🗜️ Recomprimir todas las fotos</button>
-    </div>
-
-    <!-- Backup -->
-    <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">📋 Backup de datos</div>
-    <div style="display:flex;gap:8px;margin-bottom:8px;">
-      <button class="btn btn-secondary btn-sm" style="flex:1;" onclick="exportData()">📥 Exportar JSON</button>
-      <button class="btn btn-secondary btn-sm" style="flex:1;" onclick="document.getElementById('import-file').click()">📤 Importar JSON</button>
-    </div>
-    <input type="file" id="import-file" accept=".json" style="display:none;" onchange="importData(this)">
-    <div style="font-size:10px;color:var(--muted);">El JSON contiene todos los jugadores, partidos y ajustes de la temporada</div>
-  </div>`;
-}
-
-function renderAdminSeasons() {
-  const seasons = S.seasons || [];
-  // Add test button for injury cross simulation
-  renderAdminSimulaciones();
-  renderAdminUtilidades();
-
-    document.getElementById('admin-seasons').innerHTML = `
-    <div class="card">
-      <div style="margin-bottom:16px;">
-        <div style="font-size:14px;font-weight:600;margin-bottom:4px;">Temporada actual</div>
-        <div style="font-size:12px;color:var(--muted);">${S.matches.length} partidos · ${S.players.length} jugadores</div>
-      </div>
-      ${seasons.length?`<div style="margin-bottom:16px;">
-        <div style="font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Temporadas archivadas</div>
-        ${seasons.map((s,i)=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);">
-          <div>
-            <div style="font-weight:600;">Temporada ${i+1}</div>
-            <div style="font-size:11px;color:var(--muted);">${s.date} · ${s.matches} partidos · ${s.players} jugadores</div>
-          </div>
-          <button class="btn btn-secondary btn-sm" onclick="restoreSeason(${i})">Restaurar</button>
-        </div>`).join('')}
-      </div>`:''}
-      <button class="btn btn-danger" onclick="openNewSeason()" style="width:100%;">🏆 Cerrar temporada y empezar nueva</button>
-      <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border);">
-        <div style="font-size:11px;color:var(--muted);margin-bottom:8px;">⚠️ Mantiene ajustes, configuración y temporadas archivadas.</div>
-        <button class="btn btn-danger" onclick="resetEverything()" style="width:100%;background:rgba(248,113,113,0.2);border-color:var(--red);">🗑️ Reset temporada — Borrar jugadores y partidos</button>
-        <div style="font-size:11px;color:var(--muted);margin:8px 0;">☢️ Borra absolutamente todo el historial incluidas temporadas archivadas.</div>
-        <button class="btn btn-danger" onclick="resetEverythingAndSeasons()" style="width:100%;background:rgba(248,113,113,0.35);border-color:var(--red);">💣 Reset total — Borrar todo incluidas temporadas archivadas</button>
-      </div>
-    </div>
-  `;
-}
-
-function resetEverything() {
-  openConfirmAction(
-    '⚠️ ¿Reset completo?',
-    'Se borrarán TODOS los jugadores y partidos. Los ajustes, configuración, contraseña y orden del dashboard se mantienen. Esta acción no se puede deshacer.',
-    () => {
-      // Keep settings, dashboardOrder, seasons, isAdmin
-      const kept = {
-        settings: S.settings || {},
-        dashboardOrder: S.dashboardOrder || [],
-        seasons: S.seasons || [],
-        isAdmin: false
-      };
-      S.players = [];
-      S.matches = [];
-      S.seasons = kept.seasons;
-      S.settings = kept.settings;
-      S.dashboardOrder = kept.dashboardOrder;
-      S.isAdmin = false;
-      save();
-      renderAll();
-      applySettings();
-      nav('inicio');
-      toast('✓ Reset completo — app lista para empezar de cero');
-    }
-  );
-}
-
-function openNewSeason() {
-  openConfirmAction(
-    '¿Cerrar temporada actual?',
-    'Se archivará el historial completo y se resetearán todas las stats para empezar de cero. Los jugadores se mantienen.',
-    () => {
-      if (!S.seasons) S.seasons = [];
-      S.seasons.push({
-        date: new Date().toLocaleDateString('es-ES'),
-        matches: S.matches.length,
-        players: S.players.length,
-        data: JSON.stringify({ players: S.players, matches: S.matches })
-      });
-      // Reset stats
-      S.players.forEach(p => {
-        p.stats = { partidos:0, goles:0, rating:0, ratingCount:0, gkRating:0, gkCount:0 };
-        p.ratingHistory = []; p.gkHistory = [];
-      });
-      S.matches = [];
-      save(); renderAll(); nav('inicio');
-      toast('🏆 Nueva temporada iniciada');
-    }
-  );
-}
-
-function restoreSeason(idx) {
-  openConfirmAction(
-    '¿Restaurar esta temporada?',
-    'Se reemplazarán los datos actuales con los de la temporada archivada.',
-    () => {
-      const season = S.seasons[idx];
-      const data = JSON.parse(season.data);
-      S.players = data.players; S.matches = data.matches;
-      save(); renderAll(); nav('inicio');
-      toast('Temporada restaurada');
-    }
-  );
-}
-
-// ── Edit match (date/place) ──
-function openEditMatch(mid) {
-  const m = gm(mid);
-  if (!m) return;
-  document.getElementById('edit-match-id').value = mid;
-  document.getElementById('edit-match-date').value = m.date||'';
-  document.getElementById('edit-match-place').value = m.place||'';
-  openModal('modal-edit-match');
-}
-
-
-// ── Swap player between teams ──
-function openSwapPlayers(mid) {
-  const m = gm(mid);
-  if (!m) return;
-  document.getElementById('swap-match-id').value = mid;
-  const mkOpts = (ids, label) => `<div style="margin-bottom:12px;">
-    <div style="font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">${label}</div>
-    <div style="display:flex;flex-wrap:wrap;gap:6px;" id="swap-team-${label.includes('Blanco')?'a':'b'}">
-      ${ids.map(pid=>`<div onclick="selectSwapPlayer('${mid}','${pid}')" id="swap-${pid}"
-        style="padding:5px 12px;border-radius:20px;border:1px solid var(--border);font-size:13px;cursor:pointer;transition:all .15s;"
-        onmouseover="this.style.borderColor='var(--accent)'" onmouseout="if(!this.classList.contains('swap-sel'))this.style.borderColor='var(--border)'">
-        ${gp(pid)?.name||pid}
-      </div>`).join('')}
-    </div>
-  </div>`;
-  document.getElementById('swap-content').innerHTML =
-    mkOpts(m.teamA,'⬜ Equipo Blanco') + mkOpts(m.teamB,'⬛ Equipo Negro') +
-    '<div id="swap-hint" style="font-size:12px;color:var(--muted);text-align:center;padding:8px 0;">Selecciona dos jugadores para intercambiarlos</div>';
-  window._swapSel = [];
-  openModal('modal-swap');
-}
-
-function selectSwapPlayer(mid, pid) {
-  if (!window._swapSel) window._swapSel = [];
-  const el = document.getElementById('swap-'+pid);
-  if (window._swapSel.includes(pid)) {
-    window._swapSel = window._swapSel.filter(x=>x!==pid);
-    el.style.background=''; el.style.color=''; el.classList.remove('swap-sel');
-  } else if (window._swapSel.length < 2) {
-    window._swapSel.push(pid);
-    el.style.background='rgba(250,204,21,0.15)'; el.style.borderColor='var(--accent)'; el.style.color='var(--accent)'; el.classList.add('swap-sel');
-  }
-  if (window._swapSel.length === 2) {
-    document.getElementById('swap-hint').innerHTML = `<span style="color:var(--accent);font-weight:700;">¿Intercambiar ${gp(window._swapSel[0])?.name} ↔ ${gp(window._swapSel[1])?.name}?</span>`;
-  }
-}
-
-function reopenMatch(mid) {
-  const m = gm(mid);
-  if (!m) return;
-  openConfirmAction(
-    '¿Reabrir este partido?',
-    'Volverá a estado "Pendiente de votación". Los votos existentes se mantienen.',
-    () => {
-      m.status = 'finished';
-      save(); renderAdminMatches(); renderAll();
-      toast('🔓 Partido reabierto — pendiente de votación');
-    }
-  );
-}
-
-function openEditScore(mid) {
-  const m = gm(mid);
-  if (!m) return;
-  document.getElementById('edit-match-id').value = mid;
-  // Reuse edit match modal but add score fields
-  document.getElementById('edit-match-date').value = m.date||'';
-  document.getElementById('edit-match-place').value = m.place||'';
-  // Add score inputs dynamically
-  const modal = document.getElementById('modal-edit-match');
-  let scoreDiv = document.getElementById('edit-score-wrap');
-  if (!scoreDiv) {
-    scoreDiv = document.createElement('div');
-    scoreDiv.id = 'edit-score-wrap';
-    scoreDiv.style.cssText = 'margin-top:14px;';
-    scoreDiv.innerHTML = `<div style="display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;">
-      <div>
-        <label style="font-size:10px;color:var(--muted);text-transform:uppercase;">⬜ ${getCfg('teamWhite')}</label>
-        <input type="number" id="edit-scoreA" min="0" style="width:100%;text-align:center;font-size:28px;font-family:'Barlow Condensed',sans-serif;font-weight:900;padding:6px 0;">
-      </div>
-      <div style="font-size:20px;color:var(--muted);margin-top:16px;">—</div>
-      <div>
-        <label style="font-size:10px;color:var(--muted);text-transform:uppercase;">⬛ ${getCfg('teamBlack')}</label>
-        <input type="number" id="edit-scoreB" min="0" style="width:100%;text-align:center;font-size:28px;font-family:'Barlow Condensed',sans-serif;font-weight:900;padding:6px 0;">
-      </div>
-    </div>`;
-    modal.querySelector('.modal-body, .card, form, div').appendChild(scoreDiv);
-  }
-  document.getElementById('edit-scoreA').value = m.scoreA??'';
-  document.getElementById('edit-scoreB').value = m.scoreB??'';
-  openModal('modal-edit-match');
-}
-
-function saveEditMatch() {
-  const mid = document.getElementById('edit-match-id').value;
-  const m = gm(mid);
-  if (!m) return;
-  m.date = document.getElementById('edit-match-date').value;
-  m.place = document.getElementById('edit-match-place').value;
-  const sa = document.getElementById('edit-scoreA')?.value;
-  const sb = document.getElementById('edit-scoreB')?.value;
-  if (sa !== '' && sa !== undefined && !isNaN(parseInt(sa))) m.scoreA = parseInt(sa);
-  if (sb !== '' && sb !== undefined && !isNaN(parseInt(sb))) m.scoreB = parseInt(sb);
-  save(); closeModal('modal-edit-match'); renderAdminMatches(); renderAll();
-  toast('Partido actualizado ✓');
-}
-
-function openEditGoals(mid) {
-  const m = gm(mid);
-  if (!m) return;
-  activeStatsMatchId = mid;
-  closeModal('modal-match');
-  const total = (m.scoreA||0) + (m.scoreB||0);
-  document.getElementById('stats-rows').innerHTML = m.players.map(pid => {
-    const p = gp(pid);
-    const ex = m.matchStats?.[pid]||{};
-    return `<div style="display:grid;grid-template-columns:2fr 1fr;gap:8px;align-items:center;padding:8px 4px;border-bottom:1px solid var(--border);">
-      <span style="font-weight:600;font-size:13px;">${p?.name||pid}${p?.isRandom?' 🎲':''}</span>
-      <input type="number" id="mg-${pid}" min="0" max="20" value="${ex.goles||0}" style="text-align:center;">
-    </div>`;
-  }).join('');
-  document.getElementById('score-a').value = m.scoreA??'';
-  document.getElementById('score-b').value = m.scoreB??'';
-  // Show total hint
-  const hint = document.createElement('div');
-  hint.style.cssText = 'font-size:11px;color:var(--muted);text-align:center;padding:8px 0;';
-  hint.textContent = `Total del partido: ${total} goles (${m.scoreA} — ${m.scoreB})`;
-  const rows = document.getElementById('stats-rows');
-  rows.parentNode.insertBefore(hint, rows);
-  openModal('modal-stats');
-}
-
-function confirmSwap() {
-  const mid = document.getElementById('swap-match-id').value;
-  const m = gm(mid);
-  const [p1, p2] = window._swapSel||[];
-  if (!m || !p1 || !p2) { toast('Selecciona 2 jugadores'); return; }
-  const swap = (arr, a, b) => arr.map(x=>x===a?b:x===b?a:x);
-  m.teamA = swap(m.teamA, p1, p2);
-  m.teamB = swap(m.teamB, p1, p2);
-  window._swapSel = [];
-  save(); closeModal('modal-swap'); renderAdmin(); renderAll();
-  toast('Jugadores intercambiados ✓');
-}
-
-// ── Generic confirm dialog ──
-let _confirmCallback = null;
-function openConfirmAction(title, msg, cb) {
-  document.getElementById('confirm-title').textContent = title;
-  document.getElementById('confirm-msg').textContent = msg;
-  _confirmCallback = cb;
-  openModal('modal-confirm-action');
-}
-function clearFakeMatches() {
-  const before = S.matches.length;
-  S.matches = S.matches.filter(m => !m.id.startsWith('fake_'));
-  const removed = before - S.matches.length;
-  save(); renderAll();
-  toast(`🗑️ ${removed} partidos ficticios eliminados`);
-}
-
-function simulateCure() {
-  const pid = document.getElementById('test-cure-player').value;
-  const p = gp(pid);
-  if (!p) return;
-  const others = S.players.filter(x => x.id !== pid).slice(0, 9);
-  if (others.length < 9) { toast('Necesitas al menos 9 jugadores más'); return; }
-  const allPlayers = [pid, ...others.slice(0,9).map(x=>x.id)];
-  const fakeMatch = {
-    id: 'fake_cure_' + Date.now(),
-    date: new Date().toISOString().split('T')[0],
-    place: 'Partido simulado',
-    players: allPlayers,
-    teamA: allPlayers.slice(0,5),
-    teamB: allPlayers.slice(5,10),
-    status: 'done', votes: {}, matchStats: {},
-    scoreA: 3, scoreB: 2
-  };
-  S.matches.push(fakeMatch);
-  save(); renderAll();
-  toast('💊 ' + p.name + ' curado — ya no aparece lesionado');
-}
-
-function simulateFullMatch() {
-  const eligible = S.players.filter(p=>!p.isRandom);
-  if (eligible.length < 10) { toast('Necesitas al menos 10 jugadores'); return; }
-  const shuffled = [...eligible].sort(()=>Math.random()-0.5).slice(0,10);
-  const teamA = shuffled.slice(0,5).map(p=>p.id);
-  const teamB = shuffled.slice(5,10).map(p=>p.id);
-  const allIds = [...teamA,...teamB];
-  const scoreA = Math.floor(Math.random()*8);
-  const scoreB = Math.floor(Math.random()*8);
-  const totalGoles = scoreA + scoreB;
-  const votes = {};
-  const matchStats = {};
-  // Distribute goals randomly
-  let golesLeft = totalGoles;
-  allIds.forEach((pid, i) => {
-    const g = i === allIds.length-1 ? golesLeft : Math.floor(Math.random()*(golesLeft+1)*(1/(allIds.length-i)));
-    matchStats[pid] = { goles: Math.min(g, golesLeft) };
-    golesLeft = Math.max(0, golesLeft - matchStats[pid].goles);
-  });
-  // Simulate votes
-  allIds.forEach(voterId => {
-    const field = {}, gk = {};
-    allIds.filter(id=>id!==voterId).forEach(pid => {
-      field[pid] = Math.floor(Math.random()*5)+1; // 1-5
-      gk[pid] = Math.floor(Math.random()*5)+1;   // 1-5
-    });
-    votes[voterId] = { field, gk };
-  });
-  const match = {
-    id: 'fake_' + Date.now(),
-    date: new Date().toISOString().split('T')[0],
-    place: 'Partido simulado',
-    players: allIds, teamA, teamB,
-    status: 'done', votes, matchStats,
-    scoreA, scoreB,
-    funData: { picados: {}, tardones: {}, fairplay: {}, guarros: {} }
-  };
-  // Random fun data
-  if (allIds.length) {
-    const rnd = () => allIds[Math.floor(Math.random()*allIds.length)];
-    match.funData.picados[rnd()] = 1;
-    match.funData.guarros[rnd()] = 1;
-    match.funData.tardones[rnd()] = 1;
-    match.funData.fairplay[rnd()] = 1;
-  }
-  S.matches.push(match);
-  save(); renderAll();
-  toast('🎲 Partido simulado creado ✓');
-}
-
-function simulateSeason() {
-  for (let i=0; i<5; i++) simulateFullMatch();
-  toast('📊 5 partidos simulados ✓');
-}
-
-function recompressAllPhotos() {
-  let count = 0;
-  const promises = S.players.filter(p=>p.photo).map(p => {
-    return new Promise(resolve => {
-      const img = new Image();
-      img.onload = () => {
-        const canvas = document.createElement('canvas');
-        canvas.width = 300; canvas.height = 300;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0, 300, 300);
-        // Check transparency
-        const imgData = ctx.getImageData(0,0,300,300).data;
-        let hasTransparency = false;
-        for (let i=3; i<imgData.length; i+=4) { if (imgData[i]<255) { hasTransparency=true; break; } }
-        const newPhoto = hasTransparency
-          ? canvas.toDataURL('image/webp', 0.85)
-          : canvas.toDataURL('image/jpeg', 0.82);
-        if (newPhoto.length < p.photo.length) { p.photo = newPhoto; count++; }
-        resolve();
-      };
-      img.onerror = resolve;
-      img.src = p.photo;
-    });
-  });
-  Promise.all(promises).then(() => {
-    save();
-    renderAdminUtilidades();
-    renderAll();
-    const lsKB = (new Blob([localStorage.getItem('pfcv2')||'']).size/1024).toFixed(1);
-    toast(`🗜️ ${count} fotos recomprimidas → ${lsKB} KB`);
-  });
-}
-
-function exportData() {
-  const data = localStorage.getItem('pfcv2') || '{}';
-  const blob = new Blob([data], {type:'application/json'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'pachanguitas-backup-' + new Date().toISOString().split('T')[0] + '.json';
-  a.click();
-  URL.revokeObjectURL(url);
-  toast('📥 Backup exportado ✓');
-}
-
-function importData(input) {
-  const file = input.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    try {
-      const data = JSON.parse(e.target.result);
-      if (!data.players || !data.matches) { toast('⚠️ Archivo no válido'); return; }
-      localStorage.setItem('pfcv2', JSON.stringify(data));
-      load(); renderAll(); applySettings();
-      toast('📤 Datos importados ✓ — ' + data.matches.length + ' partidos, ' + data.players.length + ' jugadores');
-    } catch(err) {
-      toast('⚠️ Error al leer el archivo: ' + err.message);
-    }
-  };
-  reader.readAsText(file);
-  input.value = '';
-}
-
-function simulateAbsences() {
-  const pid = document.getElementById('test-absent-player').value;
-  const p = gp(pid);
-  if (!p) return;
-  // Get 10 other players for fake matches
-  const others = S.players.filter(x => x.id !== pid).slice(0, 10);
-  if (others.length < 10) { toast('Necesitas al menos 10 jugadores más'); return; }
-  for (let i = 0; i < 4; i++) {
-    const fakeMatch = {
-      id: 'fake_' + Date.now() + '_' + i,
-      date: new Date(Date.now() - (i+1)*7*24*60*60*1000).toISOString().split('T')[0],
-      place: 'Partido test',
-      players: others.slice(0,10).map(x=>x.id),
-      teamA: others.slice(0,5).map(x=>x.id),
-      teamB: others.slice(5,10).map(x=>x.id),
-      status: 'done', votes: {}, matchStats: {},
-      scoreA: 3, scoreB: 2
-    };
-    S.matches.push(fakeMatch);
-  }
-  save(); renderAll();
-  toast('✓ 4 partidos ficticios añadidos sin ' + p.name + ' — revisa su carta');
-}
-
-function runConfirmAction() {
-  closeModal('modal-confirm-action');
-  if (_confirmCallback) { _confirmCallback(); _confirmCallback = null; }
-}
-
-
-// ============================================================
-// ADMIN PANEL
-// ============================================================
-function renderAdmin() {
-  if (!S.isAdmin) { nav('inicio'); return; }
-  // Only render votos by default, rest are lazy-loaded when accordion opens
-  renderAdminVotes();
-}
-
-function renderAdminSettings() {
-  const el = document.getElementById('admin-settings');
-  if (!el) return;
-
-  const field = (key, subkey, label, type='text') => {
-    const val = getCfg(key, subkey);
-    const inputId = `cfg-${key}-${subkey||''}`;
-    if (type === 'color') {
-      return `<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);">
-        <label style="font-size:13px;color:var(--muted);">${label}</label>
-        <div style="display:flex;align-items:center;gap:8px;">
-          <input type="color" id="${inputId}" value="${val}" style="width:36px;height:28px;border:none;background:none;cursor:pointer;padding:0;"
-            oninput="setCfg('${key}','${key}'==='primaryColor'?this.value:this.value,'${subkey||''}')">
-          <span style="font-size:11px;color:var(--muted);" id="${inputId}-hex">${val}</span>
-        </div>
-      </div>`;
-    }
-    return `<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid var(--border);">
-      <label style="font-size:13px;color:var(--muted);flex-shrink:0;">${label}</label>
-      <input type="text" value="${val}" style="flex:1;max-width:200px;font-size:13px;text-align:right;padding:4px 8px;border-radius:6px;"
-        oninput="setCfg('${key}',this.value,'${subkey||''}')" onblur="renderAll()">
-    </div>`;
-  };
-
-  el.innerHTML = `<div class="card" style="margin-top:20px;">
-    <div style="font-size:14px;font-weight:700;color:var(--green);margin-bottom:16px;">⚙️ Ajustes de personalización</div>
-
-    <!-- Identidad -->
-    <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">🎨 Identidad del club</div>
-    ${field('clubName', '', 'Nombre del club')}
-    ${field('season', '', 'Temporada')}
-    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid var(--border);">
-      <label style="font-size:13px;color:var(--muted);">Color principal</label>
-      <div style="display:flex;align-items:center;gap:8px;">
-        <input type="color" value="${getCfg('primaryColor')}" style="width:36px;height:28px;border:none;background:none;cursor:pointer;padding:0;"
-          oninput="setCfg('primaryColor',this.value);document.documentElement.style.setProperty('--green',this.value);">
-        <span style="font-size:11px;color:var(--muted);">${getCfg('primaryColor')}</span>
-      </div>
-    </div>
-
-    <!-- Equipos -->
-    <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin:16px 0 8px;">⬜⬛ Nombre de equipos</div>
-    ${field('teamWhite', '', '⬜ Equipo claro')}
-    ${field('teamBlack', '', '⬛ Equipo oscuro')}
-
-    <!-- Nav labels -->
-    <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin:16px 0 8px;">📱 Menú de navegación</div>
-    ${['inicio','jugadores','partidos','ranking','admin'].map(k => field('navLabels', k, k.charAt(0).toUpperCase()+k.slice(1))).join('')}
-
-    <!-- Dashboard labels -->
-    <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin:16px 0 8px;">📊 Nombres de secciones</div>
-    ${Object.keys(DEFAULT_SETTINGS.dashLabels).map(k => field('dashLabels', k, DEFAULT_SETTINGS.dashLabels[k])).join('')}
-
-    <!-- Award labels -->
-    <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin:16px 0 8px;">🏆 Nombres de premios</div>
-    ${Object.keys(DEFAULT_SETTINGS.awardLabels).map(k => field('awardLabels', k, DEFAULT_SETTINGS.awardLabels[k])).join('')}
-
-    <!-- Ranking tab labels -->
-    <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin:16px 0 8px;">📊 Pestañas de Ranking</div>
-    ${Object.keys(DEFAULT_SETTINGS.rankLabels).map(k => field('rankLabels', k, DEFAULT_SETTINGS.rankLabels[k])).join('')}
-
-    <button class="btn btn-secondary" style="width:100%;margin-top:16px;" onclick="S.settings={};save();applySettings();renderAdmin();renderAll();toast('✓ Ajustes restaurados a valores por defecto');">
-      🔄 Restaurar valores por defecto
-    </button>
-
-    <!-- Change password -->
-    <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin:20px 0 8px;">🔐 Contraseña de admin</div>
-    <div style="display:flex;gap:8px;margin-bottom:8px;">
-      <input type="password" id="cfg-new-pwd" placeholder="Nueva contraseña" style="flex:1;font-size:13px;padding:6px 10px;border-radius:6px;">
-      <input type="password" id="cfg-new-pwd2" placeholder="Repetir" style="flex:1;font-size:13px;padding:6px 10px;border-radius:6px;">
-      <button class="btn btn-primary btn-sm" onclick="changeAdminPassword()">Guardar</button>
-    </div>
-    <div style="font-size:11px;color:var(--muted);">Contraseña actual: <strong style="color:var(--text);">${getCfg('adminPassword')||'Monster'}</strong></div>
-  </div>`;
-}
-
-function renderAdminVotes() {
-  const pending = S.matches.filter(m => m.status !== 'done');
-  if (!pending.length) {
-    document.getElementById('admin-votes-summary').innerHTML = '<div class="empty"><div class="ei">✓</div><p>No hay partidos con votos pendientes</p></div>';
-    return;
-  }
-  document.getElementById('admin-votes-summary').innerHTML = pending.map(m => {
-    const voted = Object.keys(m.votes||{}).filter(vid=>gp(vid));
-    const missing = m.players.filter(pid => !voted.includes(pid));
-    return `<div class="card" style="margin-bottom:10px;">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-        <div>
-          <div style="font-weight:700;">${m.place||'Partido'} · ${fmtDate(m.date)}</div>
           <div style="font-size:12px;color:var(--muted);">${voted.length}/${m.players.length} votos</div>
         </div>
         <span class="match-status-pill ${m.status==='playing'?'pill-voting':'pill-pending'}">${statusLabel(m.status,m)}</span>
@@ -5780,8 +5048,8 @@ function renderAdminMatches() {
       <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
         <div style="flex:1;">
           <div style="font-weight:700;">${m.place||'Sin lugar'} · ${fmtDate(m.date)}</div>
-          <div style="font-size:12px;color:var(--muted);">⬜ ${m.teamA.map(id=>gp(id)?.name||'?').join(', ')}</div>
-          <div style="font-size:12px;color:var(--muted);">⬛ ${m.teamB.map(id=>gp(id)?.name||'?').join(', ')}</div>
+          <div style="font-size:12px;color:var(--muted);">⬜ ${m.teamA.map(id=>esc(gp(id)?.name||'?')).join(', ')}</div>
+          <div style="font-size:12px;color:var(--muted);">⬛ ${m.teamB.map(id=>esc(gp(id)?.name||'?')).join(', ')}</div>
           ${m.scoreA!==null?`<div style="font-size:12px;color:var(--green);font-weight:700;margin-top:2px;">${m.scoreA} — ${m.scoreB}</div>`:''}
         </div>
         <div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end;">
@@ -5810,7 +5078,7 @@ function renderAdminPlayers() {
       return `<div style="display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--border);flex-wrap:wrap;">
         ${avatarSmall(p)}
         <div style="flex:1;min-width:120px;">
-          <div style="font-weight:700;">${p.name}</div>
+          <div style="font-weight:700;">${esc(p.name)}</div>
           <div style="font-size:11px;color:var(--muted);">OVR: ${ovr>0?ovr.toFixed(1):'—'} · PJ: ${computePartidos(p.id)} · Goles: ${computeGoles(p.id)}</div>
         </div>
         <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;">
@@ -5890,7 +5158,7 @@ function renderAdminSimulaciones() {
     <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">🏥 Ausencias</div>
     <div style="font-size:11px;color:var(--muted);margin-bottom:8px;">Simula partidos sin un jugador para probar la cruz de lesión</div>
     <select id="test-absent-player" style="width:100%;margin-bottom:8px;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:8px;border-radius:6px;">
-      ${S.players.filter(p=>!p.isRandom).map(p=>`<option value="${p.id}">${p.name}</option>`).join('')}
+      ${S.players.filter(p=>!p.isRandom).map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join('')}
     </select>
     <div style="display:flex;gap:8px;margin-bottom:14px;">
       <button class="btn btn-danger btn-sm" style="flex:1;" onclick="simulateAbsences()">➕ Simular 4 ausencias</button>
@@ -5898,7 +5166,7 @@ function renderAdminSimulaciones() {
     </div>
     <div style="font-size:11px;color:var(--muted);margin-bottom:6px;">💊 Curar lesionado:</div>
     <select id="test-cure-player" style="width:100%;margin-bottom:8px;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:8px;border-radius:6px;">
-      ${S.players.filter(p=>!p.isRandom).map(p=>`<option value="${p.id}">${p.name}</option>`).join('')}
+      ${S.players.filter(p=>!p.isRandom).map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join('')}
     </select>
     <button class="btn btn-secondary btn-sm" style="width:100%;margin-bottom:14px;" onclick="simulateCure()">💊 Curar este jugador</button>
 
@@ -5965,7 +5233,7 @@ function renderAdminSeasons() {
         <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">🏥 Ausencias</div>
         <div style="font-size:11px;color:var(--muted);margin-bottom:8px;">Simula partidos sin un jugador para probar la cruz de lesión</div>
         <select id="test-absent-player" style="width:100%;margin-bottom:8px;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:8px;border-radius:6px;">
-          ${S.players.filter(p=>!p.isRandom).map(p=>`<option value="${p.id}">${p.name}</option>`).join('')}
+          ${S.players.filter(p=>!p.isRandom).map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join('')}
         </select>
         <div style="display:flex;gap:8px;margin-bottom:16px;">
           <button class="btn btn-danger btn-sm" style="flex:1;" onclick="simulateAbsences()">➕ Simular 4 ausencias</button>
@@ -5974,7 +5242,7 @@ function renderAdminSeasons() {
         <div style="font-size:11px;color:var(--muted);margin-bottom:16px;">
           💊 Curar lesionado: añade un partido donde sí jugó<br>
           <select id="test-cure-player" style="width:100%;margin-top:6px;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:8px;border-radius:6px;">
-            ${S.players.filter(p=>!p.isRandom).map(p=>`<option value="${p.id}">${p.name}</option>`).join('')}
+            ${S.players.filter(p=>!p.isRandom).map(p=>`<option value="${p.id}">${esc(p.name)}</option>`).join('')}
           </select>
           <button class="btn btn-secondary btn-sm" style="width:100%;margin-top:6px;" onclick="simulateCure()">💊 Curar este jugador</button>
         </div>
@@ -6552,7 +5820,7 @@ function renderH2H() {
         <div onclick="toggleH2H('h2h-${p.id}')" style="display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;background:var(--surface);">
           ${avatarSmall(p)}
           <div style="flex:1;">
-            <div style="font-weight:700;font-size:15px;">${p.name}</div>
+            <div style="font-weight:700;font-size:15px;">${esc(p.name)}</div>
             <div style="font-size:11px;color:var(--muted);">${totalDuels} rival${totalDuels!==1?'es':''} enfrentados</div>
           </div>
           <div id="h2h-arrow-${p.id}" style="color:var(--muted);font-size:18px;transition:transform .2s;">›</div>
@@ -6642,7 +5910,7 @@ function renderQuimica() {
           <th style="min-width:${nameW}px;"></th>
           ${players.map(p=>`<th style="width:${cellSize}px;text-align:center;padding:0 2px 6px;">
             ${avatarSmall(p)}
-            <div style="font-size:9px;color:var(--muted);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:${cellSize}px;">${p.name.split(' ')[0]}</div>
+            <div style="font-size:9px;color:var(--muted);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:${cellSize}px;">${esc(p.name.split(' ')[0])}</div>
           </th>`).join('')}
         </tr></thead>
         <tbody>
@@ -6716,7 +5984,7 @@ function renderRanking(){
         <div class="rank-num ${i===0?'g':i===1?'s':i===2?'b':''}">${i+1}</div>
         ${avatarSmall(p)}
         <div style="flex:1;">
-          <div class="rank-name">${p.name}</div>
+          <div class="rank-name">${esc(p.name)}</div>
           <div style="font-size:12px;font-weight:700;color:${racha.color};">${racha.label}</div>
         </div>
         <div style="font-size:24px;">${racha.trend==='up'?'📈':racha.trend==='down'?'📉':'➡️'}</div>
@@ -6767,7 +6035,7 @@ function renderRanking(){
       <div class="rank-num ${cls}">${i+1}</div>
       ${avatarSmall(p)}
       <div style="flex:1;">
-        <div class="rank-name">${p.name}</div>
+        <div class="rank-name">${esc(p.name)}</div>
         <div class="rank-sub">${sub}</div>
       </div>
       <div class="rank-val" style="color:${color};">${val}</div>
@@ -6905,6 +6173,7 @@ function renderClasificacion(targetId) {
     </div>`;
 }
 
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function gp(id){return S.players.find(p=>p.id===id);}
 function getFixedPlayers(){return S.players.filter(p=>!p.isRandom);}
 function getRandomPlayers(){return S.players.filter(p=>p.isRandom);}
@@ -7206,22 +6475,7 @@ checkVotingHash();
 let _tutSlide = 0;
 const _tutTotal = 9;
 function openTutorial() { _tutSlide=0; tutRender(); openModal('modal-tutorial'); }
-function tutNav(dir) { _tutSlide=Math.max(0,Math.min(_tutTotal-1,_tutSlide+dir)); tutRender(); }
 function tutGo(i) { _tutSlide=i; tutRender(); }
-function tutRender() {
-  for(let i=0;i<_tutTotal;i++) {
-    const s=document.getElementById('tut-slide-'+i);
-    const d=document.getElementById('tut-dot-'+i);
-    if(s) s.style.display=i===_tutSlide?'flex':'none';
-    if(d) d.style.background=i===_tutSlide?'var(--green)':'var(--border)';
-  }
-  const prev=document.getElementById('tut-prev');
-  const next=document.getElementById('tut-next');
-  const finish=document.getElementById('tut-finish');
-  if(prev) prev.style.display=_tutSlide>0?'':'none';
-  if(next) next.style.display=_tutSlide<_tutTotal-1?'':'none';
-  if(finish) finish.style.display=_tutSlide===_tutTotal-1?'':'none';
-}
 
 function tutNav(dir) {
   _tutSlide = Math.max(0, Math.min(_tutTotal-1, _tutSlide + dir));
