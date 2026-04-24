@@ -1605,7 +1605,7 @@ function renderDashDuplaJinetes() {
         :'<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;"><span style="font-family:Barlow Condensed,sans-serif;font-size:22px;font-weight:900;color:rgba(255,255,255,0.2);">'+initials(p.name)+'</span></div>';
       const mkCard2=(p)=>'<div style="position:relative;width:70px;height:92px;border-radius:7px;overflow:hidden;flex-shrink:0;box-shadow:0 4px 16px rgba(0,0,0,0.6);">'
         +'<img src="'+(p.isRandom?FUT_BG:getCardBg(computeOVR(p.id)))+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;">'
-        +'<div style="position:absolute;top:5%;left:50%;transform:translateX(-50%);width:68%;aspect-ratio:1;border-radius:50%;overflow:hidden;z-index:1;box-shadow:0 2px 10px rgba(0,0,0,0.7);">'+mkP2(p)+'</div>'
+        +'<div style="position:absolute;top:4%;left:4%;right:4%;height:54%;overflow:hidden;z-index:1;">'+mkP2(p)+'</div>'
         +'<div style="position:absolute;bottom:0;left:0;right:0;z-index:2;background:linear-gradient(to top,rgba(0,0,0,0.85) 0%,transparent 100%);padding:3px;text-align:center;">'
         +'<div style="font-family:Barlow Condensed,sans-serif;font-size:11px;font-weight:900;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+esc(shortName(p.name))+'</div></div></div>';
       return `<div style="background:linear-gradient(135deg,var(--surface),var(--surface2));border:1px solid var(--red);border-radius:14px;padding:20px;position:relative;overflow:hidden;margin-top:12px;">
@@ -2419,7 +2419,7 @@ function playerCardHtml(p,i) {
   // Photo OR silhouette — never both
   // Photo: object-position top-center, pushed down a bit to clear the V-notch
   const photoOrSilhouette = p.photo
-    ? `<img src="${p.photo}" style="width:100%;height:100%;object-fit:cover;object-position:center top;display:block;">`
+    ? `<img src="${p.photo}" style="width:100%;height:100%;object-fit:contain;object-position:center bottom;display:block;">`
     : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;">
         <svg viewBox="0 0 100 115" xmlns="http://www.w3.org/2000/svg" style="width:56%;height:auto;opacity:0.25;">
           <ellipse cx="50" cy="24" rx="19" ry="22" fill="#fff"/>
@@ -2459,8 +2459,8 @@ function playerCardHtml(p,i) {
     <!-- 1. SVG card art fills entire card -->
     <img src="${bg}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:fill;pointer-events:none;z-index:0;">
 
-    <!-- 2. Photo / silhouette — circular -->
-    <div style="position:absolute;top:8%;left:50%;transform:translateX(-50%);width:62%;aspect-ratio:1;border-radius:50%;overflow:hidden;z-index:1;box-shadow:0 4px 20px rgba(0,0,0,0.8);">
+    <!-- 2. Photo / silhouette — integrated, no circle -->
+    <div style="position:absolute;top:5%;left:5%;right:5%;height:54%;z-index:1;overflow:hidden;">
       ${photoOrSilhouette}
     </div>
 
@@ -2792,9 +2792,11 @@ function _composeOnDarkBg(imgEl) {
 function applyCrop() {
   const src = document.getElementById('crop-canvas');
 
-  // Fallback: foto con fondo degradado (si remove.bg falla)
-  const fallbackCanvas = _composeOnDarkBg(src);
-  const fallbackSrc = fallbackCanvas.toDataURL('image/webp', 0.88);
+  // Fallback: foto cruda sin quitar fondo
+  const rawCanvas = document.createElement('canvas');
+  rawCanvas.width = 300; rawCanvas.height = 300;
+  rawCanvas.getContext('2d').drawImage(src, 0, 0, 300, 300);
+  const rawDataUrl = rawCanvas.toDataURL('image/webp', 0.92);
 
   // Cerrar cropper y mostrar spinner
   closeModal('modal-crop');
@@ -2804,12 +2806,8 @@ function applyCrop() {
     <div style="font-size:32px;margin-bottom:8px;">✂️</div>Eliminando fondo...
   </div>`;
 
-  // Enviar foto cruda (sin el gradiente) a remove.bg
-  const rawCanvas = document.createElement('canvas');
-  rawCanvas.width = 300; rawCanvas.height = 300;
-  rawCanvas.getContext('2d').drawImage(src, 0, 0, 300, 300);
   const fd = new FormData();
-  fd.append('image_file', dataUrlToBlob(rawCanvas.toDataURL('image/webp', 0.92)), 'photo.webp');
+  fd.append('image_file', dataUrlToBlob(rawDataUrl), 'photo.webp');
   fd.append('size', 'auto');
 
   fetch('https://api.remove.bg/v1.0/removebg', {
@@ -2819,16 +2817,13 @@ function applyCrop() {
   })
   .then(r => r.ok ? r.blob() : Promise.reject(r.status))
   .then(blob => {
-    const url = URL.createObjectURL(blob);
-    const img = new Image();
-    img.onload = () => {
-      URL.revokeObjectURL(url);
-      finishPhoto(_composeOnDarkBg(img).toDataURL('image/webp', 0.88));
-    };
-    img.onerror = () => { URL.revokeObjectURL(url); finishPhoto(fallbackSrc); };
-    img.src = url;
+    // PNG transparente — leer como data URL directamente sin compositar
+    const reader = new FileReader();
+    reader.onload = e => finishPhoto(e.target.result);
+    reader.onerror = () => finishPhoto(rawDataUrl);
+    reader.readAsDataURL(blob);
   })
-  .catch(() => finishPhoto(fallbackSrc));
+  .catch(() => finishPhoto(rawDataUrl));
 }
 
 function finishPhoto(dataUrl) {
