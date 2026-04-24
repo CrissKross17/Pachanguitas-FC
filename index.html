@@ -684,6 +684,7 @@ input:focus,select:focus{border-color:var(--green);}
     <div id="last-match-badge"></div>
   </div>
 
+  <div id="home-proxima-jornada"></div>
   <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px;" id="home-tiles"></div>
   <div id="home-sortable-container"></div>
 </div>
@@ -1721,7 +1722,7 @@ function renderDashExtra() {
         const ghostData = [...players].filter(p=>!p.isRandom&&computePartidos(p.id)>0)
           .map(p=>{
             const matchesWithoutGoal = S.matches.filter(m=>
-              (m.players||[]).includes(p.id) && (m.matchStats?.[p.id]?.goles||0)===0
+              m.status==='done' && (m.players||[]).includes(p.id) && (m.matchStats?.[p.id]?.goles||0)===0
             ).length;
             return {p, matchesWithoutGoal};
           })
@@ -1754,7 +1755,7 @@ function renderDashExtra() {
           for(let j=i+1;j<fixedInMatch.length;j++){
             const a=players[i],b=players[j];
             let rivals=0;
-            S.matches.forEach(m=>{
+            S.matches.filter(m=>m.status==='done').forEach(m=>{
               const aInA=m.teamA.includes(a.id),aInB=m.teamB.includes(a.id);
               const bInA=m.teamA.includes(b.id),bInB=m.teamB.includes(b.id);
               if((!aInA&&!aInB)||(!bInA&&!bInB)) return;
@@ -1929,6 +1930,44 @@ function renderDashPrediccion() {
       </div>
     </div>`;
 }
+function renderProximaJornada() {
+  const el = document.getElementById('home-proxima-jornada');
+  if (!el) return;
+  const toArr = v => Array.isArray(v) ? v : Object.values(v || {});
+  const next = [...S.matches].reverse().find(m => m.status === 'pending' && toArr(m.teamA).length && toArr(m.teamB).length);
+  if (!next) { el.innerHTML = ''; return; }
+  const whiteLabel = getCfg('teamWhite') || 'Blancos';
+  const blackLabel = getCfg('teamBlack') || 'Negros';
+  const playerNames = ids => toArr(ids).map(id => esc(gp(id)?.name?.split(' ')[0] || '?')).join(', ');
+  let countdown = '';
+  if (next.date) {
+    const diff = Math.ceil((new Date(next.date) - new Date()) / 86400000);
+    if (diff > 0) countdown = `<span style="font-size:11px;color:var(--green);font-weight:700;">Faltan ${diff} día${diff>1?'s':''}</span>`;
+    else if (diff === 0) countdown = `<span style="font-size:11px;color:var(--accent);font-weight:700;">¡Hoy!</span>`;
+  }
+  el.innerHTML = `
+    <div onclick="nav('partidos')" style="cursor:pointer;background:var(--surface);border:1px solid var(--green);border-radius:12px;padding:12px 16px;margin-bottom:20px;display:flex;flex-direction:column;gap:8px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;">
+        <span style="font-size:11px;font-weight:900;color:var(--green);letter-spacing:1px;text-transform:uppercase;">🗓️ Próxima jornada</span>
+        <div style="display:flex;align-items:center;gap:8px;">
+          ${next.date ? `<span style="font-size:11px;color:var(--muted);">${fmtDate(next.date)}</span>` : ''}
+          ${countdown}
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;">
+        <div>
+          <div style="font-size:10px;color:var(--muted);margin-bottom:3px;">⬜ ${esc(whiteLabel)}</div>
+          <div style="font-size:12px;font-weight:600;color:var(--text);">${playerNames(next.teamA)}</div>
+        </div>
+        <div style="font-size:16px;font-weight:900;color:var(--muted);">VS</div>
+        <div style="text-align:right;">
+          <div style="font-size:10px;color:var(--muted);margin-bottom:3px;">⬛ ${esc(blackLabel)}</div>
+          <div style="font-size:12px;font-weight:600;color:var(--text);">${playerNames(next.teamB)}</div>
+        </div>
+      </div>
+    </div>`;
+}
+
 function renderInicio() {
   const done = S.matches.filter(m=>m.status==='done');
   // Exclude random players from all awards/dashboards
@@ -1936,6 +1975,7 @@ function renderInicio() {
   const randomPlayers = S.players.filter(p => p.isRandom);
   const totalGoles = fixedPlayers.reduce((a,p)=>a+computeGoles(p.id),0);
 
+  renderProximaJornada();
   renderSortableContainer();
   document.getElementById('home-tiles').innerHTML = `
     ${tile(done.length,'Jornadas jugadas')}
