@@ -970,13 +970,13 @@ input:focus,select:focus{border-color:var(--green);}
   <div class="modal" style="max-width:360px;">
     <button class="modal-close" onclick="cancelCrop()">×</button>
     <div class="modal-title" style="margin-bottom:8px;">ENCUADRAR FOTO</div>
-    <p style="font-size:12px;color:var(--muted);margin-bottom:12px;">Arrastra para centrar · Pellizca o rueda del ratón para hacer zoom</p>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:12px;">Arrastra para centrar · Desliza el slider o pellizca para hacer zoom</p>
     <!-- Canvas is the single source of truth -->
     <div id="crop-wrap" style="width:100%;aspect-ratio:1;position:relative;border-radius:50%;overflow:hidden;border:3px solid var(--green);cursor:grab;touch-action:none;background:#111;">
       <canvas id="crop-canvas" style="display:block;width:100%;height:100%;"></canvas>
     </div>
-    <input type="range" id="crop-zoom" min="1" max="4" step="0.01" value="1"
-      style="display:none;" oninput="cropZoomSlider()">
+    <input type="range" id="crop-zoom" min="1" max="10" step="0.01" value="1"
+      style="width:100%;margin-top:10px;accent-color:var(--green);" oninput="cropZoomSlider()">
     <div class="btn-row" style="margin-top:14px;">
       <button class="btn btn-secondary" onclick="cancelCrop()">Cancelar</button>
       <button class="btn btn-primary" onclick="applyCrop()">Usar foto ✓</button>
@@ -1605,7 +1605,7 @@ function renderDashDuplaJinetes() {
         :'<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;"><span style="font-family:Barlow Condensed,sans-serif;font-size:22px;font-weight:900;color:rgba(255,255,255,0.2);">'+initials(p.name)+'</span></div>';
       const mkCard2=(p)=>'<div style="position:relative;width:70px;height:92px;border-radius:7px;overflow:hidden;flex-shrink:0;box-shadow:0 4px 16px rgba(0,0,0,0.6);">'
         +'<img src="'+(p.isRandom?FUT_BG:getCardBg(computeOVR(p.id)))+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;">'
-        +'<div style="position:absolute;top:7%;left:8%;width:84%;height:54%;z-index:1;overflow:hidden;">'+mkP2(p)+'</div>'
+        +'<div style="position:absolute;top:5%;left:50%;transform:translateX(-50%);width:68%;aspect-ratio:1;border-radius:50%;overflow:hidden;z-index:1;box-shadow:0 2px 10px rgba(0,0,0,0.7);">'+mkP2(p)+'</div>'
         +'<div style="position:absolute;bottom:0;left:0;right:0;z-index:2;background:linear-gradient(to top,rgba(0,0,0,0.85) 0%,transparent 100%);padding:3px;text-align:center;">'
         +'<div style="font-family:Barlow Condensed,sans-serif;font-size:11px;font-weight:900;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+esc(shortName(p.name))+'</div></div></div>';
       return `<div style="background:linear-gradient(135deg,var(--surface),var(--surface2));border:1px solid var(--red);border-radius:14px;padding:20px;position:relative;overflow:hidden;margin-top:12px;">
@@ -2420,7 +2420,7 @@ function playerCardHtml(p,i) {
   // Photo: object-position top-center, pushed down a bit to clear the V-notch
   const photoOrSilhouette = p.photo
     ? `<img src="${p.photo}" style="width:100%;height:100%;object-fit:cover;object-position:center top;display:block;">`
-    : `<div style="width:100%;height:100%;display:flex;align-items:flex-end;justify-content:center;padding-bottom:2%;">
+    : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;">
         <svg viewBox="0 0 100 115" xmlns="http://www.w3.org/2000/svg" style="width:56%;height:auto;opacity:0.25;">
           <ellipse cx="50" cy="24" rx="19" ry="22" fill="#fff"/>
           <path d="M14 115 Q14 74 50 70 Q86 74 86 115Z" fill="#fff"/>
@@ -2459,14 +2459,10 @@ function playerCardHtml(p,i) {
     <!-- 1. SVG card art fills entire card -->
     <img src="${bg}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:fill;pointer-events:none;z-index:0;">
 
-    <!-- 2. Photo / silhouette — stays within top 58%, clear of notch and panel -->
-    <div style="position:absolute;top:12%;left:8%;right:8%;height:44%;z-index:1;overflow:hidden;border-radius:4px;">
+    <!-- 2. Photo / silhouette — circular -->
+    <div style="position:absolute;top:8%;left:50%;transform:translateX(-50%);width:62%;aspect-ratio:1;border-radius:50%;overflow:hidden;z-index:1;box-shadow:0 4px 20px rgba(0,0,0,0.8);">
       ${photoOrSilhouette}
     </div>
-
-    <!-- 3. Soft gradient: photo → panel blend -->
-    <div style="position:absolute;left:0;right:0;top:42%;height:20%;z-index:2;pointer-events:none;
-                background:linear-gradient(to bottom,transparent,rgba(0,0,0,0.7));"></div>
 
     ${injuryBadge}
     ${p.isRandom?`<div style="position:absolute;top:12px;right:11px;font-size:13px;z-index:10;filter:drop-shadow(0 1px 3px rgba(0,0,0,0.9));">🎲</div>`:''}
@@ -2623,9 +2619,9 @@ function initCrop() {
   // Scale mínimo: 0.3x del cover (puede alejar bastante)
   _minScale = Math.max(_cw / _img.naturalWidth, _ch / _img.naturalHeight) * 0.3;
 
-  // Empezar al 55% del cover — cara visible con margen alrededor
+  // Empezar al 100% del cover — la foto rellena el círculo desde el principio
   const coverScale = Math.max(_cw / _img.naturalWidth, _ch / _img.naturalHeight);
-  _scale = coverScale * 0.55;
+  _scale = coverScale * 1.0;
   // Asegurar que no baja del mínimo
   if (_scale < _minScale) _scale = _minScale;
 
@@ -2797,59 +2793,9 @@ function applyCrop() {
   // Foto encima
   ctx.drawImage(src, 0, 0, 300, 300);
 
-  const croppedSrc = out.toDataURL('image/webp', 0.9);
-
-  // 2) Mostrar spinner mientras MediaPipe procesa
   closeModal('modal-crop');
   openModal('modal-player');
-  const area = document.getElementById('photoUploadArea');
-  area.innerHTML = `<div style="font-size:12px;color:var(--green);text-align:center;padding:16px;">
-    <div style="font-size:28px;margin-bottom:8px;">🤖</div>Eliminando fondo...
-  </div>`;
-
-  // 3) Pasar el recorte por MediaPipe
-  const croppedImg = new Image();
-  croppedImg.onload = () => {
-    if (typeof SelfieSegmentation !== 'undefined') {
-      let done = false;
-      const fallbackTimer = setTimeout(() => {
-        if (!done) { done = true; try { seg.close(); } catch(_) {} finishPhoto(croppedSrc); }
-      }, 6000);
-
-      const seg = new SelfieSegmentation({ locateFile: f =>
-        `https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/${f}` });
-      seg.setOptions({ modelSelection: 1 });
-      seg.onResults(results => {
-        if (done) return;
-        done = true;
-        clearTimeout(fallbackTimer);
-        try {
-          const cvs = document.createElement('canvas');
-          cvs.width = 300; cvs.height = 300;
-          const c = cvs.getContext('2d');
-          c.drawImage(croppedImg, 0, 0, 300, 300);
-          const frame = c.getImageData(0, 0, 300, 300);
-          const maskCvs = document.createElement('canvas');
-          maskCvs.width = 300; maskCvs.height = 300;
-          const mCtx = maskCvs.getContext('2d');
-          mCtx.drawImage(results.segmentationMask, 0, 0, 300, 300);
-          const mask = mCtx.getImageData(0, 0, 300, 300);
-          for (let i = 0; i < mask.data.length; i += 4) {
-            frame.data[i + 3] = mask.data[i];
-          }
-          c.putImageData(frame, 0, 0);
-          finishPhoto(cvs.toDataURL('image/webp', 0.85));
-        } catch(_) { finishPhoto(croppedSrc); }
-        try { seg.close(); } catch(_) {}
-      });
-      seg.send({ image: croppedImg }).catch(() => {
-        if (!done) { done = true; clearTimeout(fallbackTimer); finishPhoto(croppedSrc); }
-      });
-    } else {
-      finishPhoto(croppedSrc);
-    }
-  };
-  croppedImg.src = croppedSrc;
+  finishPhoto(out.toDataURL('image/webp', 0.88));
 }
 
 function finishPhoto(dataUrl) {
