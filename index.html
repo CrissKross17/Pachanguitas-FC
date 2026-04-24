@@ -1607,7 +1607,7 @@ function renderDashDuplaJinetes() {
         +'<img src="'+(p.isRandom?FUT_BG:getCardBg(computeOVR(p.id)))+'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;">'
         +'<div style="position:absolute;top:7%;left:8%;width:84%;height:54%;z-index:1;overflow:hidden;">'+mkP2(p)+'</div>'
         +'<div style="position:absolute;bottom:0;left:0;right:0;z-index:2;background:linear-gradient(to top,rgba(0,0,0,0.85) 0%,transparent 100%);padding:3px;text-align:center;">'
-        +'<div style="font-family:Barlow Condensed,sans-serif;font-size:11px;font-weight:900;color:#fff;">'+esc(p.name.split(' ')[0])+'</div></div></div>';
+        +'<div style="font-family:Barlow Condensed,sans-serif;font-size:11px;font-weight:900;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+esc(shortName(p.name))+'</div></div></div>';
       return `<div style="background:linear-gradient(135deg,var(--surface),var(--surface2));border:1px solid var(--red);border-radius:14px;padding:20px;position:relative;overflow:hidden;margin-top:12px;">
         <div style="position:absolute;top:-10px;right:-10px;font-size:100px;opacity:0.04;pointer-events:none;">🤡</div>
         <div style="font-size:10px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:2px;margin-bottom:14px;">🤡 LOS DOS JINETES DEL APOCALIPSIS</div>
@@ -1830,7 +1830,7 @@ function renderDashExtra() {
               ${photoContent}
             </div>
             <div style="flex:1;">
-              <div style="font-weight:700;font-size:14px;">${esc(p.name.split(' ')[0])}</div>
+              <div style="font-weight:700;font-size:14px;">${esc(shortName(p.name))}</div>
               <div style="font-size:11px;color:var(--muted);">${p.pos}</div>
             </div>
             <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:var(--green);">${computePartidos(p.id)}</div>
@@ -1944,7 +1944,7 @@ function renderProximaJornada() {
   if (!next) { el.innerHTML = ''; return; }
   const whiteLabel = getCfg('teamWhite') || 'Blancos';
   const blackLabel = getCfg('teamBlack') || 'Negros';
-  const playerNames = ids => toArr(ids).map(id => esc(gp(id)?.name?.split(' ')[0] || '?')).join(', ');
+  const playerNames = ids => toArr(ids).map(id => esc(shortName(gp(id)?.name || '?'))).join(', ');
   let countdown = '';
   if (next.date) {
     const matchDate = new Date(`${next.date}T${next.time||'23:59'}:00`);
@@ -2037,7 +2037,7 @@ function renderInicio() {
             ${photoContent}
           </div>
           <div style="flex:1;min-width:0;">
-            <div style="font-weight:700;font-size:14px;margin-bottom:4px;">${esc(p.name.split(' ')[0])}</div>
+            <div style="font-weight:700;font-size:14px;margin-bottom:4px;">${esc(shortName(p.name))}</div>
             <div style="background:var(--surface2);border-radius:4px;height:5px;overflow:hidden;">
               <div style="height:100%;width:${pct}%;background:linear-gradient(90deg,var(--green),var(--accent));border-radius:4px;transition:width .4s;"></div>
             </div>
@@ -2482,10 +2482,10 @@ function playerCardHtml(p,i) {
                 display:flex;flex-direction:column;padding:3px 8px 3px;box-sizing:border-box;">
 
       <!-- Name -->
-      <div style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:900;color:#fff;
-                  text-align:center;letter-spacing:2px;text-transform:uppercase;
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:900;color:#fff;
+                  text-align:center;letter-spacing:1.5px;text-transform:uppercase;
                   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-                  text-shadow:0 1px 8px rgba(0,0,0,1);margin-bottom:2px;flex-shrink:0;">${esc(p.name.split(' ')[0])}</div>
+                  text-shadow:0 1px 8px rgba(0,0,0,1);margin-bottom:2px;flex-shrink:0;">${esc(shortName(p.name))}</div>
 
       <!-- 4-column stats -->
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;flex:1;min-height:0;
@@ -3751,7 +3751,7 @@ function buildPitch(m) {
       : `<span>${initials(p.name)}</span>`;
     return `<div class="pitch-player ${team}">
       <div class="pitch-avatar">${ph}</div>
-      <div class="pitch-pname">${esc(p.name.split(' ')[0])}</div>
+      <div class="pitch-pname">${esc(shortName(p.name))}</div>
     </div>`;
   };
 
@@ -3943,8 +3943,8 @@ function buildTeamBalance(m) {
       </div>
     </div>`:''}
     <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:10px;color:var(--muted);">
-      <span>${m.teamA.map(id=>gp(id)?.name.split(' ')[0]||'?').join(' · ')}</span>
-      <span>${m.teamB.map(id=>gp(id)?.name.split(' ')[0]||'?').join(' · ')}</span>
+      <span>${m.teamA.map(id=>shortName(gp(id)?.name||'?')).join(' · ')}</span>
+      <span>${m.teamB.map(id=>shortName(gp(id)?.name||'?')).join(' · ')}</span>
     </div>
   </div>`;
 }
@@ -6234,6 +6234,7 @@ function renderClasificacion(targetId) {
 }
 
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function shortName(name){const p=String(name||'').trim().split(/\s+/);return p.length>=2?p[0]+' '+p[1]:p[0]||'?';}
 function gp(id){return S.players.find(p=>p.id===id);}
 function getFixedPlayers(){return S.players.filter(p=>!p.isRandom);}
 function getRandomPlayers(){return S.players.filter(p=>p.isRandom);}
