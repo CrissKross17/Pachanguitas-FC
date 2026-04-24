@@ -6335,7 +6335,7 @@ function _buildStatsCache() {
   S.players.forEach(p => {
     cache[p.id] = { goles: 0, partidos: 0, fieldRatings: [], gkRatings: [] };
   });
-  S.matches.forEach(mx => {
+  S.matches.filter(mx => mx.status === 'done').forEach(mx => {
     // partidos + goles
     (mx.players||[]).forEach(pid => {
       if (!cache[pid]) cache[pid] = { goles: 0, partidos: 0, fieldRatings: [], gkRatings: [] };
