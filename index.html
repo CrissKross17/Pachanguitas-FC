@@ -3153,7 +3153,7 @@ function renderPartidos() {
 
     return `
     <div class="match-row" onclick="openMatch('${m.id}')">
-      <div class="match-date-col">${fmtDate(m.date)}</div>
+      <div class="match-date-col">${fmtDate(m.date)}${m.time?`<div style="font-size:10px;color:var(--muted);margin-top:2px;">🕐 ${m.time}</div>`:''}</div>
       <div class="match-teams-col">
         <div class="match-team-line">⬜ ${m.teamA.map(id=>esc(gp(id)?.name||'?')).join(', ')}</div>
         <div class="match-team-line">⬛ ${m.teamB.map(id=>esc(gp(id)?.name||'?')).join(', ')}</div>
