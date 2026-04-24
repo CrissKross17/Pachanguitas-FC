@@ -2774,28 +2774,61 @@ function cancelCrop() {
 
 const CLOUDINARY_CLOUD = 'dycowkh0d';
 const CLOUDINARY_PRESET = 'pachanguitas_fotos';
+const REMOVEBG_KEY = '5tZfTKP6bJk1yfNDxG5ZguUf';
+
+function _composeOnDarkBg(imgEl) {
+  // Dibuja imgEl (con o sin transparencia) sobre el fondo degradado oscuro circular
+  const c = document.createElement('canvas');
+  c.width = 300; c.height = 300;
+  const cx = c.getContext('2d');
+  cx.beginPath(); cx.arc(150, 150, 150, 0, Math.PI * 2); cx.clip();
+  const g = cx.createRadialGradient(150, 150, 0, 150, 150, 150);
+  g.addColorStop(0, '#1a1a2e'); g.addColorStop(1, '#0a0a0a');
+  cx.fillStyle = g; cx.fillRect(0, 0, 300, 300);
+  cx.drawImage(imgEl, 0, 0, 300, 300);
+  return c;
+}
 
 function applyCrop() {
-  // 1) Sacar el recorte circular del canvas con fondo degradado
   const src = document.getElementById('crop-canvas');
-  const out = document.createElement('canvas');
-  out.width = 300; out.height = 300;
-  const ctx = out.getContext('2d');
-  // Fondo degradado dentro del círculo
-  ctx.beginPath();
-  ctx.arc(150, 150, 150, 0, Math.PI * 2);
-  ctx.clip();
-  const grad = ctx.createRadialGradient(150, 150, 0, 150, 150, 150);
-  grad.addColorStop(0, '#1a1a2e');
-  grad.addColorStop(1, '#0a0a0a');
-  ctx.fillStyle = grad;
-  ctx.fillRect(0, 0, 300, 300);
-  // Foto encima
-  ctx.drawImage(src, 0, 0, 300, 300);
 
+  // Fallback: foto con fondo degradado (si remove.bg falla)
+  const fallbackCanvas = _composeOnDarkBg(src);
+  const fallbackSrc = fallbackCanvas.toDataURL('image/webp', 0.88);
+
+  // Cerrar cropper y mostrar spinner
   closeModal('modal-crop');
   openModal('modal-player');
-  finishPhoto(out.toDataURL('image/webp', 0.88));
+  const area = document.getElementById('photoUploadArea');
+  area.innerHTML = `<div style="font-size:12px;color:var(--green);text-align:center;padding:16px 8px;">
+    <div style="font-size:32px;margin-bottom:8px;">✂️</div>Eliminando fondo...
+  </div>`;
+
+  // Enviar foto cruda (sin el gradiente) a remove.bg
+  const rawCanvas = document.createElement('canvas');
+  rawCanvas.width = 300; rawCanvas.height = 300;
+  rawCanvas.getContext('2d').drawImage(src, 0, 0, 300, 300);
+  const fd = new FormData();
+  fd.append('image_file', dataUrlToBlob(rawCanvas.toDataURL('image/webp', 0.92)), 'photo.webp');
+  fd.append('size', 'auto');
+
+  fetch('https://api.remove.bg/v1.0/removebg', {
+    method: 'POST',
+    headers: { 'X-Api-Key': REMOVEBG_KEY },
+    body: fd
+  })
+  .then(r => r.ok ? r.blob() : Promise.reject(r.status))
+  .then(blob => {
+    const url = URL.createObjectURL(blob);
+    const img = new Image();
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      finishPhoto(_composeOnDarkBg(img).toDataURL('image/webp', 0.88));
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); finishPhoto(fallbackSrc); };
+    img.src = url;
+  })
+  .catch(() => finishPhoto(fallbackSrc));
 }
 
 function finishPhoto(dataUrl) {
