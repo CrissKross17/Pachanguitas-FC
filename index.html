@@ -3400,7 +3400,7 @@ function createMatch() {
     date: document.getElementById('nm-date').value,
     place: document.getElementById('nm-place').value.trim()||'',
     players, teamA, teamB,
-    status: 'pending', votes:{}, matchStats:{},
+    status: 'pending', confirmed: false, votes:{}, matchStats:{},
     scoreA: null, scoreB: null
   };
   S.matches.push(match);
@@ -3606,13 +3606,15 @@ function openMatch(mid) {
 
     <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:14px;">
       ${m.status==='pending'?`
-        ${S.isAdmin?`
-        <button class="btn btn-secondary btn-sm" onclick="reshuffleMatch('${m.id}')">🔀 Repetir sorteo</button>
-        <button class="btn btn-secondary btn-sm" onclick="swapColors('${m.id}')">👕 Cambiar colores</button>
-        `:''}
-        <button class="btn btn-secondary btn-sm" onclick="exportPitch('${m.id}')">📸 Exportar PNG</button>
-        <button class="btn btn-primary btn-sm" onclick="startMatch('${m.id}')">▶ Comenzar partido</button>
-        <button class="btn btn-danger btn-sm" onclick="cancelMatch('${m.id}')">✕ Cancelar partido</button>
+        ${!m.confirmed?`
+          <button class="btn btn-secondary btn-sm" onclick="reshuffleMatch('${m.id}')">🔀 Repetir sorteo</button>
+          <button class="btn btn-secondary btn-sm" onclick="swapColors('${m.id}')">👕 Cambiar colores</button>
+          <button class="btn btn-primary btn-sm" onclick="confirmMatch('${m.id}')">✅ Confirmar equipos</button>
+        `:`
+          <button class="btn btn-secondary btn-sm" onclick="exportPitch('${m.id}')">📸 Exportar PNG</button>
+          <button class="btn btn-primary btn-sm" onclick="startMatch('${m.id}')">▶ Comenzar partido</button>
+          <button class="btn btn-danger btn-sm" onclick="cancelMatch('${m.id}')">✕ Cancelar partido</button>
+        `}
       `:''}
       ${m.status==='playing'?`
         <div id="live-timer-${m.id}" style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:var(--green);letter-spacing:2px;width:100%;text-align:center;"></div>
@@ -4046,6 +4048,16 @@ function startListTimer(mid) {
   };
   tick();
   listTimerIntervals[mid] = setInterval(tick, 1000);
+}
+
+function confirmMatch(mid) {
+  const m = gm(mid);
+  if (!m) return;
+  m.confirmed = true;
+  save();
+  renderPartidos();
+  renderInicio();
+  toast('✅ Equipos confirmados — ¡a por ello!');
 }
 
 function startMatch(mid) {
