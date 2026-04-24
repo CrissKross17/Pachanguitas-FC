@@ -3606,8 +3606,10 @@ function openMatch(mid) {
 
     <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:14px;">
       ${m.status==='pending'?`
+        ${S.isAdmin?`
         <button class="btn btn-secondary btn-sm" onclick="reshuffleMatch('${m.id}')">🔀 Repetir sorteo</button>
         <button class="btn btn-secondary btn-sm" onclick="swapColors('${m.id}')">👕 Cambiar colores</button>
+        `:''}
         <button class="btn btn-secondary btn-sm" onclick="exportPitch('${m.id}')">📸 Exportar PNG</button>
         <button class="btn btn-primary btn-sm" onclick="startMatch('${m.id}')">▶ Comenzar partido</button>
         <button class="btn btn-danger btn-sm" onclick="cancelMatch('${m.id}')">✕ Cancelar partido</button>
