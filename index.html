@@ -796,7 +796,10 @@ input:focus,select:focus{border-color:var(--green);}
   <div class="modal" style="max-width:560px;">
     <button class="modal-close" onclick="closeModal('modal-new-match')">×</button>
     <div class="modal-title">NUEVO PARTIDO</div>
-    <div class="fg"><label>Fecha</label><input type="date" id="nm-date"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div class="fg"><label>Fecha</label><input type="date" id="nm-date"></div>
+      <div class="fg"><label>Hora (opcional)</label><input type="time" id="nm-time"></div>
+    </div>
     <div class="fg"><label>Lugar (opcional)</label><input type="text" id="nm-place" placeholder="Polideportivo..."></div>
     <!-- Modo de creación (solo admin) -->
     <div id="nm-mode-wrap" style="display:none;margin-bottom:14px;padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;">
@@ -1941,15 +1944,22 @@ function renderProximaJornada() {
   const playerNames = ids => toArr(ids).map(id => esc(gp(id)?.name?.split(' ')[0] || '?')).join(', ');
   let countdown = '';
   if (next.date) {
-    const diff = Math.ceil((new Date(next.date) - new Date()) / 86400000);
-    if (diff > 0) countdown = `<span style="font-size:11px;color:var(--green);font-weight:700;">Faltan ${diff} día${diff>1?'s':''}</span>`;
-    else if (diff === 0) countdown = `<span style="font-size:11px;color:var(--accent);font-weight:700;">¡Hoy!</span>`;
+    const matchDate = new Date(`${next.date}T${next.time||'23:59'}:00`);
+    const diffMs = matchDate - new Date();
+    const diffH = diffMs / 3600000;
+    const diffD = diffMs / 86400000;
+    if (diffMs <= 0) countdown = `<span style="font-size:11px;color:var(--accent);font-weight:700;">¡En juego!</span>`;
+    else if (diffH < 1) countdown = `<span style="font-size:11px;color:var(--red);font-weight:700;">¡Menos de 1h!</span>`;
+    else if (diffH < 6) countdown = `<span style="font-size:11px;color:var(--red);font-weight:700;">Faltan ${Math.ceil(diffH)}h</span>`;
+    else if (diffH < 24) countdown = `<span style="font-size:11px;color:var(--accent);font-weight:700;">Faltan ${Math.ceil(diffH)}h</span>`;
+    else if (diffD < 2) countdown = `<span style="font-size:11px;color:var(--accent);font-weight:700;">¡Mañana!</span>`;
+    else countdown = `<span style="font-size:11px;color:var(--green);font-weight:700;">Faltan ${Math.ceil(diffD)} días</span>`;
   }
   el.innerHTML = `
     <div onclick="nav('partidos')" style="cursor:pointer;background:var(--surface);border:1px solid var(--green);border-radius:12px;padding:12px 16px;margin-bottom:20px;display:flex;flex-direction:column;gap:8px;">
       <div style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:6px;">
         <span style="font-size:11px;font-weight:900;color:var(--green);letter-spacing:1px;text-transform:uppercase;">🗓️ Próxima jornada</span>
-        ${next.date ? `<span style="font-size:11px;color:#fff;font-weight:600;text-align:center;">${fmtDate(next.date)}</span>` : '<span></span>'}
+        ${next.date ? `<span style="font-size:11px;color:#fff;font-weight:600;text-align:center;">${fmtDate(next.date)}${next.time?` · ${next.time}`:''}</span>` : '<span></span>'}
         <div style="display:flex;align-items:center;justify-content:flex-end;">${countdown}</div>
       </div>
       <div style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;">
@@ -3190,6 +3200,7 @@ function openNewMatch() {
   nmManualB.clear();
   nmMode = 'sorteo';
   document.getElementById('nm-date').value = new Date().toISOString().split('T')[0];
+  document.getElementById('nm-time').value = '';
   document.getElementById('nm-place').value = '';
   // Show admin mode panel only when admin
   const modeWrap = document.getElementById('nm-mode-wrap');
@@ -3398,6 +3409,7 @@ function createMatch() {
   const match = {
     id: 'm'+Date.now(),
     date: document.getElementById('nm-date').value,
+    time: document.getElementById('nm-time').value||'',
     place: document.getElementById('nm-place').value.trim()||'',
     players, teamA, teamB,
     status: 'pending', confirmed: false, votes:{}, matchStats:{},
@@ -3740,8 +3752,8 @@ function buildPitch(m) {
     </div>`;
   };
 
-  const scoreA = m.scoreA!==null?m.scoreA:'';
-  const scoreB = m.scoreB!==null?m.scoreB:'';
+  const scoreA = m.scoreA ?? '';
+  const scoreB = m.scoreB ?? '';
 
   return `
   <div class="pitch-wrap" style="aspect-ratio:16/9;">
