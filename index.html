@@ -1451,8 +1451,8 @@ function renderSortableContainer() {
 
   // Create wrapper divs in the saved order
   container.innerHTML = order.map(id => `
-    <div class="dash-section" data-section="${id}" style="margin-bottom:28px;position:relative;">
-      ${S.isAdmin ? `<div class="dash-drag-handle" title="Arrastrar para reordenar" style="position:absolute;top:2px;right:2px;z-index:20;cursor:grab;background:rgba(74,222,128,0.12);border:1px solid rgba(74,222,128,0.25);border-radius:6px;padding:3px 8px;font-size:11px;color:var(--green);user-select:none;" >☰ ${getCfg('dashLabels',id)||id}</div>` : ''}
+    <div class="dash-section" data-section="${id}" style="margin-bottom:28px;">
+      ${S.isAdmin ? `<div class="dash-drag-handle" title="Arrastrar para reordenar" style="display:inline-flex;align-items:center;gap:6px;cursor:grab;background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.2);border-radius:6px;padding:3px 10px;font-size:11px;color:var(--green);user-select:none;margin-bottom:6px;">☰ ${getCfg('dashLabels',id)||id}</div>` : ''}
       <div id="home-${id}"></div>
     </div>`).join('');
 
