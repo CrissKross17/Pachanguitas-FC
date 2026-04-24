@@ -6500,7 +6500,7 @@ updatePendingBadge();
 checkVotingHash();
 
 let _tutSlide = 0;
-const _tutTotal = 9;
+const _tutTotal = 10;
 function openTutorial() { _tutSlide=0; tutRender(); openModal('modal-tutorial'); }
 function tutGo(i) { _tutSlide=i; tutRender(); }
 
@@ -6596,6 +6596,11 @@ S.matches.filter(m=>m.status==='playing').forEach(m=>{
       <div style="font-size:14px;color:var(--muted);line-height:1.6;">En Ranking puedes ver las clasificaciones de campo, portería, goles, partidos, rachas, H2H y emparejamientos.</div>
     </div>
     <div id="tut-slide-8" style="display:none;flex-direction:column;align-items:center;text-align:center;padding:28px 24px 16px;">
+      <div style="font-size:60px;line-height:1;margin-bottom:12px;">🏅</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:#facc15;margin-bottom:10px;line-height:1.1;">Clasificación</div>
+      <div style="font-size:14px;color:var(--muted);line-height:1.6;">Cada jornada suma puntos según tu rendimiento:<br><br><div style='background:var(--surface);border-radius:10px;padding:10px 16px;display:inline-block;text-align:left;line-height:2;'>📅 <strong style='color:var(--text)'>+1 pt</strong> por asistir<br>🏆 <strong style='color:var(--text)'>+2 pts</strong> por victoria<br>🤝 <strong style='color:var(--text)'>+1 pt</strong> por empate<br>⚽ <strong style='color:var(--text)'>+1 pt</strong> por cada gol</div><br><br>Desempate: más victorias, luego más goles.</div>
+    </div>
+    <div id="tut-slide-9" style="display:none;flex-direction:column;align-items:center;text-align:center;padding:28px 24px 16px;">
       <div style="font-size:60px;line-height:1;margin-bottom:12px;">🚀</div>
       <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;color:var(--green);margin-bottom:10px;line-height:1.1;">¡A jugar!</div>
       <div style="font-size:14px;color:var(--muted);line-height:1.6;">Eso es todo. Ahora a meter goles, recibir buenas notas y subir en el ranking. ¡Que empiece la pachanga!</div>
@@ -6603,7 +6608,7 @@ S.matches.filter(m=>m.status==='playing').forEach(m=>{
     </div>
     <!-- Dots -->
     <div style="display:flex;justify-content:center;gap:8px;padding:14px 0 8px;">
-      <div id="tut-dot-0" style="width:8px;height:8px;border-radius:50%;cursor:pointer;background:var(--green);transition:background .2s;" onclick="tutGo(0)"></div><div id="tut-dot-1" style="width:8px;height:8px;border-radius:50%;cursor:pointer;background:var(--border);transition:background .2s;" onclick="tutGo(1)"></div><div id="tut-dot-2" style="width:8px;height:8px;border-radius:50%;cursor:pointer;background:var(--border);transition:background .2s;" onclick="tutGo(2)"></div><div id="tut-dot-3" style="width:8px;height:8px;border-radius:50%;cursor:pointer;background:var(--border);transition:background .2s;" onclick="tutGo(3)"></div><div id="tut-dot-4" style="width:8px;height:8px;border-radius:50%;cursor:pointer;background:var(--border);transition:background .2s;" onclick="tutGo(4)"></div><div id="tut-dot-5" style="width:8px;height:8px;border-radius:50%;cursor:pointer;background:var(--border);transition:background .2s;" onclick="tutGo(5)"></div><div id="tut-dot-6" style="width:8px;height:8px;border-radius:50%;cursor:pointer;background:var(--border);transition:background .2s;" onclick="tutGo(6)"></div><div id="tut-dot-7" style="width:8px;height:8px;border-radius:50%;cursor:pointer;background:var(--border);transition:background .2s;" onclick="tutGo(7)"></div><div id="tut-dot-8" style="width:8px;height:8px;border-radius:50%;cursor:pointer;background:var(--border);transition:background .2s;" onclick="tutGo(8)"></div>
+      <div id="tut-dot-0" style="width:8px;height:8px;border-radius:50%;cursor:pointer;background:var(--green);transition:background .2s;" onclick="tutGo(0)"></div><div id="tut-dot-1" style="width:8px;height:8px;border-radius:50%;cursor:pointer;background:var(--border);transition:background .2s;" onclick="tutGo(1)"></div><div id="tut-dot-2" style="width:8px;height:8px;border-radius:50%;cursor:pointer;background:var(--border);transition:background .2s;" onclick="tutGo(2)"></div><div id="tut-dot-3" style="width:8px;height:8px;border-radius:50%;cursor:pointer;background:var(--border);transition:background .2s;" onclick="tutGo(3)"></div><div id="tut-dot-4" style="width:8px;height:8px;border-radius:50%;cursor:pointer;background:var(--border);transition:background .2s;" onclick="tutGo(4)"></div><div id="tut-dot-5" style="width:8px;height:8px;border-radius:50%;cursor:pointer;background:var(--border);transition:background .2s;" onclick="tutGo(5)"></div><div id="tut-dot-6" style="width:8px;height:8px;border-radius:50%;cursor:pointer;background:var(--border);transition:background .2s;" onclick="tutGo(6)"></div><div id="tut-dot-7" style="width:8px;height:8px;border-radius:50%;cursor:pointer;background:var(--border);transition:background .2s;" onclick="tutGo(7)"></div><div id="tut-dot-8" style="width:8px;height:8px;border-radius:50%;cursor:pointer;background:var(--border);transition:background .2s;" onclick="tutGo(8)"></div><div id="tut-dot-9" style="width:8px;height:8px;border-radius:50%;cursor:pointer;background:var(--border);transition:background .2s;" onclick="tutGo(9)"></div>
     </div>
     <!-- Buttons -->
     <div style="display:flex;gap:8px;padding:12px 20px 20px;">
