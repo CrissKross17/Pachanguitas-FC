@@ -3609,7 +3609,7 @@ function openMatch(mid) {
         <div id="live-timer-${m.id}" style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:var(--green);letter-spacing:2px;width:100%;text-align:center;"></div>
         <div style="font-size:11px;color:var(--muted);width:100%;text-align:center;margin-top:-8px;">PARTIDO EN CURSO</div>
         <button class="btn btn-danger btn-sm" style="margin-top:4px;" onclick="stopMatch('${m.id}')">⏹ Finalizar partido</button>
-        ${S.isAdmin?`<button class="btn btn-secondary btn-sm" style="margin-top:4px;" onclick="undoStartMatch('${m.id}')">↩ Deshacer inicio</button>`:''}
+        ${S.isAdmin?`<button class="btn btn-secondary btn-sm" style="margin-top:4px;" onclick="undoStartMatch('${m.id}')">🔄 Reiniciar partido</button>`:''}
 
       `:''}
       ${m.status==='finished'?`
@@ -3695,6 +3695,7 @@ function openMatch(mid) {
           <button class="btn btn-secondary btn-sm" onclick="copyVotingLink('${m.id}')">🔗 Copiar enlace WhatsApp</button>`;
         })()}
         <button class="btn btn-secondary btn-sm" onclick="exportPitch('${m.id}')">📸 Exportar PNG</button>
+        ${S.isAdmin?`<button class="btn btn-secondary btn-sm" onclick="undoStartMatch('${m.id}')">🔄 Reiniciar partido</button>`:''}
         ${S.isAdmin?`<button class="btn btn-danger btn-sm" onclick="deleteMatch('${m.id}')">Eliminar</button>`:''}
       `:''}
     </div>
@@ -4058,12 +4059,17 @@ function undoStartMatch(mid) {
   m.status = 'pending';
   m.confirmed = true;
   delete m.startTime;
+  delete m.duration;
+  delete m.scoreA;
+  delete m.scoreB;
+  delete m.scoreA2;
+  delete m.scoreB2;
   clearInterval(liveTimerInterval);
   save();
   renderPartidos();
   renderInicio();
   openMatch(mid);
-  toast('↩ Inicio deshecho — el partido vuelve a estar listo para comenzar');
+  toast('🔄 Partido reiniciado — equipos intactos, listo para comenzar');
 }
 
 function startMatch(mid) {
