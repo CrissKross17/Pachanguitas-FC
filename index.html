@@ -2459,8 +2459,8 @@ function playerCardHtml(p,i) {
     <!-- 1. SVG card art fills entire card -->
     <img src="${bg}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:fill;pointer-events:none;z-index:0;">
 
-    <!-- 2. Photo / silhouette — integrated, no circle -->
-    <div style="position:absolute;top:5%;left:5%;right:5%;height:54%;z-index:1;overflow:hidden;">
+    <!-- 2. Photo / silhouette — integrated, below V-notch -->
+    <div style="position:absolute;top:13%;left:3%;right:3%;height:47%;z-index:1;overflow:hidden;">
       ${photoOrSilhouette}
     </div>
 
@@ -3609,6 +3609,8 @@ function openMatch(mid) {
         <div id="live-timer-${m.id}" style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:var(--green);letter-spacing:2px;width:100%;text-align:center;"></div>
         <div style="font-size:11px;color:var(--muted);width:100%;text-align:center;margin-top:-8px;">PARTIDO EN CURSO</div>
         <button class="btn btn-danger btn-sm" style="margin-top:4px;" onclick="stopMatch('${m.id}')">⏹ Finalizar partido</button>
+        ${S.isAdmin?`<button class="btn btn-secondary btn-sm" style="margin-top:4px;" onclick="undoStartMatch('${m.id}')">↩ Deshacer inicio</button>`:''}
+
       `:''}
       ${m.status==='finished'?`
         <div style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:8px;">
@@ -4048,6 +4050,20 @@ function confirmMatch(mid) {
   renderInicio();
   openMatch(mid);
   toast('✅ Equipos confirmados — ¡a por ello!');
+}
+
+function undoStartMatch(mid) {
+  const m = gm(mid);
+  if (!m) return;
+  m.status = 'pending';
+  m.confirmed = true;
+  delete m.startTime;
+  clearInterval(liveTimerInterval);
+  save();
+  renderPartidos();
+  renderInicio();
+  openMatch(mid);
+  toast('↩ Inicio deshecho — el partido vuelve a estar listo para comenzar');
 }
 
 function startMatch(mid) {
