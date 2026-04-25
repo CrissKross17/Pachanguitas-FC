@@ -3676,6 +3676,7 @@ function openMatch(mid) {
               ? `<button class="btn btn-primary" onclick="closeMatchWithP2('${m.id}')">✓ Cerrar partido</button>`
               : `<div style="font-size:11px;color:var(--muted);text-align:center;width:100%;">Faltan ${eligible.filter(pid=>!voted.includes(pid)).length} voto${eligible.filter(pid=>!voted.includes(pid)).length>1?'s':''} para poder cerrar</div>`;
           })()}
+          ${S.isAdmin?`<button class="btn btn-secondary btn-sm" onclick="undoStartMatch('${m.id}')">🔄 Reiniciar partido</button>`:''}
           ${S.isAdmin?`<button class="btn btn-danger btn-sm" onclick="deleteMatch('${m.id}')">Eliminar</button>`:''}
         </div>
       `:''}
