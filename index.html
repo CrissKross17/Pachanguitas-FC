@@ -8,11 +8,11 @@
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js" crossorigin="anonymous"></script>
 <style>
 :root {
-  --bg: #0b0d08;
-  --surface: #131610;
-  --surface2: #1a1e15;
-  --surface3: #22271c;
-  --border: #363c28;
+  --bg: #07090e;
+  --surface: #0e1118;
+  --surface2: #151922;
+  --surface3: #1d222e;
+  --border: #2a3040;
   --green: #38a355;
   --green2: #2c8542;
   --field: #1a7a3a;
@@ -31,7 +31,28 @@
 html{scroll-behavior:smooth;}
 body{
   font-family:'Barlow',sans-serif;
-  background:var(--bg);
+  /* ── Vestuario old school: 0KB, puro CSS ── */
+  background-color:#07090e;
+  background-image:
+    /* Vignette fuerte en esquinas y bordes */
+    radial-gradient(ellipse 130% 130% at 50% 50%, transparent 28%, rgba(0,0,8,0.97) 100%),
+    /* Sombra lateral izquierda (taquillas en penumbra) */
+    linear-gradient(to right, rgba(0,0,6,0.92) 0%, rgba(0,0,6,0.35) 20%, transparent 38%),
+    /* Sombra lateral derecha */
+    linear-gradient(to left,  rgba(0,0,6,0.92) 0%, rgba(0,0,6,0.35) 20%, transparent 38%),
+    /* Oscuridad suelo */
+    linear-gradient(to top, rgba(0,0,10,0.88) 0%, transparent 52%),
+    /* Tubo fluorescente — el héroe de la escena */
+    radial-gradient(ellipse 18% 4% at 50% 0%, rgba(215,228,255,0.32) 0%, rgba(170,200,255,0.12) 45%, transparent 100%),
+    /* Cono de luz bajando del tubo */
+    radial-gradient(ellipse 52% 68% at 50% 14%, rgba(42,72,138,0.24) 0%, transparent 100%),
+    /* Charco de luz en el suelo (reflejo húmedo) */
+    radial-gradient(ellipse 26% 10% at 50% 93%, rgba(32,58,118,0.16) 0%, transparent 100%),
+    /* Líneas verticales taquillas (casi imperceptibles) */
+    repeating-linear-gradient(90deg, transparent 0px, transparent 138px, rgba(255,255,255,0.013) 139px, rgba(255,255,255,0.013) 141px),
+    /* Atmósfera azul-acero de fondo */
+    linear-gradient(180deg, rgba(8,14,34,0.55) 0%, rgba(4,6,18,0.75) 100%);
+  background-attachment: fixed;
   color:var(--text);
   min-height:100vh;
   overflow-x:hidden;
