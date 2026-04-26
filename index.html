@@ -625,25 +625,25 @@ input:focus,select:focus{border-color:var(--green);}
 
     <div class="admin-sidebar">
       <div class="admin-sidebar-item active" id="aside-votos" onclick="navAdminSection('votos')">
-        <span class="aside-icon">🗳️</span><span>Votos</span>
+        <span>Votos</span>
       </div>
       <div class="admin-sidebar-item" id="aside-partidos" onclick="navAdminSection('partidos')">
-        <span class="aside-icon">⚽</span><span>Jornadas</span>
+        <span>Jornadas</span>
       </div>
       <div class="admin-sidebar-item" id="aside-jugadores" onclick="navAdminSection('jugadores')">
-        <span class="aside-icon">👥</span><span>Jugadores</span>
+        <span>Jugadores</span>
       </div>
       <div class="admin-sidebar-item" id="aside-simulaciones" onclick="navAdminSection('simulaciones')">
-        <span class="aside-icon">🧪</span><span>Simulaciones</span>
+        <span>Simulaciones</span>
       </div>
       <div class="admin-sidebar-item" id="aside-utilidades" onclick="navAdminSection('utilidades')">
-        <span class="aside-icon">🛠️</span><span>Utilidades</span>
+        <span>Utilidades</span>
       </div>
       <div class="admin-sidebar-item" id="aside-temporadas" onclick="navAdminSection('temporadas')">
-        <span class="aside-icon">🏆</span><span>Temporadas</span>
+        <span>Temporadas</span>
       </div>
       <div class="admin-sidebar-item" id="aside-ajustes" onclick="navAdminSection('ajustes')">
-        <span class="aside-icon">⚙️</span><span>Ajustes</span>
+        <span>Ajustes</span>
       </div>
     </div>
 
@@ -719,14 +719,14 @@ input:focus,select:focus{border-color:var(--green);}
     <div class="page-sub">Estadísticas acumuladas</div>
   </div>
   <div class="tab-bar" id="rank-tabs">
-    <button class="tab active" id="rank-tab-rating" onclick="rankTab('rating')">⭐ Campo</button>
-    <button class="tab" id="rank-tab-porteria" onclick="rankTab('porteria')">🧤 Portería</button>
-    <button class="tab" id="rank-tab-goles" onclick="rankTab('goles')">⚽ Goles</button>
-    <button class="tab" id="rank-tab-partidos" onclick="rankTab('partidos')">📅 Jornadas</button>
-    <button class="tab" id="rank-tab-racha" onclick="rankTab('racha')">🔥 Racha</button>
-    <button class="tab" id="rank-tab-h2h" onclick="rankTab('h2h')">⚔️ H2H</button>
-    <button class="tab" id="rank-tab-quimica" onclick="rankTab('quimica')">👥 Emparejamientos</button>
-      <button class="tab" id="rank-tab-clasificacion" onclick="rankTab('clasificacion')">🏅 Clasificación</button>
+    <button class="tab active" id="rank-tab-rating" onclick="rankTab('rating')">Campo</button>
+    <button class="tab" id="rank-tab-porteria" onclick="rankTab('porteria')">Portería</button>
+    <button class="tab" id="rank-tab-goles" onclick="rankTab('goles')">Goles</button>
+    <button class="tab" id="rank-tab-partidos" onclick="rankTab('partidos')">Jornadas</button>
+    <button class="tab" id="rank-tab-racha" onclick="rankTab('racha')">Racha</button>
+    <button class="tab" id="rank-tab-h2h" onclick="rankTab('h2h')">H2H</button>
+    <button class="tab" id="rank-tab-quimica" onclick="rankTab('quimica')">Emparejamientos</button>
+    <button class="tab" id="rank-tab-clasificacion" onclick="rankTab('clasificacion')">Clasificación</button>
   </div>
   <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;">
     <div style="font-size:12px;color:var(--muted);">Temporada:</div>
@@ -806,7 +806,7 @@ input:focus,select:focus{border-color:var(--green);}
       <div style="font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">⚡ Modo admin</div>
       <div style="display:flex;gap:8px;">
         <button id="nm-btn-sorteo" onclick="setNmMode('sorteo')" class="btn btn-primary btn-sm" style="flex:1;">🔀 Sortear equipos</button>
-        <button id="nm-btn-manual" onclick="setNmMode('manual')" class="btn btn-secondary btn-sm" style="flex:1;">✍️ Repartir manualmente</button>
+        <button id="nm-btn-manual" onclick="setNmMode('manual')" class="btn btn-secondary btn-sm" style="flex:1;">Repartir manualmente</button>
       </div>
     </div>
     <div class="fg">
@@ -859,7 +859,7 @@ input:focus,select:focus{border-color:var(--green);}
       <select id="voter-sel" onchange="renderVoteRows()"></select>
     </div>
     <div style="font-size:12px;color:var(--muted);margin-bottom:14px;padding:8px 12px;background:var(--surface2);border-radius:8px;">
-      Puntúa del <strong>1 al 5</strong> en campo <span style="color:var(--accent);">⭐</span> y portería <span style="color:var(--blue);">🧤</span> · Añade tus goles abajo
+      Puntúa del <strong>1 al 5</strong> en campo y portería · Añade tus goles abajo
     </div>
     <div id="vote-error-msg" style="display:none;background:rgba(248,113,113,0.15);border:1px solid rgba(248,113,113,0.4);border-radius:8px;padding:10px 14px;font-size:13px;font-weight:600;color:var(--red);margin-bottom:12px;line-height:1.5;"></div>
     <div id="vote-rows"></div>
@@ -1216,9 +1216,9 @@ const DEFAULT_SETTINGS = {
   teamWhite: 'Blancos',
   teamBlack: 'Negros',
   navLabels: { inicio:'Inicio', jugadores:'Jugadores', partidos:'Jornadas', ranking:'Ranking', admin:'Admin' },
-  dashLabels: { premios:'🏆 Premios', dupla:'⚡ Dupla Galáctica & Jinetes', extra:'🥇 Premios individuales', enfermeria:'🏥 Enfermería', goleadores:'⚽ Goleadores', 'most-played':'📊 Más jornadas', 'blancos-negros':'⬜⬛ Blancos vs Negros', 'racha-grupo':'📅 Racha del grupo', randoms:'🎲 Invitados Random', 'last-match':'🕐 Última jornada' },
+  dashLabels: { premios:'Premios', dupla:'Dupla Galáctica & Jinetes', extra:'Premios individuales', enfermeria:'Enfermería', goleadores:'Goleadores', 'most-played':'Más jornadas', 'blancos-negros':'Blancos vs Negros', 'racha-grupo':'Racha del grupo', randoms:'Invitados Random', 'last-match':'Última jornada' },
   awardLabels: { bestPlayer:'Mejor jugador', bestGK:'Mejor portero', topScorer:'Máx. goleador', mostPicado:'Más picado', mostTardon:'Más tardón', fairplay:'Fairplay', mostGuarro:'Más guarro', worstGK:'Peor portero', ghost:'El fantasma', generous:'Más generoso', rata:'Más rata', enemies:'Enemigos jurados', untouchable:'El intocable', dupla:'La Dupla Galáctica', jinetes:'Los Dos Jinetes del Apocalipsis' },
-  rankLabels: { rating:'⭐ Campo', porteria:'🧤 Portería', goles:'⚽ Goles', partidos:'📅 Jornadas', racha:'🔥 Racha', h2h:'⚔️ H2H', quimica:'👥 Emparejamientos', clasificacion:'🏅 Clasificación' }
+  rankLabels: { rating:'Campo', porteria:'Portería', goles:'Goles', partidos:'Jornadas', racha:'Racha', h2h:'H2H', quimica:'Emparejamientos', clasificacion:'Clasificación' }
 };
 function getCfg(key, subkey) {
   if (!S.settings) S.settings = {};
@@ -1464,18 +1464,18 @@ function updateAdminUI() {
 // ============================================================
 // Dashboard section definitions (render is called after renderInicio fills content)
 const DASH_SECTIONS = {
-  'premios':       { label: '🏆 Premios' },
-  'dupla':         { label: '⚡ Dupla Galáctica & Jinetes' },
-  'enfermeria':    { label: '🏥 Enfermería' },
-  'extra':         { label: '🥇 Premios individuales' },
-  'goleadores':    { label: '⚽ Goleadores' },
-  'most-played':   { label: '📊 Más jornadas' },
-  'blancos-negros':{ label: '⬜⬛ Blancos vs Negros' },
-  'racha-grupo':   { label: '📅 Racha del grupo' },
-  'randoms':       { label: '🎲 Invitados Random' },
-  'last-match':    { label: '🕐 Última jornada' },
-  'prediccion':    { label: '🔮 Predicción' },
-  'clasificacion': { label: '🏅 Clasificación' },
+  'premios':       { label: 'Premios' },
+  'dupla':         { label: 'Dupla Galáctica & Jinetes' },
+  'enfermeria':    { label: 'Enfermería' },
+  'extra':         { label: 'Premios individuales' },
+  'goleadores':    { label: 'Goleadores' },
+  'most-played':   { label: 'Más jornadas' },
+  'blancos-negros':{ label: 'Blancos vs Negros' },
+  'racha-grupo':   { label: 'Racha del grupo' },
+  'randoms':       { label: 'Invitados Random' },
+  'last-match':    { label: 'Última jornada' },
+  'prediccion':    { label: 'Predicción' },
+  'clasificacion': { label: 'Clasificación' },
 };
 
 function renderSortableContainer() {
@@ -1678,14 +1678,14 @@ function renderDashPremios() {
   el.innerHTML = `
     <div class="section-title">${getCfg('dashLabels','premios')}</div>
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:16px;">
-      ${awardCardFull('⭐','MEJOR JUGADOR', topCampo, topCampo?`Nota media: ${(computeRating(topCampo.id)??0).toFixed(1)}`:'Sin datos aún')}
-      ${awardCardFull('🧤','MEJOR PORTERO', topPorteria, topPorteria?`Nota portería: ${(computeGKRating(topPorteria.id)??0).toFixed(1)}`:'Sin datos aún')}
-      ${awardCardFull('⚽','MÁX. GOLEADOR', topGol&&computeGoles(topGol.id)>0?topGol:null, topGol&&computeGoles(topGol.id)>0?`${computeGoles(topGol.id)} goles`:'Sin goles aún')}
-      ${topPicado&&gp(topPicado[0])?awardCardFull('😤','MÁS PICADO', gp(topPicado[0]), `${topPicado[1]} veces señalado`):''}
-      ${topTardon&&gp(topTardon[0])?awardCardFull('⏰','MÁS TARDÓN', gp(topTardon[0]), `${topTardon[1]} veces tarde`):''}
-      ${topFairplay&&gp(topFairplay[0])?awardCardFull('🤝','FAIRPLAY', gp(topFairplay[0]), `${topFairplay[1]} voto${topFairplay[1]>1?'s':''}`):''}
-      ${topGuarro&&gp(topGuarro[0])?awardCardFull('🐷','MÁS GUARRO', gp(topGuarro[0]), `${topGuarro[1]} voto${topGuarro[1]>1?'s':''}`):''}
-      ${(()=>{ const cl=computeClasificacion(); if(!cl.length) return ''; const mv=cl[0]; const tv=getTransferValue(mv.pts); return awardCardFull('💰','MÁS VALIOSO', mv.p, mv.pts+' pts · '+tv.value+'M €'); })()}
+      ${awardCardFull('MVP','MEJOR JUGADOR', topCampo, topCampo?`Nota media: ${(computeRating(topCampo.id)??0).toFixed(1)}`:'Sin datos aún')}
+      ${awardCardFull('GK','MEJOR PORTERO', topPorteria, topPorteria?`Nota portería: ${(computeGKRating(topPorteria.id)??0).toFixed(1)}`:'Sin datos aún')}
+      ${awardCardFull('GOL','MÁX. GOLEADOR', topGol&&computeGoles(topGol.id)>0?topGol:null, topGol&&computeGoles(topGol.id)>0?`${computeGoles(topGol.id)} goles`:'Sin goles aún')}
+      ${topPicado&&gp(topPicado[0])?awardCardFull('PIC','MÁS PICADO', gp(topPicado[0]), `${topPicado[1]} veces señalado`):''}
+      ${topTardon&&gp(topTardon[0])?awardCardFull('TAR','MÁS TARDÓN', gp(topTardon[0]), `${topTardon[1]} veces tarde`):''}
+      ${topFairplay&&gp(topFairplay[0])?awardCardFull('FP','FAIRPLAY', gp(topFairplay[0]), `${topFairplay[1]} voto${topFairplay[1]>1?'s':''}`):''}
+      ${topGuarro&&gp(topGuarro[0])?awardCardFull('GUA','MÁS GUARRO', gp(topGuarro[0]), `${topGuarro[1]} voto${topGuarro[1]>1?'s':''}`):''}
+      ${(()=>{ const cl=computeClasificacion(); if(!cl.length) return ''; const mv=cl[0]; const tv=getTransferValue(mv.pts); return awardCardFull('VAL','MÁS VALIOSO', mv.p, mv.pts+' pts · '+tv.value+'M €'); })()}
     </div>`;
 }
 
@@ -1773,15 +1773,15 @@ function renderDashExtra() {
           });
           return {p, avg: given.length?given.reduce((a,b)=>a+b,0)/given.length:null};
         }).filter(x=>x.avg!==null).sort((a,b)=>b.avg-a.avg);
-        if(voterAvgs[0]) out += awardCardFull('😇','MÁS GENEROSO', voterAvgs[0].p, `Media votos: ${voterAvgs[0].avg.toFixed(1)} ⭐`);
+        if(voterAvgs[0]) out += awardCardFull('GEN','MÁS GENEROSO', voterAvgs[0].p, `Media votos: ${voterAvgs[0].avg.toFixed(1)}`);
 
-        // 😈 MÁS RATA (lowest avg vote given)
+        // MÁS RATA (lowest avg vote given)
         if(voterAvgs.length>1){
           const rata = voterAvgs[voterAvgs.length-1];
-          if(rata&&rata.p&&rata.avg!==null) out += awardCardFull('😈','MÁS RATA', rata.p, `Media votos: ${rata.avg.toFixed(1)} 💀`);
+          if(rata&&rata.p&&rata.avg!==null) out += awardCardFull('RAT','MÁS RATA', rata.p, `Media votos: ${rata.avg.toFixed(1)}`);
         }
 
-        // ⚔️ ENEMIGOS JURADOS (most times as rivals)
+        // ENEMIGOS JURADOS (most times as rivals)
         const fixedInMatch = players.filter(p=>!p.isRandom);
         let topRivalPair=null, topRivalCount=0;
         for(let i=0;i<fixedInMatch.length;i++){
@@ -1803,8 +1803,7 @@ function renderDashExtra() {
           const photoB=topRivalPair.b.photo?`<img src="${topRivalPair.b.photo}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top;">`:
             `<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><span style="font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;color:rgba(255,255,255,0.2);">${initials(topRivalPair.b.name)}</span></div>`;
           out += `<div style="background:var(--surface);border:1px solid rgba(248,113,113,0.4);border-radius:14px;padding:16px;text-align:center;position:relative;overflow:hidden;">
-            <div style="position:absolute;top:-10px;right:-10px;font-size:80px;opacity:0.04;">⚔️</div>
-            <div style="font-size:10px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;">⚔️ ENEMIGOS JURADOS</div>
+            <div style="font-size:10px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;">ENEMIGOS JURADOS</div>
             <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:8px;">
               <div style="position:relative;width:44px;height:58px;border-radius:6px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.5);">
                 <img src="${topRivalPair?.a ? getCardBg(computeOVR(topRivalPair.a.id)) : FUT_BG}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;">
@@ -1833,7 +1832,7 @@ function renderDashExtra() {
           });
           return {p, best};
         }).filter(x=>x.best>0).sort((a,b)=>b.best-a.best)[0];
-        if(unbeaten) out += awardCardFull('🏆','EL INTOCABLE', unbeaten.p, `${unbeaten.best} partidos sin perder`);
+        if(unbeaten) out += awardCardFull('INV','EL INTOCABLE', unbeaten.p, `${unbeaten.best} partidos sin perder`);
 
         return out;
       })()}
@@ -1988,7 +1987,7 @@ function renderProximaJornada() {
   el.innerHTML = `
     <div onclick="nav('partidos')" style="cursor:pointer;background:var(--surface);border:1px solid var(--green);border-radius:12px;padding:12px 16px;margin-bottom:20px;display:flex;flex-direction:column;gap:8px;">
       <div style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:6px;">
-        <span style="font-size:11px;font-weight:900;color:var(--green);letter-spacing:1px;text-transform:uppercase;">🗓️ Próxima jornada</span>
+        <span style="font-size:11px;font-weight:900;color:var(--green);letter-spacing:1px;text-transform:uppercase;">Próxima jornada</span>
         ${next.date ? `<span style="font-size:11px;color:#fff;font-weight:600;text-align:center;">${fmtDate(next.date)}${next.time?` · ${next.time}`:''}</span>` : '<span></span>'}
         <div style="display:flex;align-items:center;justify-content:flex-end;">${countdown}</div>
       </div>
@@ -2035,7 +2034,7 @@ function renderInicio() {
   renderDashPrediccion();
   const clasifEl = document.getElementById('home-clasificacion');
   if (clasifEl) {
-    clasifEl.innerHTML = '<div class="section-title">🏅 Clasificación</div>';
+    clasifEl.innerHTML = '<div class="section-title">Clasificación</div>';
     const clasifInner = document.createElement('div');
     clasifInner.id = 'home-clasificacion-inner';
     clasifEl.appendChild(clasifInner);
@@ -2056,9 +2055,9 @@ function renderInicio() {
         const photoContent = p.photo
           ? `<img src="${p.photo}" style="width:100%;height:100%;object-fit:cover;object-position:top center;">`
           : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;"><span style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:900;color:var(--muted);">${initials(p.name)}</span></div>`;
-        const medals = ['🥇','🥈','🥉'];
+        const medals = ['1','2','3'];
         return `<div style="display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid var(--border);">
-          <div style="font-size:16px;min-width:24px;text-align:center;">${medals[i]||''}</div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:900;color:var(--muted);min-width:24px;text-align:center;">${medals[i]||i+1}</div>
           <!-- Avatar -->
           <div style="width:40px;height:40px;border-radius:50%;overflow:hidden;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,0.4);background:var(--surface2);border:1px solid var(--border);">
             ${photoContent}
@@ -2211,7 +2210,7 @@ function renderInicio() {
         </svg>
         <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-top:4px;">
           <span>${weekData[0]?.week?.slice(0,7)||''}</span>
-          <span style="color:${currentStreak>2?'var(--green)':currentStreak>0?'var(--accent)':'var(--red)'};">${currentStreak>2?'🔥 En racha':'⚠️ No rompáis la racha'}</span>
+          <span style="color:${currentStreak>2?'var(--green)':currentStreak>0?'var(--accent)':'var(--red)'};">${currentStreak>2?'En racha':'No rompáis la racha'}</span>
           <span>hoy</span>
         </div>
       </div>
@@ -2301,9 +2300,9 @@ function renderInicio() {
           ${(()=>{
             const aW=(last.aMatchWins||0), bW=(last.bMatchWins||0);
             const st='margin-top:4px;padding:6px 10px;border-radius:8px;font-size:12px;font-weight:700;text-align:center;';
-            if(aW>bW) return '<div style="'+st+'background:rgba(74,222,128,0.12);color:var(--green);border:1px solid rgba(74,222,128,0.3);">🏆 ⬜ Blancos gana la jornada</div>';
-            if(bW>aW) return '<div style="'+st+'background:rgba(255,255,255,0.06);color:#ccc;border:1px solid rgba(255,255,255,0.15);">🏆 ⬛ Negros gana la jornada</div>';
-            return '<div style="'+st+'background:rgba(250,204,21,0.1);color:var(--accent);border:1px solid rgba(250,204,21,0.3);">🤝 Empate de jornada</div>';
+            if(aW>bW) return '<div style="'+st+'background:rgba(74,222,128,0.12);color:var(--green);border:1px solid rgba(74,222,128,0.3);">⬜ Blancos gana la jornada</div>';
+            if(bW>aW) return '<div style="'+st+'background:rgba(255,255,255,0.06);color:#ccc;border:1px solid rgba(255,255,255,0.15);">⬛ Negros gana la jornada</div>';
+            return '<div style="'+st+'background:rgba(250,204,21,0.1);color:var(--accent);border:1px solid rgba(250,204,21,0.3);">Empate de jornada</div>';
           })()}
         `:`
           <div style="font-family:'Barlow Condensed',sans-serif;font-size:42px;font-weight:900;letter-spacing:4px;line-height:1;">
@@ -2358,7 +2357,7 @@ function renderInicio() {
         };
 
         return `<div style="display:flex;gap:10px;">
-          ${badgeCard(mvpPlayer,'⭐','MVP DE LA JORNADA',`Nota: ${mvp.avg.toFixed(1)}`,'var(--accent)','rgba(250,204,21,0.15)')}
+          ${badgeCard(mvpPlayer,'MVP','MVP DE LA JORNADA',`Nota: ${mvp.avg.toFixed(1)}`,'var(--accent)','rgba(250,204,21,0.15)')}
 
         </div>`;
       })()}
@@ -2977,12 +2976,12 @@ function openPlayerDetail(pid) {
 
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
       <div class="card-sm" style="border-color:rgba(250,204,21,0.25);">
-        <div style="font-size:10px;color:var(--accent);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">⭐ Campo</div>
+        <div style="font-size:10px;color:var(--accent);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Campo</div>
         <div style="font-family:'Barlow Condensed',sans-serif;font-size:32px;font-weight:900;color:var(--accent);">${avg>0?avg.toFixed(1):'—'}</div>
         <div style="font-size:11px;color:var(--muted);">${countVotesFor(p.id,'field')} valoraciones</div>
       </div>
       <div class="card-sm" style="border-color:rgba(96,165,250,0.25);">
-        <div style="font-size:10px;color:var(--blue);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">🧤 Portería</div>
+        <div style="font-size:10px;color:var(--blue);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Portería</div>
         <div style="font-family:'Barlow Condensed',sans-serif;font-size:32px;font-weight:900;color:var(--blue);">${gkavg>0?gkavg.toFixed(1):'—'}</div>
         <div style="font-size:11px;color:var(--muted);">${countVotesFor(p.id,'gk')} valoraciones</div>
       </div>
@@ -3067,7 +3066,7 @@ function openPlayerDetail(pid) {
       const goals = bm.matchStats?.[p.id]?.goles||0;
       const BC = 'Barlow Condensed';
       return '<div class="card-sm" style="margin-bottom:16px;border-color:rgba(250,204,21,0.3);">'
-        +'<div style="font-size:10px;color:var(--accent);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">🏆 El partido de tu vida</div>'
+        +'<div style="font-size:10px;color:var(--accent);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;">El partido de tu vida</div>'
         +'<div style="display:flex;align-items:center;justify-content:space-between;">'
         +'<div>'
         +'<div style="font-family:'+BC+',sans-serif;font-size:36px;font-weight:900;color:var(--accent);line-height:1;">'+best.ovr.toFixed(1)+'</div>'
@@ -3080,15 +3079,15 @@ function openPlayerDetail(pid) {
         +'</div>'
         +'<div style="text-align:right;">'
         +'<div style="font-size:11px;color:var(--muted);">'+fmtDate(bm.date)+'</div>'
-        +(best.fieldAvg>0?'<div style="font-size:11px;color:var(--accent);">⭐ '+best.fieldAvg.toFixed(1)+'</div>':'')
-        +(best.gkAvg>0?'<div style="font-size:11px;color:var(--blue);">🧤 '+best.gkAvg.toFixed(1)+'</div>':'')
+        +(best.fieldAvg>0?'<div style="font-size:11px;color:var(--accent);">'+best.fieldAvg.toFixed(1)+'</div>':'')
+        +(best.gkAvg>0?'<div style="font-size:11px;color:var(--blue);">'+best.gkAvg.toFixed(1)+'</div>':'')
         +'</div>'
         +'</div>'
         +'</div>';
     })()}
 
     <div class="btn-row">
-      <button class="btn btn-secondary btn-sm" onclick="openEditPlayer('${p.id}')">✏️ Editar</button>
+      <button class="btn btn-secondary btn-sm" onclick="openEditPlayer('${p.id}')">Editar</button>
       ${S.isAdmin?`<button class="btn btn-danger btn-sm" onclick="deletePlayer('${p.id}')">Eliminar</button>`:''}
     </div>
   `;
@@ -3121,13 +3120,13 @@ function renderPartidos() {
       if (m.status==='playing' && m.scoreA===null)
         return `<span class="match-status-pill pill-playing" style="display:inline-flex;align-items:center;gap:4px;"><span style="width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block;animation:pulse 1s infinite;"></span>EN VIVO</span>`;
       if (m.status==='playing' || m.status==='finished')
-        return `<span class="match-status-pill pill-pending">🗳️ Pendiente</span>`;
+        return `<span class="match-status-pill pill-pending">Pendiente</span>`;
       if (m.status==='done') {
         const cd=getVoteCountdown(m);
         const el=(m.players||[]).filter(pid=>!gp(pid)?.isRandom);
         const allV=el.length>0&&el.every(p=>Object.keys(m.votes||{}).includes(p));
         if (cd) return `<span class="match-status-pill pill-voting">${cd.text}</span>`;
-        return allV ? `<span class="match-status-pill pill-done">✓ Finalizado</span>` : `<span class="match-status-pill pill-pending">🗳️ Pendiente</span>`;
+        return allV ? `<span class="match-status-pill pill-done">✓ Finalizado</span>` : `<span class="match-status-pill pill-pending">Pendiente</span>`;
       }
       return `<span class="match-status-pill pill-pending">${statusLabel(m.status,m)}</span>`;
     })();
