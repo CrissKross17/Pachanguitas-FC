@@ -118,13 +118,13 @@ h1 { color: #444; font-size: 11px; letter-spacing: 4px; text-transform: uppercas
           <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
         </filter>
         <clipPath id="cl1">
-          <path d="M100,9 C97,4 93,0 88,0 C83,0 79,6 76,12 L20,12 L4,28 L4,254 L22,272 C48,284 74,288 100,288 C126,288 152,284 178,272 L196,254 L196,28 L180,12 L124,12 C121,6 117,0 112,0 C107,0 103,4 100,9 Z"/>
+          <path d="M100,0 L94,8 L88,4 L80,8 L76,12 L20,12 L4,28 L4,254 L22,272 C48,284 74,288 100,288 C126,288 152,284 178,272 L196,254 L196,28 L180,12 L124,12 L120,8 L112,4 L106,8 L100,0 Z"/>
         </clipPath>
       </defs>
 
       <!-- BG -->
       <g clip-path="url(#cl1)">
-        <path d="M100,9 C97,4 93,0 88,0 C83,0 79,6 76,12 L20,12 L4,28 L4,254 L22,272 C48,284 74,288 100,288 C126,288 152,284 178,272 L196,254 L196,28 L180,12 L124,12 C121,6 117,0 112,0 C107,0 103,4 100,9 Z"
+        <path d="M100,0 L94,8 L88,4 L80,8 L76,12 L20,12 L4,28 L4,254 L22,272 C48,284 74,288 100,288 C126,288 152,284 178,272 L196,254 L196,28 L180,12 L124,12 L120,8 L112,4 L106,8 L100,0 Z"
           fill="url(#bg1)"/>
         <!-- panel overlay -->
         <path d="M4,194 L196,194 L196,254 L178,272 C152,284 126,288 100,288 C74,288 48,284 22,272 L4,254 Z"
@@ -132,11 +132,11 @@ h1 { color: #444; font-size: 11px; letter-spacing: 4px; text-transform: uppercas
       </g>
 
       <!-- Outer border with glow -->
-      <path d="M100,9 C97,4 93,0 88,0 C83,0 79,6 76,12 L20,12 L4,28 L4,254 L22,272 C48,284 74,288 100,288 C126,288 152,284 178,272 L196,254 L196,28 L180,12 L124,12 C121,6 117,0 112,0 C107,0 103,4 100,9 Z"
+      <path d="M100,0 L94,8 L88,4 L80,8 L76,12 L20,12 L4,28 L4,254 L22,272 C48,284 74,288 100,288 C126,288 152,284 178,272 L196,254 L196,28 L180,12 L124,12 L120,8 L112,4 L106,8 L100,0 Z"
         fill="none" stroke="url(#br1)" stroke-width="3" filter="url(#gw1)" opacity="0.95"/>
 
       <!-- Inner border 1 -->
-      <path d="M100,14 C97,9 94,6 90,6 C86,6 82,11 80,17 L25,17 L10,33 L10,250 L27,267 C52,279 76,283 100,283 C124,283 148,279 173,267 L190,250 L190,33 L175,17 L120,17 C118,11 114,6 110,6 C106,6 103,9 100,14 Z"
+      <path d="M100,7 L95,13 L90,10 L83,14 L80,17 L25,17 L10,33 L10,250 L27,267 C52,279 76,283 100,283 C124,283 148,279 173,267 L190,250 L190,33 L175,17 L120,17 L117,14 L110,10 L105,13 L100,7 Z"
         fill="none" stroke="#ff5522" stroke-width="0.8" opacity="0.45"/>
 
       <!-- Panel separator -->
@@ -144,14 +144,14 @@ h1 { color: #444; font-size: 11px; letter-spacing: 4px; text-transform: uppercas
 
       <!-- ── TOP CROWN ORNAMENT ── -->
       <!-- Arch tracing the crown shape -->
-      <path d="M76,12 C79,6 83,0 88,0 C92,0 95,4 97,7 L100,9 L103,7 C105,4 108,0 112,0 C117,0 121,6 124,12"
+      <path d="M76,12 L80,8 L88,4 L94,8 L100,0 L106,8 L112,4 L120,8 L124,12"
         fill="none" stroke="#ff5522" stroke-width="1" opacity="0.6"/>
-      <!-- Center gem at notch -->
-      <path d="M100,3 L104,7 L100,11 L96,7 Z" fill="#ff5522" opacity="0.9"/>
-      <path d="M100,5 L103,8 L100,11 L97,8 Z" fill="#ff8866" opacity="0.6"/>
-      <!-- Side accent dots -->
-      <circle cx="76"  cy="12" r="1.8" fill="#ff4411" opacity="0.55"/>
-      <circle cx="124" cy="12" r="1.8" fill="#ff4411" opacity="0.55"/>
+      <!-- Center gem at top peak -->
+      <path d="M100,-5 L104,0 L100,5 L96,0 Z" fill="#ff5522" opacity="0.9"/>
+      <path d="M100,-3 L103,0 L100,3 L97,0 Z" fill="#ff8866" opacity="0.6"/>
+      <!-- Side peak dots -->
+      <circle cx="88"  cy="4" r="2" fill="#ff4411" opacity="0.65"/>
+      <circle cx="112" cy="4" r="2" fill="#ff4411" opacity="0.65"/>
       <!-- Horizontal accent lines -->
       <line x1="24"  y1="12" x2="68"  y2="12" stroke="#ff4411" stroke-width="0.8" opacity="0.35"/>
       <line x1="132" y1="12" x2="176" y2="12" stroke="#ff4411" stroke-width="0.8" opacity="0.35"/>
@@ -222,29 +222,29 @@ h1 { color: #444; font-size: 11px; letter-spacing: 4px; text-transform: uppercas
           <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
         </filter>
         <clipPath id="cl2">
-          <path d="M100,9 C97,4 93,0 88,0 C83,0 79,6 76,12 L20,12 L4,28 L4,254 L22,272 C48,284 74,288 100,288 C126,288 152,284 178,272 L196,254 L196,28 L180,12 L124,12 C121,6 117,0 112,0 C107,0 103,4 100,9 Z"/>
+          <path d="M100,0 L94,8 L88,4 L80,8 L76,12 L20,12 L4,28 L4,254 L22,272 C48,284 74,288 100,288 C126,288 152,284 178,272 L196,254 L196,28 L180,12 L124,12 L120,8 L112,4 L106,8 L100,0 Z"/>
         </clipPath>
       </defs>
 
       <g clip-path="url(#cl2)">
-        <path d="M100,9 C97,4 93,0 88,0 C83,0 79,6 76,12 L20,12 L4,28 L4,254 L22,272 C48,284 74,288 100,288 C126,288 152,284 178,272 L196,254 L196,28 L180,12 L124,12 C121,6 117,0 112,0 C107,0 103,4 100,9 Z"
+        <path d="M100,0 L94,8 L88,4 L80,8 L76,12 L20,12 L4,28 L4,254 L22,272 C48,284 74,288 100,288 C126,288 152,284 178,272 L196,254 L196,28 L180,12 L124,12 L120,8 L112,4 L106,8 L100,0 Z"
           fill="url(#bg2)"/>
         <path d="M4,194 L196,194 L196,254 L178,272 C152,284 126,288 100,288 C74,288 48,284 22,272 L4,254 Z"
           fill="url(#pn2)"/>
       </g>
 
-      <path d="M100,9 C97,4 93,0 88,0 C83,0 79,6 76,12 L20,12 L4,28 L4,254 L22,272 C48,284 74,288 100,288 C126,288 152,284 178,272 L196,254 L196,28 L180,12 L124,12 C121,6 117,0 112,0 C107,0 103,4 100,9 Z"
+      <path d="M100,0 L94,8 L88,4 L80,8 L76,12 L20,12 L4,28 L4,254 L22,272 C48,284 74,288 100,288 C126,288 152,284 178,272 L196,254 L196,28 L180,12 L124,12 L120,8 L112,4 L106,8 L100,0 Z"
         fill="none" stroke="url(#br2)" stroke-width="3" filter="url(#gw2)" opacity="0.95"/>
-      <path d="M100,14 C97,9 94,6 90,6 C86,6 82,11 80,17 L25,17 L10,33 L10,250 L27,267 C52,279 76,283 100,283 C124,283 148,279 173,267 L190,250 L190,33 L175,17 L120,17 C118,11 114,6 110,6 C106,6 103,9 100,14 Z"
+      <path d="M100,7 L95,13 L90,10 L83,14 L80,17 L25,17 L10,33 L10,250 L27,267 C52,279 76,283 100,283 C124,283 148,279 173,267 L190,250 L190,33 L175,17 L120,17 L117,14 L110,10 L105,13 L100,7 Z"
         fill="none" stroke="#5599ee" stroke-width="0.8" opacity="0.4"/>
       <line x1="10" y1="194" x2="190" y2="194" stroke="url(#br2)" stroke-width="1.2" opacity="0.7"/>
 
-      <path d="M76,12 C79,6 83,0 88,0 C92,0 95,4 97,7 L100,9 L103,7 C105,4 108,0 112,0 C117,0 121,6 124,12"
+      <path d="M76,12 L80,8 L88,4 L94,8 L100,0 L106,8 L112,4 L120,8 L124,12"
         fill="none" stroke="#4488dd" stroke-width="1" opacity="0.6"/>
-      <path d="M100,3 L104,7 L100,11 L96,7 Z" fill="#4488ff" opacity="0.9"/>
-      <path d="M100,5 L103,8 L100,11 L97,8 Z" fill="#aaccff" opacity="0.6"/>
-      <circle cx="76"  cy="12" r="1.8" fill="#2255cc" opacity="0.55"/>
-      <circle cx="124" cy="12" r="1.8" fill="#2255cc" opacity="0.55"/>
+      <path d="M100,-5 L104,0 L100,5 L96,0 Z" fill="#4488ff" opacity="0.9"/>
+      <path d="M100,-3 L103,0 L100,3 L97,0 Z" fill="#aaccff" opacity="0.6"/>
+      <circle cx="88"  cy="4" r="2" fill="#2255cc" opacity="0.65"/>
+      <circle cx="112" cy="4" r="2" fill="#2255cc" opacity="0.65"/>
       <line x1="24"  y1="12" x2="68"  y2="12" stroke="#2255cc" stroke-width="0.8" opacity="0.35"/>
       <line x1="132" y1="12" x2="176" y2="12" stroke="#2255cc" stroke-width="0.8" opacity="0.35"/>
 
@@ -309,12 +309,12 @@ h1 { color: #444; font-size: 11px; letter-spacing: 4px; text-transform: uppercas
           <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
         </filter>
         <clipPath id="cl3">
-          <path d="M100,9 C97,4 93,0 88,0 C83,0 79,6 76,12 L20,12 L4,28 L4,254 L22,272 C48,284 74,288 100,288 C126,288 152,284 178,272 L196,254 L196,28 L180,12 L124,12 C121,6 117,0 112,0 C107,0 103,4 100,9 Z"/>
+          <path d="M100,0 L94,8 L88,4 L80,8 L76,12 L20,12 L4,28 L4,254 L22,272 C48,284 74,288 100,288 C126,288 152,284 178,272 L196,254 L196,28 L180,12 L124,12 L120,8 L112,4 L106,8 L100,0 Z"/>
         </clipPath>
       </defs>
 
       <g clip-path="url(#cl3)">
-        <path d="M100,9 C97,4 93,0 88,0 C83,0 79,6 76,12 L20,12 L4,28 L4,254 L22,272 C48,284 74,288 100,288 C126,288 152,284 178,272 L196,254 L196,28 L180,12 L124,12 C121,6 117,0 112,0 C107,0 103,4 100,9 Z"
+        <path d="M100,0 L94,8 L88,4 L80,8 L76,12 L20,12 L4,28 L4,254 L22,272 C48,284 74,288 100,288 C126,288 152,284 178,272 L196,254 L196,28 L180,12 L124,12 L120,8 L112,4 L106,8 L100,0 Z"
           fill="url(#bg3)"/>
         <!-- Stars -->
         <g fill="#fff" opacity="0.5">
@@ -328,18 +328,18 @@ h1 { color: #444; font-size: 11px; letter-spacing: 4px; text-transform: uppercas
           fill="url(#pn3)"/>
       </g>
 
-      <path d="M100,9 C97,4 93,0 88,0 C83,0 79,6 76,12 L20,12 L4,28 L4,254 L22,272 C48,284 74,288 100,288 C126,288 152,284 178,272 L196,254 L196,28 L180,12 L124,12 C121,6 117,0 112,0 C107,0 103,4 100,9 Z"
+      <path d="M100,0 L94,8 L88,4 L80,8 L76,12 L20,12 L4,28 L4,254 L22,272 C48,284 74,288 100,288 C126,288 152,284 178,272 L196,254 L196,28 L180,12 L124,12 L120,8 L112,4 L106,8 L100,0 Z"
         fill="none" stroke="url(#br3)" stroke-width="3" filter="url(#gw3)" opacity="0.95"/>
-      <path d="M100,14 C97,9 94,6 90,6 C86,6 82,11 80,17 L25,17 L10,33 L10,250 L27,267 C52,279 76,283 100,283 C124,283 148,279 173,267 L190,250 L190,33 L175,17 L120,17 C118,11 114,6 110,6 C106,6 103,9 100,14 Z"
+      <path d="M100,7 L95,13 L90,10 L83,14 L80,17 L25,17 L10,33 L10,250 L27,267 C52,279 76,283 100,283 C124,283 148,279 173,267 L190,250 L190,33 L175,17 L120,17 L117,14 L110,10 L105,13 L100,7 Z"
         fill="none" stroke="#bb66ff" stroke-width="0.8" opacity="0.4"/>
       <line x1="10" y1="194" x2="190" y2="194" stroke="url(#br3)" stroke-width="1.2" opacity="0.7"/>
 
-      <path d="M76,12 C79,6 83,0 88,0 C92,0 95,4 97,7 L100,9 L103,7 C105,4 108,0 112,0 C117,0 121,6 124,12"
+      <path d="M76,12 L80,8 L88,4 L94,8 L100,0 L106,8 L112,4 L120,8 L124,12"
         fill="none" stroke="#9933cc" stroke-width="1" opacity="0.65"/>
-      <path d="M100,3 L104,7 L100,11 L96,7 Z" fill="#cc44ff" opacity="0.95"/>
-      <path d="M100,5 L103,8 L100,11 L97,8 Z" fill="#ee99ff" opacity="0.65"/>
-      <circle cx="76"  cy="12" r="1.8" fill="#9922cc" opacity="0.65"/>
-      <circle cx="124" cy="12" r="1.8" fill="#9922cc" opacity="0.65"/>
+      <path d="M100,-5 L104,0 L100,5 L96,0 Z" fill="#cc44ff" opacity="0.95"/>
+      <path d="M100,-3 L103,0 L100,3 L97,0 Z" fill="#ee99ff" opacity="0.65"/>
+      <circle cx="88"  cy="4" r="2" fill="#9922cc" opacity="0.7"/>
+      <circle cx="112" cy="4" r="2" fill="#9922cc" opacity="0.7"/>
       <line x1="24"  y1="12" x2="68"  y2="12" stroke="#9922cc" stroke-width="0.8" opacity="0.35"/>
       <line x1="132" y1="12" x2="176" y2="12" stroke="#9922cc" stroke-width="0.8" opacity="0.35"/>
 
@@ -404,12 +404,12 @@ h1 { color: #444; font-size: 11px; letter-spacing: 4px; text-transform: uppercas
           <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
         </filter>
         <clipPath id="cl4">
-          <path d="M100,9 C97,4 93,0 88,0 C83,0 79,6 76,12 L20,12 L4,28 L4,254 L22,272 C48,284 74,288 100,288 C126,288 152,284 178,272 L196,254 L196,28 L180,12 L124,12 C121,6 117,0 112,0 C107,0 103,4 100,9 Z"/>
+          <path d="M100,0 L94,8 L88,4 L80,8 L76,12 L20,12 L4,28 L4,254 L22,272 C48,284 74,288 100,288 C126,288 152,284 178,272 L196,254 L196,28 L180,12 L124,12 L120,8 L112,4 L106,8 L100,0 Z"/>
         </clipPath>
       </defs>
 
       <g clip-path="url(#cl4)">
-        <path d="M100,9 C97,4 93,0 88,0 C83,0 79,6 76,12 L20,12 L4,28 L4,254 L22,272 C48,284 74,288 100,288 C126,288 152,284 178,272 L196,254 L196,28 L180,12 L124,12 C121,6 117,0 112,0 C107,0 103,4 100,9 Z"
+        <path d="M100,0 L94,8 L88,4 L80,8 L76,12 L20,12 L4,28 L4,254 L22,272 C48,284 74,288 100,288 C126,288 152,284 178,272 L196,254 L196,28 L180,12 L124,12 L120,8 L112,4 L106,8 L100,0 Z"
           fill="url(#bg4)"/>
         <!-- Diagonal rays -->
         <g opacity="0.06" stroke="#ffdd00" stroke-width="1.5">
@@ -423,28 +423,28 @@ h1 { color: #444; font-size: 11px; letter-spacing: 4px; text-transform: uppercas
       </g>
 
       <!-- Outer border -->
-      <path d="M100,9 C97,4 93,0 88,0 C83,0 79,6 76,12 L20,12 L4,28 L4,254 L22,272 C48,284 74,288 100,288 C126,288 152,284 178,272 L196,254 L196,28 L180,12 L124,12 C121,6 117,0 112,0 C107,0 103,4 100,9 Z"
+      <path d="M100,0 L94,8 L88,4 L80,8 L76,12 L20,12 L4,28 L4,254 L22,272 C48,284 74,288 100,288 C126,288 152,284 178,272 L196,254 L196,28 L180,12 L124,12 L120,8 L112,4 L106,8 L100,0 Z"
         fill="none" stroke="url(#br4)" stroke-width="3.5" filter="url(#gw4)" opacity="0.98"/>
       <!-- Inner border 1 -->
-      <path d="M100,14 C97,9 94,6 90,6 C86,6 82,11 80,17 L25,17 L10,33 L10,250 L27,267 C52,279 76,283 100,283 C124,283 148,279 173,267 L190,250 L190,33 L175,17 L120,17 C118,11 114,6 110,6 C106,6 103,9 100,14 Z"
+      <path d="M100,7 L95,13 L90,10 L83,14 L80,17 L25,17 L10,33 L10,250 L27,267 C52,279 76,283 100,283 C124,283 148,279 173,267 L190,250 L190,33 L175,17 L120,17 L117,14 L110,10 L105,13 L100,7 Z"
         fill="none" stroke="#ffcc44" stroke-width="0.9" opacity="0.55"/>
       <!-- Inner border 2 (gold only — extra refinement) -->
-      <path d="M100,19 C97,15 95,12 92,12 C89,12 85,16 83,21 L30,21 L16,37 L16,247 L32,263 C56,275 78,279 100,279 C122,279 144,275 168,263 L184,247 L184,37 L170,21 L117,21 C115,16 111,12 108,12 C105,12 103,15 100,19 Z"
+      <path d="M100,14 L96,18 L91,15 L86,19 L83,21 L30,21 L16,37 L16,247 L32,263 C56,275 78,279 100,279 C122,279 144,275 168,263 L184,247 L184,37 L170,21 L117,21 L114,19 L109,15 L104,18 L100,14 Z"
         fill="none" stroke="#ddaa00" stroke-width="0.5" opacity="0.30"/>
 
       <line x1="10" y1="194" x2="190" y2="194" stroke="url(#br4)" stroke-width="1.4" opacity="0.85"/>
 
       <!-- Crown ornament — more elaborate for gold -->
-      <path d="M76,12 C79,6 83,0 88,0 C92,0 95,4 97,7 L100,9 L103,7 C105,4 108,0 112,0 C117,0 121,6 124,12"
+      <path d="M76,12 L80,8 L88,4 L94,8 L100,0 L106,8 L112,4 L120,8 L124,12"
         fill="none" stroke="#ddaa00" stroke-width="1.3" opacity="0.7"/>
-      <!-- Larger crown gem -->
-      <path d="M100,2 L105,7 L100,12 L95,7 Z" fill="#ffcc00" opacity="0.95"/>
-      <path d="M100,4 L104,8 L100,12 L96,8 Z" fill="#fff5b0" opacity="0.8"/>
-      <!-- More accent dots -->
-      <circle cx="76"  cy="12" r="2.2" fill="#ddaa00" opacity="0.7"/>
-      <circle cx="124" cy="12" r="2.2" fill="#ddaa00" opacity="0.7"/>
-      <circle cx="60"  cy="14" r="1.4" fill="#ddaa00" opacity="0.4"/>
-      <circle cx="140" cy="14" r="1.4" fill="#ddaa00" opacity="0.4"/>
+      <!-- Larger crown gem at top peak -->
+      <path d="M100,-7 L106,0 L100,7 L94,0 Z" fill="#ffcc00" opacity="0.97"/>
+      <path d="M100,-4 L104,0 L100,4 L96,0 Z" fill="#fff5b0" opacity="0.8"/>
+      <!-- Side peak dots -->
+      <circle cx="88"  cy="4" r="2.5" fill="#ddaa00" opacity="0.75"/>
+      <circle cx="112" cy="4" r="2.5" fill="#ddaa00" opacity="0.75"/>
+      <circle cx="80"  cy="8" r="1.5" fill="#ddaa00" opacity="0.4"/>
+      <circle cx="120" cy="8" r="1.5" fill="#ddaa00" opacity="0.4"/>
       <line x1="24"  y1="12" x2="52"  y2="12" stroke="#ddaa00" stroke-width="0.9" opacity="0.4"/>
       <line x1="148" y1="12" x2="176" y2="12" stroke="#ddaa00" stroke-width="0.9" opacity="0.4"/>
 
