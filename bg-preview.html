@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Preview fondo — Pachanguitas FC</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;600&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'Barlow', sans-serif;
+  background-color: #070a14;
+  background-image:
+    radial-gradient(ellipse 110% 110% at 50% 50%, transparent 20%, rgba(0,0,12,0.97) 100%),
+    linear-gradient(to right, rgba(0,1,8,0.96) 0%, rgba(0,1,8,0.4) 16%, transparent 28%),
+    linear-gradient(to left,  rgba(0,1,8,0.96) 0%, rgba(0,1,8,0.4) 16%, transparent 28%),
+    linear-gradient(to top, rgba(0,1,12,0.93) 0%, transparent 50%),
+    radial-gradient(ellipse 14% 6% at 50% 0%, rgba(255,255,255,0.55) 0%, rgba(210,228,255,0.28) 30%, rgba(150,185,255,0.08) 70%, transparent 100%),
+    radial-gradient(ellipse 58% 72% at 50% 0%, rgba(55,95,175,0.38) 0%, rgba(25,50,110,0.18) 50%, transparent 100%),
+    radial-gradient(ellipse 28% 8% at 50% 100%, rgba(40,70,145,0.22) 0%, transparent 100%),
+    repeating-linear-gradient(90deg, transparent 0px, transparent 118px, rgba(255,255,255,0.022) 119px, rgba(255,255,255,0.022) 121px),
+    radial-gradient(ellipse 85% 75% at 50% 25%, rgba(18,35,80,0.55) 0%, rgba(5,8,20,0) 100%);
+  background-attachment: fixed;
+  color: #ece6d2;
+  min-height: 100vh;
+}
+
+/* Noise grain encima */
+body::before {
+  content:''; position:fixed; inset:0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events:none; z-index:1000; opacity:0.5;
+}
+
+nav {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 28px; height:60px;
+  background:rgba(7,10,20,0.92);
+  border-bottom:1px solid rgba(55,70,100,0.4);
+  backdrop-filter:blur(16px);
+  position:sticky; top:0; z-index:100;
+}
+.logo {
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:22px; font-weight:900; letter-spacing:2px;
+}
+.logo span { color:#38a355; }
+.nav-links { display:flex; gap:2px; }
+.nav-btn {
+  padding:6px 16px; border-radius:6px; border:none;
+  background:none; color:rgba(236,230,210,0.45);
+  font-family:'Barlow',sans-serif; font-size:13px; font-weight:600;
+  cursor:pointer;
+}
+.nav-btn.active { color:#070a14; background:#38a355; }
+
+.page { padding:28px; max-width:1100px; margin:0 auto; }
+
+.page-title {
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:48px; font-weight:900; letter-spacing:1px; margin-bottom:4px;
+}
+.page-sub { color:#79755e; font-size:14px; margin-bottom:28px; }
+
+.grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:24px; }
+.grid-4 { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:24px; }
+
+/* CARDS SEMITRANSPARENTES — el fondo respira */
+.card {
+  background: rgba(12,16,26,0.88);
+  border: 1px solid rgba(55,70,100,0.55);
+  border-radius:12px; padding:20px;
+  backdrop-filter: blur(4px);
+}
+.card-sm {
+  background: rgba(12,16,26,0.88);
+  border: 1px solid rgba(55,70,100,0.55);
+  border-radius:10px; padding:16px;
+  backdrop-filter: blur(4px);
+}
+
+.stat-val {
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:42px; font-weight:900; color:#38a355; line-height:1;
+}
+.stat-lbl { font-size:11px; color:#79755e; text-transform:uppercase; letter-spacing:1px; margin-top:4px; }
+
+.section-title {
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:18px; font-weight:800; letter-spacing:1px;
+  text-transform:uppercase; color:#79755e; margin-bottom:14px;
+}
+
+.award-icon {
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:52px; font-weight:900; color:rgba(236,230,210,0.08);
+  margin-bottom:8px;
+}
+.award-label { font-size:10px; font-weight:700; color:#79755e; text-transform:uppercase; letter-spacing:1.5px; }
+.award-name {
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:22px; font-weight:900; margin-top:4px;
+}
+
+/* Jugador card */
+.player-card {
+  background: rgba(12,16,26,0.88);
+  border: 1px solid rgba(55,70,100,0.55);
+  border-radius:12px; overflow:hidden; cursor:pointer;
+  backdrop-filter: blur(4px);
+  transition: all .2s;
+}
+.player-card:hover { border-color:#38a355; transform:translateY(-3px); }
+.player-photo {
+  width:100%; aspect-ratio:1;
+  background: rgba(18,23,35,0.85);
+  display:flex; align-items:center; justify-content:center;
+}
+.player-initials {
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:40px; font-weight:900; color:rgba(55,70,100,0.6);
+}
+.player-info { padding:12px; }
+.player-name { font-weight:700; font-size:14px; }
+.player-avg {
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:26px; font-weight:900; color:#38a355; margin-top:6px;
+}
+
+.pill {
+  display:inline-block; padding:3px 10px; border-radius:20px;
+  font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px;
+}
+.pill-green { background:rgba(56,163,85,0.18); color:#38a355; border:1px solid rgba(56,163,85,0.35); }
+.pill-amber { background:rgba(212,168,32,0.18); color:#d4a820; border:1px solid rgba(212,168,32,0.35); }
+
+.next-match {
+  background: rgba(12,16,26,0.88);
+  border: 1px solid #38a355;
+  border-radius:12px; padding:16px 20px;
+  margin-bottom:24px;
+  backdrop-filter: blur(4px);
+}
+.next-label { font-size:11px; font-weight:900; color:#38a355; letter-spacing:1px; text-transform:uppercase; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">PACHANGUITAS <span>FC</span></div>
+  <div class="nav-links">
+    <button class="nav-btn active">Inicio</button>
+    <button class="nav-btn">Jugadores</button>
+    <button class="nav-btn">Jornadas</button>
+    <button class="nav-btn">Ranking</button>
+  </div>
+  <div></div>
+</nav>
+
+<div class="page">
+
+  <div class="page-title">DASHBOARD</div>
+  <div class="page-sub">Temporada 1</div>
+
+  <!-- Próxima jornada -->
+  <div class="next-match">
+    <div style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;margin-bottom:10px;">
+      <span class="next-label">Próxima jornada</span>
+      <span style="font-size:12px;font-weight:600;color:#ece6d2;">27 abr 2026 · 19:30</span>
+      <span style="text-align:right;font-size:12px;color:#d4a820;font-weight:700;">Faltan 2h</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;">
+      <div>
+        <div style="font-size:10px;color:#79755e;margin-bottom:3px;">⬜ Blancos</div>
+        <div style="font-size:12px;font-weight:600;">Nene, Mario, Toni, Meiero, Alex</div>
+      </div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:900;color:#79755e;">VS</div>
+      <div style="text-align:right;">
+        <div style="font-size:10px;color:#79755e;margin-bottom:3px;">⬛ Negros</div>
+        <div style="font-size:12px;font-weight:600;">Quino, Cristian, Jose, Juanda, Nano</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="grid-3" style="margin-bottom:24px;">
+    <div class="card">
+      <div class="stat-val">12</div>
+      <div class="stat-lbl">Jornadas jugadas</div>
+    </div>
+    <div class="card">
+      <div class="stat-val">47</div>
+      <div class="stat-lbl">Goles totales</div>
+    </div>
+    <div class="card">
+      <div class="stat-val">10</div>
+      <div class="stat-lbl">Jugadores</div>
+    </div>
+  </div>
+
+  <!-- Premios -->
+  <div class="section-title">Premios</div>
+  <div class="grid-4" style="margin-bottom:28px;">
+    <div class="card" style="text-align:center;">
+      <div class="award-icon">MVP</div>
+      <div class="award-label">Mejor jugador</div>
+      <div class="award-name">Cristian</div>
+      <div style="font-size:11px;color:#79755e;margin-top:4px;">Nota media: 4.2</div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div class="award-icon">GK</div>
+      <div class="award-label">Mejor portero</div>
+      <div class="award-name">Nano</div>
+      <div style="font-size:11px;color:#79755e;margin-top:4px;">Nota portería: 3.8</div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div class="award-icon">GOL</div>
+      <div class="award-label">Máx. goleador</div>
+      <div class="award-name">Toni</div>
+      <div style="font-size:11px;color:#79755e;margin-top:4px;">11 goles</div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div class="award-icon">INV</div>
+      <div class="award-label">El intocable</div>
+      <div class="award-name">Alex</div>
+      <div style="font-size:11px;color:#79755e;margin-top:4px;">7 sin perder</div>
+    </div>
+  </div>
+
+  <!-- Jugadores -->
+  <div class="section-title">Jugadores</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:16px;margin-bottom:28px;">
+    <div class="player-card">
+      <div class="player-photo"><div class="player-initials">CR</div></div>
+      <div class="player-info">
+        <div class="player-name">Cristian</div>
+        <div class="player-avg">4.2</div>
+        <div style="margin-top:6px;"><span class="pill pill-green">ORO</span></div>
+      </div>
+    </div>
+    <div class="player-card">
+      <div class="player-photo"><div class="player-initials">TN</div></div>
+      <div class="player-info">
+        <div class="player-name">Toni</div>
+        <div class="player-avg">3.8</div>
+        <div style="margin-top:6px;"><span class="pill pill-amber">PLATA</span></div>
+      </div>
+    </div>
+    <div class="player-card">
+      <div class="player-photo"><div class="player-initials">NN</div></div>
+      <div class="player-info">
+        <div class="player-name">Nano</div>
+        <div class="player-avg">3.5</div>
+        <div style="margin-top:6px;"><span class="pill pill-amber">PLATA</span></div>
+      </div>
+    </div>
+    <div class="player-card">
+      <div class="player-photo"><div class="player-initials">AL</div></div>
+      <div class="player-info">
+        <div class="player-name">Alex</div>
+        <div class="player-avg">3.1</div>
+        <div style="margin-top:6px;"><span class="pill pill-amber">PLATA</span></div>
+      </div>
+    </div>
+    <div class="player-card">
+      <div class="player-photo"><div class="player-initials">JU</div></div>
+      <div class="player-info">
+        <div class="player-name">Juanda</div>
+        <div class="player-avg">2.9</div>
+        <div style="margin-top:6px;"><span class="pill" style="background:rgba(196,64,64,0.18);color:#c44040;border:1px solid rgba(196,64,64,0.35);">BRONCE</span></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
