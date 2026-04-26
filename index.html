@@ -1019,88 +1019,102 @@ const FUT_HERO = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAAAAAAD/2wBDAAYEBQY
 // ── SVG CARD GENERATOR ──────────────────────────────────────
 // ── FUT CARD SVG BACKGROUND (decorative only, no text) ──────
 function makeFutCardSVG(tier) {
+  // ── Tier colour tokens ───────────────────────────────────────
   const T = {
     red: {
       g0:'#1c0000', g1:'#640a0a', g2:'#8f1212', g3:'#1c0000',
-      gA:'#ff5555', gB:'#bb1111',
-      brd:'rgba(255,80,80,0.95)', brd2:'rgba(255,140,140,0.3)',
+      acA:'#ff5555', acB:'#bb1111',
+      brd0:'#ff9966', brd1:'#cc3300', brd2:'#ff7744',
+      inner:'rgba(255,85,34,0.42)', inner2:null,
       shine:'rgba(255,90,90,0.14)', panel:'rgba(0,0,0,0.74)',
-      div:'rgba(255,75,75,0.5)', label:'BRONCE',
+      div:'rgba(255,75,75,0.5)',
+      gem:'#ff5522', gemHi:'#ff8866',
+      dot:'#ff4411', fan:'#ff4411', fanGem:'#ff6644',
+      label:'BRONCE',
       defs:'', glows:'', stars:'', sparkles:'',
     },
     blue: {
       g0:'#000a1e', g1:'#051240', g2:'#0b1d6e', g3:'#000a1e',
-      gA:'#4477ff', gB:'#1133cc',
-      brd:'rgba(70,120,255,0.95)', brd2:'rgba(120,170,255,0.3)',
+      acA:'#4477ff', acB:'#1133cc',
+      brd0:'#aaccff', brd1:'#2255cc', brd2:'#88bbff',
+      inner:'rgba(85,153,238,0.38)', inner2:null,
       shine:'rgba(70,120,255,0.13)', panel:'rgba(0,0,8,0.76)',
-      div:'rgba(70,120,255,0.5)', label:'TOTY',
+      div:'rgba(70,120,255,0.5)',
+      gem:'#4488ff', gemHi:'#aaccff',
+      dot:'#2255cc', fan:'#2255cc', fanGem:'#88bbff',
+      label:'PLATA',
       defs:'', glows:'', stars:'', sparkles:'',
     },
     galaxy: {
       g0:'#04000e', g1:'#0a0025', g2:'#110040', g3:'#04000a',
-      gA:'#bb33ff', gB:'#7700ee',
-      brd:'rgba(185,45,255,0.98)', brd2:'rgba(210,110,255,0.35)',
+      acA:'#bb33ff', acB:'#7700ee',
+      brd0:'#ee99ff', brd1:'#7711bb', brd2:'#cc66ff',
+      inner:'rgba(187,102,255,0.38)', inner2:null,
       shine:'rgba(175,40,255,0.18)', panel:'rgba(4,0,16,0.8)',
-      div:'rgba(175,40,255,0.6)', label:'GALAXY',
+      div:'rgba(175,40,255,0.6)',
+      gem:'#cc44ff', gemHi:'#ee99ff',
+      dot:'#9922cc', fan:'#9922cc', fanGem:'#dd88ff',
+      label:'GALAXIA',
       defs:`<radialGradient id="gnA" cx="22%" cy="28%" r="55%"><stop offset="0%" stop-color="rgba(155,0,255,0.3)"/><stop offset="100%" stop-color="rgba(0,0,0,0)"/></radialGradient><radialGradient id="gnB" cx="78%" cy="72%" r="50%"><stop offset="0%" stop-color="rgba(0,175,255,0.22)"/><stop offset="100%" stop-color="rgba(0,0,0,0)"/></radialGradient>`,
       glows:'<rect width="300" height="420" fill="url(#gnA)"/><rect width="300" height="420" fill="url(#gnB)"/>',
-      stars:`<circle cx="22" cy="26" r="1.8" fill="rgba(255,255,255,0.9)"/><circle cx="276" cy="18" r="1.4" fill="rgba(255,255,255,0.7)"/><circle cx="14" cy="120" r="1.5" fill="rgba(185,50,255,0.9)"/><circle cx="288" cy="135" r="1.3" fill="rgba(50,215,255,0.9)"/><circle cx="28" cy="210" r="1.1" fill="rgba(255,255,255,0.6)"/><circle cx="280" cy="225" r="1.4" fill="rgba(175,50,255,0.8)"/><circle cx="150" cy="8" r="1.2" fill="rgba(255,255,255,0.65)"/>`,
+      stars:`<circle cx="22" cy="40" r="1.8" fill="rgba(255,255,255,0.9)"/><circle cx="276" cy="32" r="1.4" fill="rgba(255,255,255,0.7)"/><circle cx="14" cy="130" r="1.5" fill="rgba(185,50,255,0.9)"/><circle cx="288" cy="148" r="1.3" fill="rgba(50,215,255,0.9)"/><circle cx="28" cy="220" r="1.1" fill="rgba(255,255,255,0.6)"/><circle cx="280" cy="238" r="1.4" fill="rgba(175,50,255,0.8)"/>`,
       sparkles:'',
     },
     gold: {
       g0:'#0e0600', g1:'#2c1400', g2:'#522600', g3:'#0e0600',
-      gA:'#ffbb00', gB:'#cc8800',
-      brd:'rgba(255,200,25,0.98)', brd2:'rgba(255,225,110,0.45)',
+      acA:'#ffbb00', acB:'#cc8800',
+      brd0:'#fff5b0', brd1:'#ddaa00', brd2:'#ffdd66',
+      inner:'rgba(255,204,68,0.52)', inner2:'rgba(221,170,0,0.26)',
       shine:'rgba(255,210,55,0.2)', panel:'rgba(10,5,0,0.82)',
-      div:'rgba(255,185,15,0.65)', label:'HÉROE',
+      div:'rgba(255,185,15,0.65)',
+      gem:'#ffcc00', gemHi:'#fff5b0',
+      dot:'#ddaa00', fan:'#ddaa00', fanGem:'#ffdd66',
+      label:'ORO',
       defs:`<radialGradient id="gg1" cx="50%" cy="10%" r="60%"><stop offset="0%" stop-color="rgba(255,215,55,0.28)"/><stop offset="100%" stop-color="rgba(0,0,0,0)"/></radialGradient>`,
       glows:'<rect width="300" height="420" fill="url(#gg1)"/>',
       stars:'',
-      sparkles:`<path d="M38 50 L40 42 L42 50 L34 46 L46 46Z" fill="rgba(255,230,80,0.98)"/><path d="M260 46 L262 38 L264 46 L256 42 L268 42Z" fill="rgba(255,230,80,0.88)"/><circle cx="286" cy="130" r="2.1" fill="rgba(255,225,70,0.9)"/><circle cx="14" cy="145" r="1.7" fill="rgba(255,215,50,0.85)"/><ellipse cx="150" cy="34" rx="32" ry="7" fill="none" stroke="rgba(255,210,50,0.5)" stroke-width="1.8" stroke-dasharray="6 4"/>`,
+      sparkles:`<path d="M38 62 L40 54 L42 62 L34 58 L46 58Z" fill="rgba(255,230,80,0.98)"/><path d="M260 58 L262 50 L264 58 L256 54 L268 54Z" fill="rgba(255,230,80,0.88)"/><circle cx="286" cy="145" r="2.1" fill="rgba(255,225,70,0.9)"/><circle cx="14" cy="158" r="1.7" fill="rgba(255,215,50,0.85)"/>`,
     },
   };
-  const t = T[tier]||T.red;
+  const t = T[tier] || T.red;
 
-  // ── Card shape path (300 × 420) ─────────────────────────────
-  // FIFA-style: top has a pronounced V-notch centred at x=150
-  // Notch tip reaches y=52 (deep), starts/ends at y=0 at x=88 & x=212
-  // Corners: top-left r=20, top-right r=20, bottom-left r=26, bottom-right r=26
-  //
-  // Path (clockwise from bottom-left corner):
-  const cardPath = `
-    M 26 420
-    Q 0 420 0 394
-    L 0 20
-    Q 0 0 20 0
-    L 88 0
-    Q 110 0 150 52
-    Q 190 0 212 0
-    L 280 0
-    Q 300 0 300 20
-    L 300 394
-    Q 300 420 274 420
-    Z
-  `;
+  // ── Card shape (300 × 420) ───────────────────────────────────
+  // Crown: 3-point angular — center peak (150,0), side peaks (132,6)/(168,6)
+  // Top horizontal y=18, chamfered corners, pointed bottom tip (150,420)
+  const C  = 'M150,0 L141,12 L132,6 L120,12 L114,18 L30,18 L6,41 L6,371 L33,397 C72,415 111,420 150,420 C189,420 228,415 267,397 L294,371 L294,41 L270,18 L186,18 L180,12 L168,6 L159,12 L150,0 Z';
+  const CI = 'M150,9 L143,19 L136,13 L126,19 L122,26 L37,26 L15,47 L15,364 L40,389 C77,406 114,411 150,411 C186,411 223,406 260,389 L285,364 L285,47 L263,26 L178,26 L174,19 L164,13 L157,19 L150,9 Z';
+  const CI2= 'M150,17 L145,26 L139,20 L130,26 L127,32 L45,32 L24,53 L24,357 L47,381 C81,398 116,403 150,403 C184,403 219,398 253,381 L276,357 L276,53 L255,32 L173,32 L170,26 L161,20 L155,26 L150,17 Z';
 
-  // Inner border path (inset 6px)
-  const innerPath = `
-    M 30 414
-    Q 6 414 6 390
-    L 6 23
-    Q 6 6 23 6
-    L 90 6
-    Q 112 6 150 56
-    Q 188 6 210 6
-    L 277 6
-    Q 294 6 294 23
-    L 294 390
-    Q 294 414 270 414
-    Z
-  `;
-
-  // Shine: upper region fill (above ~y=160), clipped to card
-  // Panel: bottom section starting at y=252 (60% of 420)
   const panelY = 252;
+
+  // ── Crown ornament (sits above y=18, outside clip) ───────────
+  const crown = `
+    <path d="M114,18 L120,12 L132,6 L141,12 L150,0 L159,12 L168,6 L180,12 L186,18"
+      fill="none" stroke="${t.gem}" stroke-width="1.8" opacity="0.65"/>
+    <path d="M150,0 L157,8 L150,16 L143,8 Z" fill="${t.gem}" opacity="0.95"/>
+    <path d="M150,3 L154,8 L150,13 L146,8 Z" fill="${t.gemHi}" opacity="0.82"/>
+    <circle cx="132" cy="6"  r="3.5" fill="${t.dot}" opacity="0.72"/>
+    <circle cx="168" cy="6"  r="3.5" fill="${t.dot}" opacity="0.72"/>
+    <circle cx="120" cy="12" r="2"   fill="${t.dot}" opacity="0.4"/>
+    <circle cx="180" cy="12" r="2"   fill="${t.dot}" opacity="0.4"/>
+    <line x1="40"  y1="18" x2="104" y2="18" stroke="${t.dot}" stroke-width="1.1" opacity="0.38"/>
+    <line x1="196" y1="18" x2="260" y2="18" stroke="${t.dot}" stroke-width="1.1" opacity="0.38"/>
+    ${tier==='gold'?`<circle cx="108" cy="18" r="2" fill="${t.dot}" opacity="0.45"/><circle cx="192" cy="18" r="2" fill="${t.dot}" opacity="0.45"/>`:''}`;
+
+  // ── Fan lines at bottom (clipped to avoid stats text) ────────
+  const fan = `
+    <clipPath id="fc"><rect x="0" y="378" width="300" height="42"/></clipPath>
+    <g clip-path="url(#fc)" stroke="${t.fan}" opacity="0.3" stroke-width="1.1">
+      <line x1="150" y1="420" x2="34"  y2="378"/>
+      <line x1="150" y1="420" x2="68"  y2="387"/>
+      <line x1="150" y1="420" x2="103" y2="396"/>
+      <line x1="150" y1="420" x2="130" y2="406"/>
+      <line x1="150" y1="420" x2="170" y2="406"/>
+      <line x1="150" y1="420" x2="197" y2="396"/>
+      <line x1="150" y1="420" x2="232" y2="387"/>
+      <line x1="150" y1="420" x2="266" y2="378"/>
+    </g>
+    <circle cx="150" cy="413" r="4" fill="${t.fanGem}" opacity="0.65"/>`;
 
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 420" width="300" height="420">
   <defs>
@@ -1110,46 +1124,59 @@ function makeFutCardSVG(tier) {
       <stop offset="68%"  stop-color="${t.g2}"/>
       <stop offset="100%" stop-color="${t.g3}"/>
     </linearGradient>
+    <linearGradient id="brd" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="${t.brd0}"/>
+      <stop offset="40%"  stop-color="${t.brd1}"/>
+      <stop offset="100%" stop-color="${t.brd2}"/>
+    </linearGradient>
     <linearGradient id="ac" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%"   stop-color="${t.gA}"/>
-      <stop offset="100%" stop-color="${t.gB}" stop-opacity="0.55"/>
+      <stop offset="0%"   stop-color="${t.acA}"/>
+      <stop offset="100%" stop-color="${t.acB}" stop-opacity="0.55"/>
     </linearGradient>
     <linearGradient id="shineGrad" x1="0" y1="0" x2="0.5" y2="1">
-      <stop offset="0%"   stop-color="${t.shine.replace(')',',0.38)').replace('rgba(','rgba(')}"/>
+      <stop offset="0%"   stop-color="${t.shine}"/>
       <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
     </linearGradient>
-    <clipPath id="cc"><path d="${cardPath}"/></clipPath>
+    <filter id="gw" x="-25%" y="-25%" width="150%" height="150%">
+      <feGaussianBlur stdDeviation="3" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <clipPath id="cc"><path d="${C}"/></clipPath>
     ${t.defs}
   </defs>
+
+  <!-- Clipped card interior -->
   <g clip-path="url(#cc)">
-    <!-- Background -->
     <rect width="300" height="420" fill="url(#bg)"/>
-    <!-- Nebula / glow layers -->
     ${t.glows}
-    <!-- Top shine -->
-    <rect width="300" height="185" fill="url(#shineGrad)"/>
-    <!-- Stars / sparkles -->
+    <rect width="300" height="200" fill="url(#shineGrad)"/>
     ${t.stars}${t.sparkles}
-    <!-- Outer border (follows card shape, 1.4px) -->
-    <path d="${cardPath}" fill="none" stroke="${t.brd}" stroke-width="1.4"/>
-    <!-- Inner border (inset, subtle) -->
-    <path d="${innerPath}" fill="none" stroke="${t.brd2}" stroke-width="0.9"/>
-    <!-- Stats panel dark bg -->
+    <!-- Stats panel -->
     <rect x="0" y="${panelY}" width="300" height="${420-panelY}" fill="${t.panel}"/>
-    <!-- Panel top accent line -->
     <rect x="0" y="${panelY}" width="300" height="2.5" fill="url(#ac)" opacity="0.85"/>
-    <!-- Name zone bottom divider -->
     <line x1="14" y1="${panelY+36}" x2="286" y2="${panelY+36}" stroke="${t.div}" stroke-width="0.9" opacity="0.7"/>
-    <!-- Stat column dividers -->
     <line x1="85"  y1="${panelY+40}" x2="85"  y2="${panelY+95}" stroke="${t.div}" stroke-width="0.7" opacity="0.3"/>
     <line x1="160" y1="${panelY+40}" x2="160" y2="${panelY+95}" stroke="${t.div}" stroke-width="0.7" opacity="0.3"/>
     <line x1="228" y1="${panelY+40}" x2="228" y2="${panelY+95}" stroke="${t.div}" stroke-width="0.7" opacity="0.3"/>
-    <!-- Form dots zone -->
     <rect x="0" y="${panelY+96}" width="300" height="30" fill="rgba(0,0,0,0.28)"/>
-    <!-- Tier label (top-right, subtle) -->
-    <text x="287" y="22" font-family="Barlow Condensed,sans-serif" font-weight="700" font-size="10"
-          fill="${t.brd}" text-anchor="end" letter-spacing="2" opacity="0.75">${t.label}</text>
+    <!-- Fan lines + gem (bottom decoration) -->
+    ${fan}
+    <!-- Tier label -->
+    <text x="285" y="36" font-family="Barlow Condensed,sans-serif" font-weight="700" font-size="10"
+          fill="${t.brd2}" text-anchor="end" letter-spacing="2" opacity="0.7">${t.label}</text>
   </g>
+
+  <!-- Outer border with glow (drawn outside clip for clean glowing edge) -->
+  <path d="${C}" fill="none" stroke="url(#brd)" stroke-width="3.5" filter="url(#gw)" opacity="0.95"/>
+
+  <!-- Inner border 1 -->
+  <path d="${CI}" fill="none" stroke="${t.inner}" stroke-width="1"/>
+
+  ${t.inner2 ? `<!-- Inner border 2 (gold only) -->
+  <path d="${CI2}" fill="none" stroke="${t.inner2}" stroke-width="0.6"/>` : ''}
+
+  <!-- Crown ornament (above card top, visible due to overflow:visible) -->
+  ${crown}
 </svg>`;
   return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
 }
@@ -2440,8 +2467,8 @@ function playerCardHtml(p,i) {
   // The SVG card is 300×420 (ratio 5:7).
   // Panel starts at y=252 = 60% of 420.
   // So photo area = top 60%, panel = bottom 40%.
-  // The V-notch occupies roughly the top 13% of card height.
-  // Photo starts at ~13% to clear the notch, giving photo height ~47%.
+  // Crown baseline is at y=18 = 4.3% of card height.
+  // Photo starts at 5% to clear the crown, giving photo height 55% (5%→60%).
 
   return `<div class="player-card" onclick="openPlayerDetail('${p.id}')" style="background:none;border:none;padding:0;">
   <div style="
@@ -2459,8 +2486,8 @@ function playerCardHtml(p,i) {
     <!-- 1. SVG card art fills entire card -->
     <img src="${bg}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:fill;pointer-events:none;z-index:0;">
 
-    <!-- 2. Photo / silhouette — integrated, below V-notch -->
-    <div style="position:absolute;top:13%;left:3%;right:3%;height:47%;z-index:1;overflow:hidden;">
+    <!-- 2. Photo / silhouette — integrated, below crown baseline (~4.3% of card) -->
+    <div style="position:absolute;top:5%;left:3%;right:3%;height:55%;z-index:1;overflow:hidden;">
       ${photoOrSilhouette}
     </div>
 
