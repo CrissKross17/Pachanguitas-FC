@@ -12,7 +12,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 40px 20px 70px;
+  padding: 40px 20px 80px;
   font-family: 'Barlow Condensed', sans-serif;
   gap: 52px;
 }
@@ -22,20 +22,22 @@ h1 { color: #444; font-size: 11px; letter-spacing: 4px; text-transform: uppercas
 .lbl { color: #444; font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; }
 
 /*
-  viewBox: 0 0 200 288
-  Crown: two bumps at (88,0) and (112,0), notch at (100,9)
-  Chamfered corners: 20px cuts
-  Bottom: pointed shield tip at (100,288)
+  viewBox: 0 0 260 360
+  Shape (from Copilot, adjusted):
+    Outer:  M30,10 H230 L250,60 V275 L130,350 L10,275 V60 Z
+    Inner1: M40,20 H220 L238,66 V271 L130,338 L22,271 V66 Z
+    Inner2: M50,30 H210 L226,72 V267 L130,326 L34,267 V72 Z  (Oro only)
+    Panel:  from y=240 down
 */
-.card { width: 168px; height: 242px; position: relative; }
+.card { width: 156px; height: 216px; position: relative; }
 .card svg.frame { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
 
-.ovr  { position: absolute; top: 15%; left: 8%; z-index: 10; line-height: 1;
+.ovr  { position: absolute; top: 14%; left: 8%; z-index: 10; line-height: 1;
         filter: drop-shadow(0 1px 8px rgba(0,0,0,.9)); }
 .ovr .n { font-size: 22px; font-weight: 900; }
 .ovr .l { font-size: 7px; font-weight: 700; letter-spacing: 2px; margin-top: 2px; }
 .sil  { position: absolute; bottom: 36%; left: 50%; transform: translateX(-50%);
-        width: 50%; z-index: 2; opacity: 0.42; }
+        width: 48%; z-index: 2; opacity: 0.42; }
 .panel { position: absolute; bottom: 0; left: 0; right: 0; height: 33%;
          z-index: 3; display: flex; flex-direction: column; padding: 5px 12px 8px; }
 .pname { font-size: 11px; font-weight: 900; color: #fff; text-align: center;
@@ -52,55 +54,17 @@ h1 { color: #444; font-size: 11px; letter-spacing: 4px; text-transform: uppercas
 <body>
 <h1>Contorno de cartas — estilo FIFA</h1>
 
-<!--
-  CARD SHAPE  (viewBox 0 0 200 288)
-  ─────────────────────────────────
-  Crown top: two bumps peaking at y=0, notch at (100,9)
-  Corners: 20px chamfer at all four corners
-  Bottom: tapered shield finish, lowest point (100,288)
-
-  Main path:
-    M 100,9
-    C 97,4  93,0  88,0          ← left bump up
-    C 83,0  79,6  76,12         ← left bump down to horizontal
-    L 20,12                     ← top-left horizontal
-    L 4,28                      ← top-left chamfer
-    L 4,254                     ← left side
-    L 22,272                    ← bottom-left chamfer
-    C 48,284 74,288 100,288     ← bottom curve left
-    C 126,288 152,284 178,272   ← bottom curve right
-    L 196,254                   ← right side
-    L 196,28                    ← top-right
-    L 180,12                    ← top-right chamfer
-    L 124,12                    ← top-right horizontal
-    C 121,6  117,0  112,0       ← right bump up
-    C 107,0  103,4  100,9       ← right bump down to notch
-    Z
-
-  Inner border (~6px inset, same crown):
-    M 100,14
-    C 97,9  94,6  90,6
-    C 86,6  82,11 80,17
-    L 25,17  L 10,33  L 10,250  L 27,267
-    C 52,279 76,283 100,283
-    C 124,283 148,279 173,267
-    L 190,250  L 190,33  L 175,17  L 120,17
-    C 118,11 114,6 110,6
-    C 106,6 103,9 100,14
-    Z
--->
-
 <div class="row">
 
-<!-- ══════════════════════════════
+<!-- ══════════════════════
      BRONCE
-══════════════════════════════ -->
+══════════════════════ -->
 <div class="col">
   <div class="lbl">Bronce</div>
   <div class="card">
-    <svg class="frame" viewBox="0 0 200 288" xmlns="http://www.w3.org/2000/svg">
+    <svg class="frame" viewBox="0 0 260 360" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <radialGradient id="bg1" cx="50%" cy="28%" r="74%">
+        <radialGradient id="bg1" cx="50%" cy="28%" r="75%">
           <stop offset="0%"   stop-color="#3e0f0f"/>
           <stop offset="100%" stop-color="#0c0303"/>
         </radialGradient>
@@ -113,69 +77,67 @@ h1 { color: #444; font-size: 11px; letter-spacing: 4px; text-transform: uppercas
           <stop offset="0%"   stop-color="#2e0909" stop-opacity="0.93"/>
           <stop offset="100%" stop-color="#080101" stop-opacity="0.98"/>
         </linearGradient>
-        <filter id="gw1" x="-30%" y="-30%" width="160%" height="160%">
-          <feGaussianBlur stdDeviation="2.5" result="b"/>
+        <filter id="gw1" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="3" result="b"/>
           <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
         </filter>
         <clipPath id="cl1">
-          <path d="M100,9 C97,4 93,0 88,0 C83,0 79,6 76,12 L20,12 L4,28 L4,254 L22,272 C48,284 74,288 100,288 C126,288 152,284 178,272 L196,254 L196,28 L180,12 L124,12 C121,6 117,0 112,0 C107,0 103,4 100,9 Z"/>
+          <path d="M30,10 H230 L250,60 V275 L130,350 L10,275 V60 Z"/>
         </clipPath>
       </defs>
 
-      <!-- BG -->
+      <!-- BG fill clipped to card shape -->
       <g clip-path="url(#cl1)">
-        <path d="M100,9 C97,4 93,0 88,0 C83,0 79,6 76,12 L20,12 L4,28 L4,254 L22,272 C48,284 74,288 100,288 C126,288 152,284 178,272 L196,254 L196,28 L180,12 L124,12 C121,6 117,0 112,0 C107,0 103,4 100,9 Z"
-          fill="url(#bg1)"/>
-        <!-- panel overlay -->
-        <path d="M4,194 L196,194 L196,254 L178,272 C152,284 126,288 100,288 C74,288 48,284 22,272 L4,254 Z"
-          fill="url(#pn1)"/>
+        <path d="M30,10 H230 L250,60 V275 L130,350 L10,275 V60 Z" fill="url(#bg1)"/>
+        <!-- Stats panel dark overlay -->
+        <path d="M10,238 L250,238 V275 L130,350 L10,275 Z" fill="url(#pn1)"/>
       </g>
 
       <!-- Outer border with glow -->
-      <path d="M100,9 C97,4 93,0 88,0 C83,0 79,6 76,12 L20,12 L4,28 L4,254 L22,272 C48,284 74,288 100,288 C126,288 152,284 178,272 L196,254 L196,28 L180,12 L124,12 C121,6 117,0 112,0 C107,0 103,4 100,9 Z"
-        fill="none" stroke="url(#br1)" stroke-width="3" filter="url(#gw1)" opacity="0.95"/>
+      <path d="M30,10 H230 L250,60 V275 L130,350 L10,275 V60 Z"
+        fill="none" stroke="url(#br1)" stroke-width="5.5" filter="url(#gw1)" opacity="0.95"/>
 
       <!-- Inner border 1 -->
-      <path d="M100,14 C97,9 94,6 90,6 C86,6 82,11 80,17 L25,17 L10,33 L10,250 L27,267 C52,279 76,283 100,283 C124,283 148,279 173,267 L190,250 L190,33 L175,17 L120,17 C118,11 114,6 110,6 C106,6 103,9 100,14 Z"
-        fill="none" stroke="#ff5522" stroke-width="0.8" opacity="0.45"/>
+      <path d="M40,20 H220 L238,66 V271 L130,338 L22,271 V66 Z"
+        fill="none" stroke="#ff5522" stroke-width="1" opacity="0.45"/>
 
       <!-- Panel separator -->
-      <line x1="10" y1="194" x2="190" y2="194" stroke="url(#br1)" stroke-width="1.2" opacity="0.7"/>
+      <line x1="12" y1="238" x2="248" y2="238" stroke="url(#br1)" stroke-width="1.5" opacity="0.7"/>
 
       <!-- ── TOP CROWN ORNAMENT ── -->
-      <!-- Arch tracing the crown shape -->
-      <path d="M76,12 C79,6 83,0 88,0 C92,0 95,4 97,7 L100,9 L103,7 C105,4 108,0 112,0 C117,0 121,6 124,12"
-        fill="none" stroke="#ff5522" stroke-width="1" opacity="0.6"/>
-      <!-- Center gem at notch -->
-      <path d="M100,3 L104,7 L100,11 L96,7 Z" fill="#ff5522" opacity="0.9"/>
-      <path d="M100,5 L103,8 L100,11 L97,8 Z" fill="#ff8866" opacity="0.6"/>
-      <!-- Side accent dots -->
-      <circle cx="76"  cy="12" r="1.8" fill="#ff4411" opacity="0.55"/>
-      <circle cx="124" cy="12" r="1.8" fill="#ff4411" opacity="0.55"/>
-      <!-- Horizontal accent lines -->
-      <line x1="24"  y1="12" x2="68"  y2="12" stroke="#ff4411" stroke-width="0.8" opacity="0.35"/>
-      <line x1="132" y1="12" x2="176" y2="12" stroke="#ff4411" stroke-width="0.8" opacity="0.35"/>
+      <!-- Horizontal accent line across the top -->
+      <line x1="38" y1="10" x2="222" y2="10" stroke="#ff5522" stroke-width="0.8" opacity="0.3"/>
+      <!-- Center gem sitting ON the top edge -->
+      <path d="M130,0 L136,8 L130,16 L124,8 Z" fill="#ff5522" opacity="0.9"/>
+      <path d="M130,3 L134,8 L130,13 L126,8 Z" fill="#ff8866" opacity="0.6"/>
+      <!-- Small arcs flanking gem -->
+      <path d="M100,10 Q115,2 124,10" fill="none" stroke="#ff4411" stroke-width="1" opacity="0.55"/>
+      <path d="M136,10 Q145,2 160,10" fill="none" stroke="#ff4411" stroke-width="1" opacity="0.55"/>
+      <!-- Side dots -->
+      <circle cx="90"  cy="10" r="2" fill="#ff4411" opacity="0.5"/>
+      <circle cx="170" cy="10" r="2" fill="#ff4411" opacity="0.5"/>
+      <!-- Outer horizontal lines -->
+      <line x1="40"  y1="10" x2="82"  y2="10" stroke="#ff4411" stroke-width="0.8" opacity="0.4"/>
+      <line x1="178" y1="10" x2="220" y2="10" stroke="#ff4411" stroke-width="0.8" opacity="0.4"/>
 
-      <!-- ── BOTTOM WINGS ── -->
-      <!-- Fan lines radiating from bottom tip -->
-      <g stroke="#ff4411" opacity="0.28" stroke-width="0.8">
-        <line x1="100" y1="288" x2="22"  y2="262"/>
-        <line x1="100" y1="288" x2="44"  y2="268"/>
-        <line x1="100" y1="288" x2="66"  y2="274"/>
-        <line x1="100" y1="288" x2="88"  y2="280"/>
-        <line x1="100" y1="288" x2="112" y2="280"/>
-        <line x1="100" y1="288" x2="134" y2="274"/>
-        <line x1="100" y1="288" x2="156" y2="268"/>
-        <line x1="100" y1="288" x2="178" y2="262"/>
+      <!-- ── BOTTOM FAN (from pointed tip) ── -->
+      <g stroke="#ff4411" opacity="0.25" stroke-width="0.9">
+        <line x1="130" y1="350" x2="14"  y2="264"/>
+        <line x1="130" y1="350" x2="42"  y2="272"/>
+        <line x1="130" y1="350" x2="74"  y2="282"/>
+        <line x1="130" y1="350" x2="106" y2="292"/>
+        <line x1="130" y1="350" x2="154" y2="292"/>
+        <line x1="130" y1="350" x2="186" y2="282"/>
+        <line x1="130" y1="350" x2="218" y2="272"/>
+        <line x1="130" y1="350" x2="246" y2="264"/>
       </g>
-      <!-- Center bottom gem -->
-      <circle cx="100" cy="278" r="2.5" fill="#ff6644" opacity="0.7"/>
+      <circle cx="130" cy="338" r="3" fill="#ff6644" opacity="0.65"/>
 
-      <!-- ── CORNER MARKS ── -->
-      <path d="M12,42 L12,58"   stroke="#ff5522" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
-      <path d="M188,42 L188,58" stroke="#ff5522" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
-      <path d="M12,210 L12,226"   stroke="#ff5522" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
-      <path d="M188,210 L188,226" stroke="#ff5522" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+      <!-- Corner marks -->
+      <path d="M18,72 L18,92"  stroke="#ff5522" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+      <path d="M242,72 L242,92" stroke="#ff5522" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+      <path d="M18,222 L18,242"  stroke="#ff5522" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+      <path d="M242,222 L242,242" stroke="#ff5522" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
     </svg>
 
     <div class="ovr" style="color:#ff7755;"><div class="n">3.2</div><div class="l">OVR</div></div>
@@ -196,15 +158,15 @@ h1 { color: #444; font-size: 11px; letter-spacing: 4px; text-transform: uppercas
 </div>
 
 
-<!-- ══════════════════════════════
+<!-- ══════════════════════
      PLATA
-══════════════════════════════ -->
+══════════════════════ -->
 <div class="col">
   <div class="lbl">Plata</div>
   <div class="card">
-    <svg class="frame" viewBox="0 0 200 288" xmlns="http://www.w3.org/2000/svg">
+    <svg class="frame" viewBox="0 0 260 360" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <radialGradient id="bg2" cx="50%" cy="28%" r="74%">
+        <radialGradient id="bg2" cx="50%" cy="28%" r="75%">
           <stop offset="0%"   stop-color="#0c1c38"/>
           <stop offset="100%" stop-color="#030610"/>
         </radialGradient>
@@ -217,52 +179,47 @@ h1 { color: #444; font-size: 11px; letter-spacing: 4px; text-transform: uppercas
           <stop offset="0%"   stop-color="#060e20" stop-opacity="0.93"/>
           <stop offset="100%" stop-color="#010306" stop-opacity="0.98"/>
         </linearGradient>
-        <filter id="gw2" x="-30%" y="-30%" width="160%" height="160%">
-          <feGaussianBlur stdDeviation="2.5" result="b"/>
+        <filter id="gw2" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="3" result="b"/>
           <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
         </filter>
-        <clipPath id="cl2">
-          <path d="M100,9 C97,4 93,0 88,0 C83,0 79,6 76,12 L20,12 L4,28 L4,254 L22,272 C48,284 74,288 100,288 C126,288 152,284 178,272 L196,254 L196,28 L180,12 L124,12 C121,6 117,0 112,0 C107,0 103,4 100,9 Z"/>
-        </clipPath>
+        <clipPath id="cl2"><path d="M30,10 H230 L250,60 V275 L130,350 L10,275 V60 Z"/></clipPath>
       </defs>
 
       <g clip-path="url(#cl2)">
-        <path d="M100,9 C97,4 93,0 88,0 C83,0 79,6 76,12 L20,12 L4,28 L4,254 L22,272 C48,284 74,288 100,288 C126,288 152,284 178,272 L196,254 L196,28 L180,12 L124,12 C121,6 117,0 112,0 C107,0 103,4 100,9 Z"
-          fill="url(#bg2)"/>
-        <path d="M4,194 L196,194 L196,254 L178,272 C152,284 126,288 100,288 C74,288 48,284 22,272 L4,254 Z"
-          fill="url(#pn2)"/>
+        <path d="M30,10 H230 L250,60 V275 L130,350 L10,275 V60 Z" fill="url(#bg2)"/>
+        <path d="M10,238 L250,238 V275 L130,350 L10,275 Z" fill="url(#pn2)"/>
       </g>
+      <path d="M30,10 H230 L250,60 V275 L130,350 L10,275 V60 Z"
+        fill="none" stroke="url(#br2)" stroke-width="5.5" filter="url(#gw2)" opacity="0.95"/>
+      <path d="M40,20 H220 L238,66 V271 L130,338 L22,271 V66 Z"
+        fill="none" stroke="#5599ee" stroke-width="1" opacity="0.4"/>
+      <line x1="12" y1="238" x2="248" y2="238" stroke="url(#br2)" stroke-width="1.5" opacity="0.7"/>
 
-      <path d="M100,9 C97,4 93,0 88,0 C83,0 79,6 76,12 L20,12 L4,28 L4,254 L22,272 C48,284 74,288 100,288 C126,288 152,284 178,272 L196,254 L196,28 L180,12 L124,12 C121,6 117,0 112,0 C107,0 103,4 100,9 Z"
-        fill="none" stroke="url(#br2)" stroke-width="3" filter="url(#gw2)" opacity="0.95"/>
-      <path d="M100,14 C97,9 94,6 90,6 C86,6 82,11 80,17 L25,17 L10,33 L10,250 L27,267 C52,279 76,283 100,283 C124,283 148,279 173,267 L190,250 L190,33 L175,17 L120,17 C118,11 114,6 110,6 C106,6 103,9 100,14 Z"
-        fill="none" stroke="#5599ee" stroke-width="0.8" opacity="0.4"/>
-      <line x1="10" y1="194" x2="190" y2="194" stroke="url(#br2)" stroke-width="1.2" opacity="0.7"/>
+      <path d="M130,0 L136,8 L130,16 L124,8 Z" fill="#4488ff" opacity="0.9"/>
+      <path d="M130,3 L134,8 L130,13 L126,8 Z" fill="#aaccff" opacity="0.6"/>
+      <path d="M100,10 Q115,2 124,10" fill="none" stroke="#2255cc" stroke-width="1" opacity="0.55"/>
+      <path d="M136,10 Q145,2 160,10" fill="none" stroke="#2255cc" stroke-width="1" opacity="0.55"/>
+      <circle cx="90"  cy="10" r="2" fill="#2255cc" opacity="0.5"/>
+      <circle cx="170" cy="10" r="2" fill="#2255cc" opacity="0.5"/>
+      <line x1="40"  y1="10" x2="82"  y2="10" stroke="#2255cc" stroke-width="0.8" opacity="0.4"/>
+      <line x1="178" y1="10" x2="220" y2="10" stroke="#2255cc" stroke-width="0.8" opacity="0.4"/>
 
-      <path d="M76,12 C79,6 83,0 88,0 C92,0 95,4 97,7 L100,9 L103,7 C105,4 108,0 112,0 C117,0 121,6 124,12"
-        fill="none" stroke="#4488dd" stroke-width="1" opacity="0.6"/>
-      <path d="M100,3 L104,7 L100,11 L96,7 Z" fill="#4488ff" opacity="0.9"/>
-      <path d="M100,5 L103,8 L100,11 L97,8 Z" fill="#aaccff" opacity="0.6"/>
-      <circle cx="76"  cy="12" r="1.8" fill="#2255cc" opacity="0.55"/>
-      <circle cx="124" cy="12" r="1.8" fill="#2255cc" opacity="0.55"/>
-      <line x1="24"  y1="12" x2="68"  y2="12" stroke="#2255cc" stroke-width="0.8" opacity="0.35"/>
-      <line x1="132" y1="12" x2="176" y2="12" stroke="#2255cc" stroke-width="0.8" opacity="0.35"/>
-
-      <g stroke="#2255cc" opacity="0.28" stroke-width="0.8">
-        <line x1="100" y1="288" x2="22"  y2="262"/>
-        <line x1="100" y1="288" x2="44"  y2="268"/>
-        <line x1="100" y1="288" x2="66"  y2="274"/>
-        <line x1="100" y1="288" x2="88"  y2="280"/>
-        <line x1="100" y1="288" x2="112" y2="280"/>
-        <line x1="100" y1="288" x2="134" y2="274"/>
-        <line x1="100" y1="288" x2="156" y2="268"/>
-        <line x1="100" y1="288" x2="178" y2="262"/>
+      <g stroke="#2255cc" opacity="0.25" stroke-width="0.9">
+        <line x1="130" y1="350" x2="14"  y2="264"/>
+        <line x1="130" y1="350" x2="42"  y2="272"/>
+        <line x1="130" y1="350" x2="74"  y2="282"/>
+        <line x1="130" y1="350" x2="106" y2="292"/>
+        <line x1="130" y1="350" x2="154" y2="292"/>
+        <line x1="130" y1="350" x2="186" y2="282"/>
+        <line x1="130" y1="350" x2="218" y2="272"/>
+        <line x1="130" y1="350" x2="246" y2="264"/>
       </g>
-      <circle cx="100" cy="278" r="2.5" fill="#88bbff" opacity="0.7"/>
-      <path d="M12,42 L12,58"   stroke="#5599ee" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
-      <path d="M188,42 L188,58" stroke="#5599ee" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
-      <path d="M12,210 L12,226"   stroke="#5599ee" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
-      <path d="M188,210 L188,226" stroke="#5599ee" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+      <circle cx="130" cy="338" r="3" fill="#88bbff" opacity="0.65"/>
+      <path d="M18,72 L18,92"  stroke="#5599ee" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+      <path d="M242,72 L242,92" stroke="#5599ee" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+      <path d="M18,222 L18,242"  stroke="#5599ee" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+      <path d="M242,222 L242,242" stroke="#5599ee" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
     </svg>
 
     <div class="ovr" style="color:#88bbff;"><div class="n">3.8</div><div class="l">OVR</div></div>
@@ -283,13 +240,13 @@ h1 { color: #444; font-size: 11px; letter-spacing: 4px; text-transform: uppercas
 </div>
 
 
-<!-- ══════════════════════════════
+<!-- ══════════════════════
      GALAXIA
-══════════════════════════════ -->
+══════════════════════ -->
 <div class="col">
   <div class="lbl">Galaxia</div>
   <div class="card">
-    <svg class="frame" viewBox="0 0 200 288" xmlns="http://www.w3.org/2000/svg">
+    <svg class="frame" viewBox="0 0 260 360" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <radialGradient id="bg3" cx="42%" cy="26%" r="76%">
           <stop offset="0%"   stop-color="#200540"/>
@@ -304,60 +261,54 @@ h1 { color: #444; font-size: 11px; letter-spacing: 4px; text-transform: uppercas
           <stop offset="0%"   stop-color="#140230" stop-opacity="0.93"/>
           <stop offset="100%" stop-color="#030007" stop-opacity="0.98"/>
         </linearGradient>
-        <filter id="gw3" x="-30%" y="-30%" width="160%" height="160%">
-          <feGaussianBlur stdDeviation="3" result="b"/>
+        <filter id="gw3" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="3.5" result="b"/>
           <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
         </filter>
-        <clipPath id="cl3">
-          <path d="M100,9 C97,4 93,0 88,0 C83,0 79,6 76,12 L20,12 L4,28 L4,254 L22,272 C48,284 74,288 100,288 C126,288 152,284 178,272 L196,254 L196,28 L180,12 L124,12 C121,6 117,0 112,0 C107,0 103,4 100,9 Z"/>
-        </clipPath>
+        <clipPath id="cl3"><path d="M30,10 H230 L250,60 V275 L130,350 L10,275 V60 Z"/></clipPath>
       </defs>
 
       <g clip-path="url(#cl3)">
-        <path d="M100,9 C97,4 93,0 88,0 C83,0 79,6 76,12 L20,12 L4,28 L4,254 L22,272 C48,284 74,288 100,288 C126,288 152,284 178,272 L196,254 L196,28 L180,12 L124,12 C121,6 117,0 112,0 C107,0 103,4 100,9 Z"
-          fill="url(#bg3)"/>
-        <!-- Stars -->
-        <g fill="#fff" opacity="0.5">
-          <circle cx="28" cy="22" r="0.6"/><circle cx="62" cy="14" r="0.8"/>
-          <circle cx="142" cy="18" r="0.6"/><circle cx="174" cy="30" r="0.7"/>
-          <circle cx="168" cy="80" r="0.5"/><circle cx="32" cy="90" r="0.5"/>
-          <circle cx="50" cy="140" r="0.6"/><circle cx="160" cy="130" r="0.6"/>
-          <circle cx="90" cy="60" r="0.4"/><circle cx="128" cy="50" r="0.4"/>
+        <path d="M30,10 H230 L250,60 V275 L130,350 L10,275 V60 Z" fill="url(#bg3)"/>
+        <g fill="#fff" opacity="0.45">
+          <circle cx="35" cy="28" r="0.7"/><circle cx="75" cy="18" r="0.9"/>
+          <circle cx="185" cy="22" r="0.7"/><circle cx="222" cy="35" r="0.8"/>
+          <circle cx="218" cy="95" r="0.6"/><circle cx="38" cy="108" r="0.6"/>
+          <circle cx="58" cy="168" r="0.7"/><circle cx="208" cy="155" r="0.7"/>
+          <circle cx="112" cy="70" r="0.5"/><circle cx="165" cy="58" r="0.5"/>
         </g>
-        <path d="M4,194 L196,194 L196,254 L178,272 C152,284 126,288 100,288 C74,288 48,284 22,272 L4,254 Z"
-          fill="url(#pn3)"/>
+        <path d="M10,238 L250,238 V275 L130,350 L10,275 Z" fill="url(#pn3)"/>
       </g>
+      <path d="M30,10 H230 L250,60 V275 L130,350 L10,275 V60 Z"
+        fill="none" stroke="url(#br3)" stroke-width="5.5" filter="url(#gw3)" opacity="0.95"/>
+      <path d="M40,20 H220 L238,66 V271 L130,338 L22,271 V66 Z"
+        fill="none" stroke="#bb66ff" stroke-width="1" opacity="0.4"/>
+      <line x1="12" y1="238" x2="248" y2="238" stroke="url(#br3)" stroke-width="1.5" opacity="0.7"/>
 
-      <path d="M100,9 C97,4 93,0 88,0 C83,0 79,6 76,12 L20,12 L4,28 L4,254 L22,272 C48,284 74,288 100,288 C126,288 152,284 178,272 L196,254 L196,28 L180,12 L124,12 C121,6 117,0 112,0 C107,0 103,4 100,9 Z"
-        fill="none" stroke="url(#br3)" stroke-width="3" filter="url(#gw3)" opacity="0.95"/>
-      <path d="M100,14 C97,9 94,6 90,6 C86,6 82,11 80,17 L25,17 L10,33 L10,250 L27,267 C52,279 76,283 100,283 C124,283 148,279 173,267 L190,250 L190,33 L175,17 L120,17 C118,11 114,6 110,6 C106,6 103,9 100,14 Z"
-        fill="none" stroke="#bb66ff" stroke-width="0.8" opacity="0.4"/>
-      <line x1="10" y1="194" x2="190" y2="194" stroke="url(#br3)" stroke-width="1.2" opacity="0.7"/>
+      <path d="M130,0 L136,8 L130,16 L124,8 Z" fill="#cc44ff" opacity="0.95"/>
+      <path d="M130,3 L134,8 L130,13 L126,8 Z" fill="#ee99ff" opacity="0.65"/>
+      <path d="M100,10 Q115,2 124,10" fill="none" stroke="#9922cc" stroke-width="1" opacity="0.6"/>
+      <path d="M136,10 Q145,2 160,10" fill="none" stroke="#9922cc" stroke-width="1" opacity="0.6"/>
+      <circle cx="90"  cy="10" r="2" fill="#9922cc" opacity="0.55"/>
+      <circle cx="170" cy="10" r="2" fill="#9922cc" opacity="0.55"/>
+      <line x1="40"  y1="10" x2="82"  y2="10" stroke="#9922cc" stroke-width="0.8" opacity="0.4"/>
+      <line x1="178" y1="10" x2="220" y2="10" stroke="#9922cc" stroke-width="0.8" opacity="0.4"/>
 
-      <path d="M76,12 C79,6 83,0 88,0 C92,0 95,4 97,7 L100,9 L103,7 C105,4 108,0 112,0 C117,0 121,6 124,12"
-        fill="none" stroke="#9933cc" stroke-width="1" opacity="0.65"/>
-      <path d="M100,3 L104,7 L100,11 L96,7 Z" fill="#cc44ff" opacity="0.95"/>
-      <path d="M100,5 L103,8 L100,11 L97,8 Z" fill="#ee99ff" opacity="0.65"/>
-      <circle cx="76"  cy="12" r="1.8" fill="#9922cc" opacity="0.65"/>
-      <circle cx="124" cy="12" r="1.8" fill="#9922cc" opacity="0.65"/>
-      <line x1="24"  y1="12" x2="68"  y2="12" stroke="#9922cc" stroke-width="0.8" opacity="0.35"/>
-      <line x1="132" y1="12" x2="176" y2="12" stroke="#9922cc" stroke-width="0.8" opacity="0.35"/>
-
-      <g stroke="#9922cc" opacity="0.30" stroke-width="0.8">
-        <line x1="100" y1="288" x2="22"  y2="262"/>
-        <line x1="100" y1="288" x2="44"  y2="268"/>
-        <line x1="100" y1="288" x2="66"  y2="274"/>
-        <line x1="100" y1="288" x2="88"  y2="280"/>
-        <line x1="100" y1="288" x2="112" y2="280"/>
-        <line x1="100" y1="288" x2="134" y2="274"/>
-        <line x1="100" y1="288" x2="156" y2="268"/>
-        <line x1="100" y1="288" x2="178" y2="262"/>
+      <g stroke="#9922cc" opacity="0.28" stroke-width="0.9">
+        <line x1="130" y1="350" x2="14"  y2="264"/>
+        <line x1="130" y1="350" x2="42"  y2="272"/>
+        <line x1="130" y1="350" x2="74"  y2="282"/>
+        <line x1="130" y1="350" x2="106" y2="292"/>
+        <line x1="130" y1="350" x2="154" y2="292"/>
+        <line x1="130" y1="350" x2="186" y2="282"/>
+        <line x1="130" y1="350" x2="218" y2="272"/>
+        <line x1="130" y1="350" x2="246" y2="264"/>
       </g>
-      <circle cx="100" cy="278" r="2.5" fill="#dd88ff" opacity="0.8"/>
-      <path d="M12,42 L12,58"   stroke="#bb66ff" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
-      <path d="M188,42 L188,58" stroke="#bb66ff" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
-      <path d="M12,210 L12,226"   stroke="#bb66ff" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
-      <path d="M188,210 L188,226" stroke="#bb66ff" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+      <circle cx="130" cy="338" r="3" fill="#dd88ff" opacity="0.75"/>
+      <path d="M18,72 L18,92"  stroke="#bb66ff" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+      <path d="M242,72 L242,92" stroke="#bb66ff" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+      <path d="M18,222 L18,242"  stroke="#bb66ff" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+      <path d="M242,222 L242,242" stroke="#bb66ff" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
     </svg>
 
     <div class="ovr" style="color:#dd88ff;"><div class="n">4.3</div><div class="l">OVR</div></div>
@@ -378,13 +329,13 @@ h1 { color: #444; font-size: 11px; letter-spacing: 4px; text-transform: uppercas
 </div>
 
 
-<!-- ══════════════════════════════
+<!-- ══════════════════════
      ORO
-══════════════════════════════ -->
+══════════════════════ -->
 <div class="col">
   <div class="lbl">Oro</div>
   <div class="card">
-    <svg class="frame" viewBox="0 0 200 288" xmlns="http://www.w3.org/2000/svg">
+    <svg class="frame" viewBox="0 0 260 360" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <radialGradient id="bg4" cx="50%" cy="26%" r="74%">
           <stop offset="0%"   stop-color="#322000"/>
@@ -399,82 +350,78 @@ h1 { color: #444; font-size: 11px; letter-spacing: 4px; text-transform: uppercas
           <stop offset="0%"   stop-color="#1e1300" stop-opacity="0.93"/>
           <stop offset="100%" stop-color="#060400" stop-opacity="0.98"/>
         </linearGradient>
-        <filter id="gw4" x="-30%" y="-30%" width="160%" height="160%">
-          <feGaussianBlur stdDeviation="3.5" result="b"/>
+        <filter id="gw4" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="4" result="b"/>
           <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
         </filter>
-        <clipPath id="cl4">
-          <path d="M100,9 C97,4 93,0 88,0 C83,0 79,6 76,12 L20,12 L4,28 L4,254 L22,272 C48,284 74,288 100,288 C126,288 152,284 178,272 L196,254 L196,28 L180,12 L124,12 C121,6 117,0 112,0 C107,0 103,4 100,9 Z"/>
-        </clipPath>
+        <clipPath id="cl4"><path d="M30,10 H230 L250,60 V275 L130,350 L10,275 V60 Z"/></clipPath>
       </defs>
 
       <g clip-path="url(#cl4)">
-        <path d="M100,9 C97,4 93,0 88,0 C83,0 79,6 76,12 L20,12 L4,28 L4,254 L22,272 C48,284 74,288 100,288 C126,288 152,284 178,272 L196,254 L196,28 L180,12 L124,12 C121,6 117,0 112,0 C107,0 103,4 100,9 Z"
-          fill="url(#bg4)"/>
+        <path d="M30,10 H230 L250,60 V275 L130,350 L10,275 V60 Z" fill="url(#bg4)"/>
         <!-- Diagonal rays -->
-        <g opacity="0.06" stroke="#ffdd00" stroke-width="1.5">
-          <line x1="100" y1="9" x2="4"   y2="194"/>
-          <line x1="100" y1="9" x2="44"  y2="194"/>
-          <line x1="100" y1="9" x2="156" y2="194"/>
-          <line x1="100" y1="9" x2="196" y2="194"/>
+        <g opacity="0.06" stroke="#ffdd00" stroke-width="2">
+          <line x1="130" y1="10" x2="10"  y2="238"/>
+          <line x1="130" y1="10" x2="60"  y2="238"/>
+          <line x1="130" y1="10" x2="200" y2="238"/>
+          <line x1="130" y1="10" x2="250" y2="238"/>
         </g>
-        <path d="M4,194 L196,194 L196,254 L178,272 C152,284 126,288 100,288 C74,288 48,284 22,272 L4,254 Z"
-          fill="url(#pn4)"/>
+        <path d="M10,238 L250,238 V275 L130,350 L10,275 Z" fill="url(#pn4)"/>
       </g>
 
       <!-- Outer border -->
-      <path d="M100,9 C97,4 93,0 88,0 C83,0 79,6 76,12 L20,12 L4,28 L4,254 L22,272 C48,284 74,288 100,288 C126,288 152,284 178,272 L196,254 L196,28 L180,12 L124,12 C121,6 117,0 112,0 C107,0 103,4 100,9 Z"
-        fill="none" stroke="url(#br4)" stroke-width="3.5" filter="url(#gw4)" opacity="0.98"/>
+      <path d="M30,10 H230 L250,60 V275 L130,350 L10,275 V60 Z"
+        fill="none" stroke="url(#br4)" stroke-width="6" filter="url(#gw4)" opacity="0.98"/>
       <!-- Inner border 1 -->
-      <path d="M100,14 C97,9 94,6 90,6 C86,6 82,11 80,17 L25,17 L10,33 L10,250 L27,267 C52,279 76,283 100,283 C124,283 148,279 173,267 L190,250 L190,33 L175,17 L120,17 C118,11 114,6 110,6 C106,6 103,9 100,14 Z"
-        fill="none" stroke="#ffcc44" stroke-width="0.9" opacity="0.55"/>
-      <!-- Inner border 2 (gold only — extra refinement) -->
-      <path d="M100,19 C97,15 95,12 92,12 C89,12 85,16 83,21 L30,21 L16,37 L16,247 L32,263 C56,275 78,279 100,279 C122,279 144,275 168,263 L184,247 L184,37 L170,21 L117,21 C115,16 111,12 108,12 C105,12 103,15 100,19 Z"
-        fill="none" stroke="#ddaa00" stroke-width="0.5" opacity="0.30"/>
+      <path d="M40,20 H220 L238,66 V271 L130,338 L22,271 V66 Z"
+        fill="none" stroke="#ffcc44" stroke-width="1.2" opacity="0.55"/>
+      <!-- Inner border 2 (gold only) -->
+      <path d="M50,30 H210 L226,72 V267 L130,326 L34,267 V72 Z"
+        fill="none" stroke="#ddaa00" stroke-width="0.6" opacity="0.28"/>
 
-      <line x1="10" y1="194" x2="190" y2="194" stroke="url(#br4)" stroke-width="1.4" opacity="0.85"/>
+      <line x1="12" y1="238" x2="248" y2="238" stroke="url(#br4)" stroke-width="1.8" opacity="0.85"/>
 
       <!-- Crown ornament — more elaborate for gold -->
-      <path d="M76,12 C79,6 83,0 88,0 C92,0 95,4 97,7 L100,9 L103,7 C105,4 108,0 112,0 C117,0 121,6 124,12"
-        fill="none" stroke="#ddaa00" stroke-width="1.3" opacity="0.7"/>
-      <!-- Larger crown gem -->
-      <path d="M100,2 L105,7 L100,12 L95,7 Z" fill="#ffcc00" opacity="0.95"/>
-      <path d="M100,4 L104,8 L100,12 L96,8 Z" fill="#fff5b0" opacity="0.8"/>
-      <!-- More accent dots -->
-      <circle cx="76"  cy="12" r="2.2" fill="#ddaa00" opacity="0.7"/>
-      <circle cx="124" cy="12" r="2.2" fill="#ddaa00" opacity="0.7"/>
-      <circle cx="60"  cy="14" r="1.4" fill="#ddaa00" opacity="0.4"/>
-      <circle cx="140" cy="14" r="1.4" fill="#ddaa00" opacity="0.4"/>
-      <line x1="24"  y1="12" x2="52"  y2="12" stroke="#ddaa00" stroke-width="0.9" opacity="0.4"/>
-      <line x1="148" y1="12" x2="176" y2="12" stroke="#ddaa00" stroke-width="0.9" opacity="0.4"/>
+      <path d="M130,0 L138,8 L130,18 L122,8 Z" fill="#ffcc00" opacity="0.97"/>
+      <path d="M130,3 L136,9 L130,15 L124,9 Z" fill="#fff5b0" opacity="0.8"/>
+      <!-- Crown arcs flanking gem -->
+      <path d="M96,10 Q113,0 122,10"  fill="none" stroke="#ddaa00" stroke-width="1.4" opacity="0.65"/>
+      <path d="M138,10 Q147,0 164,10" fill="none" stroke="#ddaa00" stroke-width="1.4" opacity="0.65"/>
+      <!-- Side accent dots -->
+      <circle cx="86"  cy="10" r="2.5" fill="#ddaa00" opacity="0.65"/>
+      <circle cx="174" cy="10" r="2.5" fill="#ddaa00" opacity="0.65"/>
+      <circle cx="70"  cy="12" r="1.6" fill="#ddaa00" opacity="0.38"/>
+      <circle cx="190" cy="12" r="1.6" fill="#ddaa00" opacity="0.38"/>
+      <!-- Horizontal lines -->
+      <line x1="40"  y1="10" x2="78"  y2="10" stroke="#ddaa00" stroke-width="1"   opacity="0.45"/>
+      <line x1="182" y1="10" x2="220" y2="10" stroke="#ddaa00" stroke-width="1"   opacity="0.45"/>
 
       <!-- Bottom fan — more elaborate for gold -->
-      <g stroke="#ddaa00" opacity="0.32" stroke-width="0.9">
-        <line x1="100" y1="288" x2="20"  y2="260"/>
-        <line x1="100" y1="288" x2="40"  y2="265"/>
-        <line x1="100" y1="288" x2="60"  y2="270"/>
-        <line x1="100" y1="288" x2="80"  y2="276"/>
-        <line x1="100" y1="288" x2="120" y2="276"/>
-        <line x1="100" y1="288" x2="140" y2="270"/>
-        <line x1="100" y1="288" x2="160" y2="265"/>
-        <line x1="100" y1="288" x2="180" y2="260"/>
+      <g stroke="#ddaa00" opacity="0.30" stroke-width="1">
+        <line x1="130" y1="350" x2="14"  y2="264"/>
+        <line x1="130" y1="350" x2="42"  y2="272"/>
+        <line x1="130" y1="350" x2="74"  y2="282"/>
+        <line x1="130" y1="350" x2="106" y2="292"/>
+        <line x1="130" y1="350" x2="154" y2="292"/>
+        <line x1="130" y1="350" x2="186" y2="282"/>
+        <line x1="130" y1="350" x2="218" y2="272"/>
+        <line x1="130" y1="350" x2="246" y2="264"/>
       </g>
-      <!-- Extra inner fan for gold -->
-      <g stroke="#ffcc44" opacity="0.18" stroke-width="0.7">
-        <line x1="100" y1="285" x2="50"  y2="272"/>
-        <line x1="100" y1="285" x2="70"  y2="277"/>
-        <line x1="100" y1="285" x2="130" y2="277"/>
-        <line x1="100" y1="285" x2="150" y2="272"/>
+      <!-- Extra inner fan -->
+      <g stroke="#ffcc44" opacity="0.18" stroke-width="0.8">
+        <line x1="130" y1="345" x2="62"  y2="286"/>
+        <line x1="130" y1="345" x2="90"  y2="294"/>
+        <line x1="130" y1="345" x2="170" y2="294"/>
+        <line x1="130" y1="345" x2="198" y2="286"/>
       </g>
-      <!-- Center bottom gem -->
-      <circle cx="100" cy="276" r="3"   fill="#ffdd66" opacity="0.85"/>
-      <circle cx="100" cy="276" r="1.5" fill="#fff5b0" opacity="0.9"/>
+      <circle cx="130" cy="336" r="3.5" fill="#ffdd66" opacity="0.85"/>
+      <circle cx="130" cy="336" r="1.8" fill="#fff5b0" opacity="0.9"/>
 
-      <!-- Corner marks with L-shape (gold only) -->
-      <path d="M12,42 L12,60 M12,42 L22,42"   stroke="#ffcc44" stroke-width="1.5" stroke-linecap="round" opacity="0.55"/>
-      <path d="M188,42 L188,60 M188,42 L178,42" stroke="#ffcc44" stroke-width="1.5" stroke-linecap="round" opacity="0.55"/>
-      <path d="M12,210 L12,228 M12,228 L22,228"   stroke="#ffcc44" stroke-width="1.5" stroke-linecap="round" opacity="0.55"/>
-      <path d="M188,210 L188,228 M188,228 L178,228" stroke="#ffcc44" stroke-width="1.5" stroke-linecap="round" opacity="0.55"/>
+      <!-- Corner marks — L-shape (gold only) -->
+      <path d="M18,72 L18,94 M18,72 L32,72"   stroke="#ffcc44" stroke-width="2" stroke-linecap="round" opacity="0.55"/>
+      <path d="M242,72 L242,94 M242,72 L228,72" stroke="#ffcc44" stroke-width="2" stroke-linecap="round" opacity="0.55"/>
+      <path d="M18,222 L18,244 M18,244 L32,244"   stroke="#ffcc44" stroke-width="2" stroke-linecap="round" opacity="0.55"/>
+      <path d="M242,222 L242,244 M242,244 L228,244" stroke="#ffcc44" stroke-width="2" stroke-linecap="round" opacity="0.55"/>
     </svg>
 
     <div class="ovr" style="color:#ffcc44;"><div class="n">4.8</div><div class="l">OVR</div></div>
