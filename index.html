@@ -2970,6 +2970,14 @@ function openPlayerDetail(pid) {
       </div>
     </div>
 
+    <!-- Tabs -->
+    <div style="display:flex;border-bottom:1px solid var(--border);margin-bottom:20px;">
+      <button id="pd-tab-stats" onclick="pdTab('stats')" style="padding:8px 20px;border:none;border-bottom:2px solid var(--green);background:none;color:var(--text);font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;margin-bottom:-1px;">Stats</button>
+      <button id="pd-tab-carta" onclick="pdTab('carta')" style="padding:8px 20px;border:none;border-bottom:2px solid transparent;background:none;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;margin-bottom:-1px;">Carta</button>
+    </div>
+
+    <!-- Panel Stats -->
+    <div id="pd-panel-stats">
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px;">
       <div class="card-sm" style="text-align:center;"><div style="font-family:'Barlow Condensed',sans-serif;font-size:30px;font-weight:900;color:var(--green);">${computePartidos(p.id)}</div><div style="font-size:10px;color:var(--muted);">JORNADAS</div></div>
       <div class="card-sm" style="text-align:center;"><div style="font-family:'Barlow Condensed',sans-serif;font-size:30px;font-weight:900;color:var(--green);">${computeGoles(p.id)}</div><div style="font-size:10px;color:var(--muted);">GOLES</div></div>
@@ -3095,8 +3103,30 @@ function openPlayerDetail(pid) {
       <button class="btn btn-secondary btn-sm" onclick="openEditPlayer('${p.id}')">Editar</button>
       ${S.isAdmin?`<button class="btn btn-danger btn-sm" onclick="deletePlayer('${p.id}')">Eliminar</button>`:''}
     </div>
+    </div><!-- /pd-panel-stats -->
+
+    <!-- Panel Carta -->
+    <div id="pd-panel-carta" style="display:none;text-align:center;padding:16px 0 24px;">
+      <div style="width:210px;margin:0 auto;pointer-events:none;">
+        ${playerCardHtml(p, 0)}
+      </div>
+    </div>
   `;
   openModal('modal-player-detail');
+}
+
+function pdTab(tab) {
+  const ps = document.getElementById('pd-panel-stats');
+  const pc = document.getElementById('pd-panel-carta');
+  const ts = document.getElementById('pd-tab-stats');
+  const tc = document.getElementById('pd-tab-carta');
+  if (!ps||!pc) return;
+  ps.style.display = tab==='stats' ? '' : 'none';
+  pc.style.display = tab==='carta' ? '' : 'none';
+  ts.style.borderBottomColor = tab==='stats' ? 'var(--green)' : 'transparent';
+  ts.style.color             = tab==='stats' ? 'var(--text)'  : 'var(--muted)';
+  tc.style.borderBottomColor = tab==='carta' ? 'var(--green)' : 'transparent';
+  tc.style.color             = tab==='carta' ? 'var(--text)'  : 'var(--muted)';
 }
 
 function deletePlayer(pid) {
