@@ -549,10 +549,6 @@ input:focus,select:focus{border-color:var(--green);}
         renderAll();
         applySettings();
         checkVotingHash();
-        // If voting modal is open, refresh the goals counter with fresh data
-        if (document.getElementById('modal-voting')?.classList.contains('open')) {
-          updateGolesRestantes();
-        }
       }
       // Restore last page and admin state — only on first Firebase load
       // Must be outside the data-diff check because localStorage pre-populates S
@@ -4489,25 +4485,18 @@ function renderVoteRows() {
     </div>`;
 
   // Goles section — only for the voter themselves
-  // Total = P1 + P2 (if P2 happened)
-  const totalGolesP1 = (m2.scoreA!==null && m2.scoreB!==null) ? (m2.scoreA||0) + (m2.scoreB||0) : null;
-  const totalGolesP2 = (m2.scoreA2!==undefined && m2.scoreB2!==undefined) ? (m2.scoreA2||0) + (m2.scoreB2||0) : 0;
-  const totalGoles = totalGolesP1 !== null ? totalGolesP1 + totalGolesP2 : null;
-  const golesHintLabel = m2.scoreA2!==undefined
-    ? `P1: ${m2.scoreA}–${m2.scoreB} · P2: ${m2.scoreA2}–${m2.scoreB2} = <strong style="color:var(--text);">${totalGoles} goles totales</strong>`
-    : `Total: <strong style="color:var(--text);">${totalGoles} goles</strong> (${m2.scoreA} – ${m2.scoreB})`;
+  // Pre-fill voter's own goals from a previous vote if they already submitted
+  const prevGoles = m2.matchStats?.[voterId]?.goles || 0;
   const golesBlock = `
     <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;margin-top:8px;">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:6px;">
+      <div style="margin-bottom:10px;">
         <div style="font-size:11px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:1px;">⚽ Tus goles en el día</div>
-        ${totalGoles!==null?`<div style="font-size:11px;color:var(--muted);background:var(--surface);border:1px solid var(--border);padding:3px 10px;border-radius:20px;">${golesHintLabel}</div>`:''}
       </div>
       <div style="display:flex;align-items:center;gap:12px;">
         <button onclick="adjustGoles(-1)" style="width:36px;height:36px;border-radius:50%;background:var(--surface);border:1px solid var(--border);color:var(--text);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;">−</button>
-        <div id="goles-val" style="font-family:'Barlow Condensed',sans-serif;font-size:48px;font-weight:900;color:var(--green);min-width:48px;text-align:center;">0</div>
+        <div id="goles-val" style="font-family:'Barlow Condensed',sans-serif;font-size:48px;font-weight:900;color:var(--green);min-width:48px;text-align:center;">${prevGoles}</div>
         <button id="btn-goles-plus" onclick="adjustGoles(1)" style="width:36px;height:36px;border-radius:50%;background:var(--surface);border:1px solid var(--border);color:var(--text);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;">+</button>
       </div>
-      ${totalGoles!==null?`<div id="goles-hint" style="font-size:11px;color:var(--muted);margin-top:8px;font-style:italic;">💡 Quedan <strong style="color:var(--accent);">${totalGoles}</strong> goles por repartir</div>`:''}
     </div>`;
 
   let html = '';
@@ -4524,8 +4513,7 @@ function renderVoteRows() {
   html += golesBlock;
 
   document.getElementById('vote-rows').innerHTML = html;
-  window._voterGoles = 0;
-  setTimeout(updateGolesRestantes, 50);
+  window._voterGoles = prevGoles; // pre-fill from previous vote (0 if first time)
 }
 
 function _matchTotalGoles(m) {
@@ -4536,22 +4524,8 @@ function _matchTotalGoles(m) {
 }
 
 function adjustGoles(delta) {
-  const m = gm(activeVotingMatchId);
-  const total = m ? _matchTotalGoles(m) : null;
-  if (delta > 0 && m && total !== null) {
-    const voterId = document.getElementById('voter-sel')?.value;
-    let yaRegistrados = 0;
-    Object.entries(m.matchStats||{}).forEach(([pid, ms]) => {
-      if (pid !== voterId) yaRegistrados += (ms.goles||0);
-    });
-    if ((window._voterGoles||0) >= total - yaRegistrados) {
-      toast('⚠️ Ya no quedan goles por repartir');
-      return;
-    }
-  }
   window._voterGoles = Math.max(0, (window._voterGoles||0) + delta);
   document.getElementById('goles-val').textContent = window._voterGoles;
-  updateGolesRestantes();
 }
 
 function updateGolesRestantes() {
@@ -4832,12 +4806,8 @@ function submitStats(){
   if(!m.matchStats) m.matchStats={};
   m.players.forEach(pid=>{
     const g=parseInt(document.getElementById('mg-'+pid)?.value||0);
-    // Only add delta from new input vs existing
-    const ex = m.matchStats[pid]||{goles:0};
-    const dg = g - ex.goles;
     m.matchStats[pid]={goles:g};
-    const p=gp(pid);
-    if(p){p.stats.goles+=dg;}
+    // Note: p.stats.goles is only updated at finalization (computeGoles from done matches)
   });
   const sa=document.getElementById('score-a').value;
   const sb=document.getElementById('score-b').value;
@@ -4923,8 +4893,8 @@ function finalizeMatch(mid){
   });
   m.status='done';
   if(!m.closedAt) m.closedAt = Date.now();
-  // Sync p.stats.goles from computeGoles for consistency
-  S.players.forEach(p => { p.stats.goles = computeGoles(p.id); });
+  // Invalidate cache so post-finalization computeGoles reads from updated matchStats
+  invalidateStatsCache();
   save(); closeModal('modal-match'); renderAll();
   toast('Partido finalizado ✓ Estadísticas actualizadas');
 }
@@ -4954,9 +4924,6 @@ function confirmDeleteMatch(){
         const p = gp(pid);
         if (!p) return;
         p.stats.partidos = Math.max(0, p.stats.partidos - 1);
-        // Reverse goals from matchStats
-        const ms = m.matchStats?.[pid];
-        if (ms) p.stats.goles = Math.max(0, p.stats.goles - (ms.goles||0));
         // Reverse field rating
         if (p.stats.ratingCount > 0) {
           p.ratingHistory = p.ratingHistory.slice(0, -1);
@@ -4981,6 +4948,14 @@ function confirmDeleteMatch(){
     S.players = S.players.filter(p => playersInOtherMatches.has(p.id));
   }
   S.matches = S.matches.filter(mx=>mx.id!==pendingDeleteMatchId);
+  // Recompute goals from scratch from remaining done matches (avoids delta drift)
+  S.players.forEach(p => { p.stats.goles = 0; });
+  S.matches.filter(mx => mx.status === 'done').forEach(mx => {
+    Object.entries(mx.matchStats||{}).forEach(([pid, ms]) => {
+      const p = gp(pid); if (p) p.stats.goles += (ms.goles||0);
+    });
+  });
+  invalidateStatsCache();
   pendingDeleteMatchId = null;
   save(); closeModal('modal-confirm-delete'); closeModal('modal-match'); renderAll();
   toast('Partido y jugadores sin historial eliminados');
