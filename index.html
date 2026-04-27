@@ -549,6 +549,10 @@ input:focus,select:focus{border-color:var(--green);}
         renderAll();
         applySettings();
         checkVotingHash();
+        // If voting modal is open, refresh the goals counter with fresh data
+        if (document.getElementById('modal-voting')?.classList.contains('open')) {
+          updateGolesRestantes();
+        }
       }
       // Restore last page and admin state — only on first Firebase load
       // Must be outside the data-diff check because localStorage pre-populates S
@@ -4503,7 +4507,7 @@ function renderVoteRows() {
         <div id="goles-val" style="font-family:'Barlow Condensed',sans-serif;font-size:48px;font-weight:900;color:var(--green);min-width:48px;text-align:center;">0</div>
         <button id="btn-goles-plus" onclick="adjustGoles(1)" style="width:36px;height:36px;border-radius:50%;background:var(--surface);border:1px solid var(--border);color:var(--text);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;">+</button>
       </div>
-      ${totalGoles!==null?`<div style="font-size:11px;color:var(--muted);margin-top:8px;font-style:italic;">💡 El partido tuvo <strong style="color:var(--text);">${totalGoles}</strong> goles en total</div>`:''}
+      ${totalGoles!==null?`<div id="goles-hint" style="font-size:11px;color:var(--muted);margin-top:8px;font-style:italic;">💡 Quedan <strong style="color:var(--accent);">${totalGoles}</strong> goles por repartir</div>`:''}
     </div>`;
 
   let html = '';
@@ -4521,6 +4525,7 @@ function renderVoteRows() {
 
   document.getElementById('vote-rows').innerHTML = html;
   window._voterGoles = 0;
+  setTimeout(updateGolesRestantes, 50);
 }
 
 function _matchTotalGoles(m) {
@@ -4533,10 +4538,46 @@ function _matchTotalGoles(m) {
 function adjustGoles(delta) {
   const m = gm(activeVotingMatchId);
   const total = m ? _matchTotalGoles(m) : null;
-  // Only hard cap: can't score more than the whole match
-  if (delta > 0 && total !== null && (window._voterGoles||0) >= total) return;
+  if (delta > 0 && m && total !== null) {
+    const voterId = document.getElementById('voter-sel')?.value;
+    let yaRegistrados = 0;
+    Object.entries(m.matchStats||{}).forEach(([pid, ms]) => {
+      if (pid !== voterId) yaRegistrados += (ms.goles||0);
+    });
+    if ((window._voterGoles||0) >= total - yaRegistrados) {
+      toast('⚠️ Ya no quedan goles por repartir');
+      return;
+    }
+  }
   window._voterGoles = Math.max(0, (window._voterGoles||0) + delta);
   document.getElementById('goles-val').textContent = window._voterGoles;
+  updateGolesRestantes();
+}
+
+function updateGolesRestantes() {
+  const m = gm(activeVotingMatchId);
+  const total = m ? _matchTotalGoles(m) : null;
+  const hintEl = document.getElementById('goles-hint');
+  const btnPlus = document.getElementById('btn-goles-plus');
+  if (!hintEl || !m || total === null) return;
+  const voterId = document.getElementById('voter-sel')?.value;
+  let yaRegistrados = 0;
+  Object.entries(m.matchStats||{}).forEach(([pid, ms]) => {
+    if (pid !== voterId) yaRegistrados += (ms.goles||0);
+  });
+  const restantes = Math.max(0, total - yaRegistrados - (window._voterGoles||0));
+  hintEl.innerHTML = restantes === 0
+    ? '✅ No quedan más goles por repartir'
+    : `💡 Quedan <strong style="color:var(--accent);">${restantes}</strong> goles por repartir`;
+  hintEl.style.color   = restantes === 0 ? 'var(--green)' : 'var(--muted)';
+  hintEl.style.fontWeight = restantes === 0 ? '700' : '';
+  hintEl.style.fontStyle  = restantes === 0 ? 'normal' : 'italic';
+  if (btnPlus) {
+    const maxed = (window._voterGoles||0) >= total - yaRegistrados;
+    btnPlus.disabled     = maxed;
+    btnPlus.style.opacity = maxed ? '0.3' : '';
+    btnPlus.style.cursor  = maxed ? 'not-allowed' : '';
+  }
 }
 
 
