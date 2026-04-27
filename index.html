@@ -4503,7 +4503,7 @@ function renderVoteRows() {
         <div id="goles-val" style="font-family:'Barlow Condensed',sans-serif;font-size:48px;font-weight:900;color:var(--green);min-width:48px;text-align:center;">0</div>
         <button id="btn-goles-plus" onclick="adjustGoles(1)" style="width:36px;height:36px;border-radius:50%;background:var(--surface);border:1px solid var(--border);color:var(--text);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;">+</button>
       </div>
-      ${totalGoles!==null?`<div id="goles-hint" style="font-size:11px;color:var(--muted);margin-top:8px;font-style:italic;">💡 Quedan <strong id="goles-restantes" style="color:var(--green);">${totalGoles}</strong> goles por repartir entre los demás</div>`:''}
+      ${totalGoles!==null?`<div style="font-size:11px;color:var(--muted);margin-top:8px;font-style:italic;">💡 Pon los goles que metiste tú en el partido</div>`:''}
     </div>`;
 
   let html = '';
@@ -4533,24 +4533,14 @@ function _matchTotalGoles(m) {
 
 function adjustGoles(delta) {
   const m = gm(activeVotingMatchId);
-  if (delta > 0 && m) {
-    const total = _matchTotalGoles(m);
-    if (total !== null) {
-      const voterId = document.getElementById('voter-sel')?.value;
-      let yaRegistrados = 0;
-      Object.entries(m.matchStats||{}).forEach(([pid, ms]) => {
-        if (pid !== voterId) yaRegistrados += (ms.goles||0);
-      });
-      const maxAllowed = total - yaRegistrados;
-      if ((window._voterGoles||0) >= maxAllowed) {
-        toast('⚠️ Ya no quedan goles por repartir');
-        return;
-      }
-    }
+  const total = m ? _matchTotalGoles(m) : null;
+  // Cap at total goals of the match (can't score more than the whole game)
+  if (delta > 0 && total !== null && (window._voterGoles||0) >= total) {
+    toast('⚠️ No puedes marcar más goles que el total del partido');
+    return;
   }
   window._voterGoles = Math.max(0, (window._voterGoles||0) + delta);
   document.getElementById('goles-val').textContent = window._voterGoles;
-  updateGolesRestantes();
 }
 
 function updateGolesRestantes() {
@@ -5104,11 +5094,14 @@ function renderAdminVotes() {
       ${voted.length?`<div>
         <div style="font-size:11px;color:var(--green);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">✓ Han votado</div>
         <div style="display:flex;flex-wrap:wrap;gap:6px;">
-          ${voted.map(pid=>`<span style="background:rgba(74,222,128,0.1);color:var(--green);border:1px solid rgba(74,222,128,0.2);padding:3px 10px;border-radius:20px;font-size:12px;display:flex;align-items:center;gap:6px;">
-            ${gp(pid)?.name||pid}
+          ${voted.map(pid=>{
+            const goles = m.matchStats?.[pid]?.goles;
+            const golesLabel = (goles!=null) ? `<span style="background:rgba(74,222,128,0.15);color:var(--green);border-radius:10px;padding:1px 6px;font-size:10px;font-weight:700;">⚽${goles}</span>` : '';
+            return `<span style="background:rgba(74,222,128,0.1);color:var(--green);border:1px solid rgba(74,222,128,0.2);padding:3px 10px;border-radius:20px;font-size:12px;display:flex;align-items:center;gap:6px;">
+            ${gp(pid)?.name||pid}${golesLabel}
             <button onclick="adminEditVote('${m.id}','${pid}')" style="background:none;border:none;color:var(--accent);cursor:pointer;font-size:11px;padding:0;line-height:1;" title="Editar voto">✏️</button>
             <button onclick="deleteVote('${m.id}','${pid}')" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:14px;padding:0;line-height:1;" title="Borrar voto">×</button>
-          </span>`).join('')}
+          </span>`;}).join('')}
         </div>
       </div>`:''}
     </div>`;
