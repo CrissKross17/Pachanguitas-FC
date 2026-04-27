@@ -4503,7 +4503,7 @@ function renderVoteRows() {
         <div id="goles-val" style="font-family:'Barlow Condensed',sans-serif;font-size:48px;font-weight:900;color:var(--green);min-width:48px;text-align:center;">0</div>
         <button id="btn-goles-plus" onclick="adjustGoles(1)" style="width:36px;height:36px;border-radius:50%;background:var(--surface);border:1px solid var(--border);color:var(--text);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;">+</button>
       </div>
-      ${totalGoles!==null?`<div style="font-size:11px;color:var(--muted);margin-top:8px;font-style:italic;">💡 Pon los goles que metiste tú en el partido</div>`:''}
+      ${totalGoles!==null?`<div id="goles-hint" style="font-size:11px;color:var(--muted);margin-top:8px;font-style:italic;">💡 Puedes anotar hasta <strong style="color:var(--green);">${totalGoles}</strong> goles</div>`:''}
     </div>`;
 
   let html = '';
@@ -4521,7 +4521,7 @@ function renderVoteRows() {
 
   document.getElementById('vote-rows').innerHTML = html;
   window._voterGoles = 0;
-  setTimeout(updateGolesRestantes, 50);
+  setTimeout(updateGolesHint, 50);
 }
 
 function _matchTotalGoles(m) {
@@ -4534,47 +4534,42 @@ function _matchTotalGoles(m) {
 function adjustGoles(delta) {
   const m = gm(activeVotingMatchId);
   const total = m ? _matchTotalGoles(m) : null;
-  // Cap at total goals of the match (can't score more than the whole game)
-  if (delta > 0 && total !== null && (window._voterGoles||0) >= total) {
-    toast('⚠️ No puedes marcar más goles que el total del partido');
-    return;
+  if (delta > 0 && m && total !== null) {
+    const voterId = document.getElementById('voter-sel')?.value;
+    let yaRegistrados = 0;
+    Object.entries(m.matchStats||{}).forEach(([pid, ms]) => {
+      if (pid !== voterId) yaRegistrados += (ms.goles||0);
+    });
+    const maxAllowed = total - yaRegistrados;
+    if ((window._voterGoles||0) >= maxAllowed) {
+      toast('⚠️ Ya has llegado al límite según los votos enviados');
+      return;
+    }
   }
   window._voterGoles = Math.max(0, (window._voterGoles||0) + delta);
   document.getElementById('goles-val').textContent = window._voterGoles;
+  updateGolesHint();
 }
 
-function updateGolesRestantes() {
+function updateGolesHint() {
   const m = gm(activeVotingMatchId);
-  const total = _matchTotalGoles(m);
-  if (!m || total === null) return;
-  // Sum goles already submitted by other voters
-  let yaRegistrados = 0;
+  const total = m ? _matchTotalGoles(m) : null;
+  const hintEl = document.getElementById('goles-hint');
+  if (!hintEl || total === null) return;
   const voterId = document.getElementById('voter-sel')?.value;
+  let yaRegistrados = 0;
   Object.entries(m.matchStats||{}).forEach(([pid, ms]) => {
     if (pid !== voterId) yaRegistrados += (ms.goles||0);
   });
-  const restantes = Math.max(0, total - yaRegistrados - (window._voterGoles||0));
-  const el = document.getElementById('goles-restantes');
-  const hintEl = document.getElementById('goles-hint');
-  const btnPlus = document.getElementById('btn-goles-plus');
-  if (el) {
-    el.textContent = restantes === 0 ? '✓' : restantes;
-    el.style.color = restantes === 0 ? 'var(--green)' : restantes < 0 ? 'var(--red)' : 'var(--accent)';
-  }
-  if (hintEl) {
-    hintEl.innerHTML = restantes === 0
-      ? '✅ Ya no quedan goles por repartir'
-      : '💡 Quedan <strong id="goles-restantes" style="color:var(--accent);">'+restantes+'</strong> goles por repartir entre los demás';
-    hintEl.style.color = restantes === 0 ? 'var(--green)' : 'var(--muted)';
-    hintEl.style.fontWeight = restantes === 0 ? '700' : '';
-    hintEl.style.fontStyle = restantes === 0 ? 'normal' : 'italic';
-  }
-  if (btnPlus) {
-    btnPlus.disabled = restantes === 0;
-    btnPlus.style.opacity = restantes === 0 ? '0.3' : '';
-    btnPlus.style.cursor = restantes === 0 ? 'not-allowed' : '';
-  }
+  const maxAllowed = Math.max(0, total - yaRegistrados);
+  hintEl.innerHTML = (window._voterGoles||0) >= maxAllowed
+    ? '✅ Has llegado al máximo según los votos ya enviados'
+    : `💡 Puedes anotar hasta <strong style="color:var(--green);">${maxAllowed}</strong> goles`;
+  hintEl.style.color = (window._voterGoles||0) >= maxAllowed ? 'var(--green)' : 'var(--muted)';
+  hintEl.style.fontWeight = (window._voterGoles||0) >= maxAllowed ? '700' : '';
+  hintEl.style.fontStyle = (window._voterGoles||0) >= maxAllowed ? 'normal' : 'italic';
 }
+
 
 function fillTestVote() {
   const m = gm(activeVotingMatchId);
@@ -5147,7 +5142,7 @@ function adminEditVote(mid, pid) {
     Object.entries(existing.gk||{}).forEach(([p,v]) => setGK(p, v));
   }
   document.getElementById('goles-val').textContent = window._voterGoles;
-  setTimeout(updateGolesRestantes, 50);
+  setTimeout(updateGolesHint, 50);
 
   closeModal('modal-match');
   document.getElementById('voting-funny-msg').textContent = `⚡ Admin votando por ${gp(pid)?.name||pid}`;
