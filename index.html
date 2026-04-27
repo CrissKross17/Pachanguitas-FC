@@ -857,6 +857,7 @@ input:focus,select:focus{border-color:var(--green);}
   <div class="modal" style="max-width:580px;">
     <button class="modal-close" onclick="closeModal('modal-voting')">×</button>
     <div class="modal-title">PUNTUAR PARTIDO</div>
+    <div id="voting-match-header" style="margin-bottom:14px;"></div>
     <div id="voting-funny-msg" style="font-size:15px;font-weight:700;text-align:center;padding:10px;background:var(--surface2);border-radius:8px;margin-bottom:14px;color:var(--accent);"></div>
     <div id="voting-already-warned" style="display:none;background:rgba(248,113,113,0.15);border:1px solid rgba(248,113,113,0.4);border-radius:8px;padding:10px;text-align:center;font-size:13px;font-weight:700;color:var(--red);margin-bottom:14px;">⚠️ Ya has votado en este partido — no puedes votar dos veces</div>
     <div id="vote-countdown-banner" style="display:none;text-align:center;font-size:13px;font-weight:700;margin-bottom:10px;padding:6px 12px;background:var(--surface2);border-radius:8px;"></div>
@@ -4352,6 +4353,34 @@ function openVoting(mid) {
   renderVoteRows();
   closeModal('modal-match');
   document.getElementById('voting-funny-msg').textContent = getFunnyMsg();
+  // Match result header
+  const _hdr = document.getElementById('voting-match-header');
+  if (_hdr) {
+    const hasScore = m.scoreA !== null && m.scoreB !== null;
+    const dateStr = m.date ? new Date(m.date).toLocaleDateString('es-ES',{weekday:'long',day:'numeric',month:'long'}) : '';
+    const teamWhite = getCfg('teamWhite'); const teamBlack = getCfg('teamBlack');
+    if (hasScore) {
+      const p2 = (m.scoreA2 !== undefined && m.scoreB2 !== undefined)
+        ? `<div style="font-size:10px;color:var(--muted);margin-top:4px;">P1: ${m.scoreA}–${m.scoreB} · P2: ${m.scoreA2}–${m.scoreB2}</div>` : '';
+      const totalA = (m.scoreA||0)+(m.scoreA2||0), totalB = (m.scoreB||0)+(m.scoreB2||0);
+      _hdr.innerHTML = `
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;text-align:center;">
+          ${dateStr?`<div style="font-size:11px;color:var(--muted);margin-bottom:8px;text-transform:capitalize;">${dateStr}</div>`:''}
+          <div style="display:flex;align-items:center;justify-content:center;gap:12px;">
+            <div style="font-size:13px;font-weight:700;color:var(--text);flex:1;text-align:right;">⬜ ${teamWhite}</div>
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:36px;font-weight:900;color:var(--green);letter-spacing:2px;line-height:1;">${totalA} – ${totalB}</div>
+            <div style="font-size:13px;font-weight:700;color:var(--text);flex:1;text-align:left;">⬛ ${teamBlack}</div>
+          </div>
+          ${p2}
+        </div>`;
+    } else {
+      _hdr.innerHTML = `
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 16px;text-align:center;">
+          ${dateStr?`<div style="font-size:11px;color:var(--muted);text-transform:capitalize;">${dateStr}</div>`:''}
+          <div style="font-size:12px;color:var(--muted);margin-top:4px;">Resultado pendiente</div>
+        </div>`;
+    }
+  }
   // Show vote countdown if applicable
   const _cd = getVoteCountdown(m);
   const _cdEl = document.getElementById('vote-countdown-banner');
