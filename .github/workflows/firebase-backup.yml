@@ -1,0 +1,36 @@
+name: Firebase Backup
+
+on:
+  schedule:
+    - cron: '0 3 1,15 * *'   # días 1 y 15 de cada mes a las 3:00 UTC
+  workflow_dispatch:           # también se puede lanzar manualmente desde GitHub
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Descargar datos de Firebase
+        run: |
+          DATE=$(date +%Y-%m-%d)
+          mkdir -p backups
+          curl -sf "https://pachanguitas-fc-default-rtdb.europe-west1.firebasedatabase.app/.json" \
+            -o "backups/backup-${DATE}.json"
+          echo "Backup guardado: backups/backup-${DATE}.json"
+          wc -c "backups/backup-${DATE}.json"
+
+      - name: Commit y push del backup
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add backups/
+          git diff --staged --quiet \
+            && echo "Sin cambios desde el último backup" \
+            || git commit -m "backup: $(date +%Y-%m-%d)"
+          git push
