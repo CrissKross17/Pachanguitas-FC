@@ -4487,10 +4487,19 @@ function renderVoteRows() {
   // Goles section — only for the voter themselves
   // Pre-fill voter's own goals from a previous vote if they already submitted
   const prevGoles = m2.matchStats?.[voterId]?.goles || 0;
+  // Team goals indicator (informational, no limit)
+  const hasScore = m2.scoreA !== null && m2.scoreB !== null;
+  const miEquipoGoles = hasScore
+    ? (voterTeam === 'A'
+        ? (m2.scoreA||0) + (m2.scoreA2||0)
+        : (m2.scoreB||0) + (m2.scoreB2||0))
+    : null;
+  const teamName = voterTeam === 'A' ? getCfg('teamWhite') : getCfg('teamBlack');
   const golesBlock = `
     <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;margin-top:8px;">
-      <div style="margin-bottom:10px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:6px;">
         <div style="font-size:11px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:1px;">⚽ Tus goles en el día</div>
+        ${miEquipoGoles!==null?`<div style="font-size:11px;color:var(--muted);background:var(--surface);border:1px solid var(--border);padding:3px 10px;border-radius:20px;">Tu equipo marcó <strong style="color:var(--text);">${miEquipoGoles}</strong></div>`:''}
       </div>
       <div style="display:flex;align-items:center;gap:12px;">
         <button onclick="adjustGoles(-1)" style="width:36px;height:36px;border-radius:50%;background:var(--surface);border:1px solid var(--border);color:var(--text);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;">−</button>
