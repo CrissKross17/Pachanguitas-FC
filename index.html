@@ -4776,9 +4776,11 @@ function submitVote(){
   const tardones = [..._tardones];
   const fairplays = [..._fairplay];
   if(!m.funData) m.funData={picados:{},tardones:{},fairplay:{},guarros:{}};
-  // Migrate old funData structures
-  if(!m.funData.fairplay) m.funData.fairplay={};
-  if(!m.funData.guarros) m.funData.guarros={};
+  // Migrate old funData structures (ensure all sub-objects exist)
+  if(!m.funData.fairplay)  m.funData.fairplay={};
+  if(!m.funData.guarros)   m.funData.guarros={};
+  if(!m.funData.tardones)  m.funData.tardones={};
+  if(!m.funData.picados)   m.funData.picados={};
   if(picado) m.funData.picados[picado] = (m.funData.picados[picado]||0) + 1;
   if(guarro) m.funData.guarros[guarro] = (m.funData.guarros[guarro]||0) + 1;
   tardones.forEach(pid => { m.funData.tardones[pid] = (m.funData.tardones[pid]||0) + 1; });
@@ -4786,20 +4788,23 @@ function submitVote(){
   _tardones = new Set();
   _fairplay = new Set();
 
-  m.votes[voterId]={field:{...currentFieldVotes},gk:{...currentGKVotes}};
-  // Save this player's own goals — just store, don't touch p.stats.goles yet
-  if(!m.matchStats) m.matchStats={};
-  m.matchStats[voterId] = { goles: window._voterGoles || 0 };
-  if(m.status==='pending') m.status='voting';
-  currentFieldVotes={}; currentGKVotes={}; window._voterGoles=0;
-  save(); closeModal('modal-voting'); renderAll();
-  // Re-enable button for future use
-  const _sb = document.getElementById('submit-vote-btn');
-  if (_sb) { _sb.disabled = false; _sb.textContent = 'Enviar puntuaciones'; }
-  // Refresh admin votes panel if open
-  const adminVotesBody = document.getElementById('abody-votos');
-  if (adminVotesBody && adminVotesBody.style.display !== 'none') renderAdminVotes();
-  toast('¡Puntuación enviada! ✓ Gracias por participar');
+  try {
+    m.votes[voterId]={field:{...currentFieldVotes},gk:{...currentGKVotes}};
+    // Save this player's own goals — just store, don't touch p.stats.goles yet
+    if(!m.matchStats) m.matchStats={};
+    m.matchStats[voterId] = { goles: window._voterGoles || 0 };
+    if(m.status==='pending') m.status='voting';
+    currentFieldVotes={}; currentGKVotes={}; window._voterGoles=0;
+    save(); closeModal('modal-voting'); renderAll();
+    // Refresh admin votes panel if open
+    const adminVotesBody = document.getElementById('abody-votos');
+    if (adminVotesBody && adminVotesBody.style.display !== 'none') renderAdminVotes();
+    toast('¡Puntuación enviada! ✓ Gracias por participar');
+  } catch(e) {
+    console.error('submitVote error:', e);
+    if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Enviar puntuaciones'; }
+    toast('⚠️ Error al enviar, inténtalo de nuevo');
+  }
 }
 
 // ============================================================
