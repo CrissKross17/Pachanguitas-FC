@@ -3609,9 +3609,9 @@ function openMatchSummary(mid) {
         + '</div>';
     })()}
 
-    <!-- Admin actions -->
-    <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:14px;">
-      <button class="btn btn-secondary btn-sm" onclick="exportPitch('${m.id}')">📸 PNG</button>
+    <!-- Admin actions (excluded from PNG export) -->
+    <div id="match-export-actions" style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:14px;">
+      <button class="btn btn-secondary btn-sm" onclick="exportMatchSummary('${m.id}')">📸 PNG</button>
       ${S.isAdmin?`<button class="btn btn-danger btn-sm" onclick="deleteMatch('${m.id}')">Eliminar</button>`:''}
     </div>
   `;
@@ -4321,6 +4321,52 @@ function downloadCanvas(canvas, mid) {
   link.href = canvas.toDataURL('image/png');
   link.click();
   toast('📸 Imagen descargada');
+}
+
+function exportMatchSummary(mid) {
+  const inner = document.getElementById('modal-match-inner');
+  if (!inner) { toast('Abre el partido primero'); return; }
+  toast('📸 Generando imagen...');
+
+  const doCapture = () => {
+    // Temporarily hide action buttons so they don't appear in the PNG
+    const actions = document.getElementById('match-export-actions');
+    const closeBtn = inner.querySelector('.modal-close');
+    if (actions) actions.style.visibility = 'hidden';
+    if (closeBtn) closeBtn.style.visibility = 'hidden';
+
+    html2canvas(inner, {
+      backgroundColor: '#12151e',
+      scale: 2,
+      useCORS: true,
+      allowTaint: true,
+      logging: false,
+    }).then(canvas => {
+      if (actions) actions.style.visibility = '';
+      if (closeBtn) closeBtn.style.visibility = '';
+      const m = gm(mid);
+      const link = document.createElement('a');
+      link.download = `pachanguitas-${m?.date||mid}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      toast('📸 Imagen descargada');
+    }).catch(e => {
+      if (actions) actions.style.visibility = '';
+      if (closeBtn) closeBtn.style.visibility = '';
+      console.error('exportMatchSummary:', e);
+      toast('⚠️ Error al generar imagen');
+    });
+  };
+
+  if (window.html2canvas) {
+    doCapture();
+  } else {
+    const script = document.createElement('script');
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+    script.onload = doCapture;
+    script.onerror = () => toast('⚠️ No se pudo cargar la librería de captura');
+    document.head.appendChild(script);
+  }
 }
 
 function checkVotingHash(retries) {
