@@ -3658,7 +3658,7 @@ function openMatch(mid) {
 
     ${buildTeamBalance(m)}
 
-    <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:14px;">
+    <div id="match-export-actions" style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:14px;">
       ${m.status==='pending'?`
         ${!m.confirmed?`
           <button class="btn btn-secondary btn-sm" onclick="reshuffleMatch('${m.id}')">🔀 Repetir sorteo</button>
@@ -4228,91 +4228,10 @@ function copyVotingLink(mid) {
 function exportPitch(mid) {
   const m = gm(mid);
   if (!m) return;
-  const pitchWrap = document.querySelector('#modal-match .pitch-wrap');
-  // Partido finalizado: no hay campo, exportar el resumen completo
-  if (!pitchWrap) { exportMatchSummary(mid); return; }
-  toast('📸 Generando imagen...');
-
-  const scale = 2;
-  const w = pitchWrap.offsetWidth || 640;
-  const h = pitchWrap.offsetHeight || 360;
-  const canvas = document.createElement('canvas');
-  canvas.width = w * scale;
-  canvas.height = h * scale;
-  const ctx = canvas.getContext('2d');
-  ctx.scale(scale, scale);
-
-  // Fondo campo
-  ctx.fillStyle = '#c4854a';
-  ctx.fillRect(0, 0, w, h);
-  // Franjas
-  ctx.fillStyle = 'rgba(0,0,0,0.06)';
-  for (let y2 = 0; y2 < h; y2 += 60) { ctx.fillRect(0, y2, w, 30); }
-  // Lineas campo
-  ctx.strokeStyle = 'rgba(255,255,255,0.55)';
-  ctx.lineWidth = 1.5;
-  ctx.strokeRect(10, 10, w - 20, h - 20);
-  ctx.beginPath(); ctx.moveTo(w/2, 10); ctx.lineTo(w/2, h-10); ctx.stroke();
-  ctx.beginPath(); ctx.arc(w/2, h/2, 40, 0, Math.PI*2); ctx.stroke();
-  ctx.fillStyle = 'rgba(255,255,255,0.55)';
-  ctx.beginPath(); ctx.arc(w/2, h/2, 3, 0, Math.PI*2); ctx.fill();
-  const aW = w*0.18, aH = h*0.5;
-  ctx.strokeRect(10, (h-aH)/2, aW, aH);
-  ctx.strokeRect(w-10-aW, (h-aH)/2, aW, aH);
-  // Etiquetas equipos
-  ctx.fillStyle = 'rgba(0,0,0,0.4)';
-  ctx.fillRect(0, h-36, w/2, 36);
-  ctx.fillRect(w/2, h-36, w/2, 36);
-  ctx.fillStyle = '#fff';
-  ctx.font = 'bold 13px Barlow Condensed, sans-serif';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText('Blancos', w/4, h-18);
-  ctx.fillText('Negros', w*3/4, h-18);
-
-  // Jugadores
-  const players = pitchWrap.querySelectorAll('.pitch-player');
-  const wrapRect = pitchWrap.getBoundingClientRect();
-  players.forEach(playerEl => {
-    const avatarEl = playerEl.querySelector('.pitch-avatar');
-    const nameEl = playerEl.querySelector('.pitch-pname');
-    if (!avatarEl) return;
-    const rect = avatarEl.getBoundingClientRect();
-    const x = rect.left - wrapRect.left;
-    const y = rect.top - wrapRect.top;
-    const r = rect.width / 2;
-    const isWhite = playerEl.classList.contains('team-white');
-    ctx.beginPath();
-    ctx.arc(x + r, y + r, r, 0, Math.PI * 2);
-    ctx.fillStyle = isWhite ? '#e8e8e8' : '#222222';
-    ctx.fill();
-    ctx.strokeStyle = isWhite ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.2)';
-    ctx.lineWidth = 2;
-    ctx.stroke();
-    const initText = nameEl?.textContent?.slice(0,2).toUpperCase() || '?';
-    ctx.fillStyle = isWhite ? '#111' : '#eee';
-    ctx.font = `bold ${Math.round(r * 0.9)}px 'Barlow Condensed', sans-serif`;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(initText, x + r, y + r + 1);
-    if (nameEl) {
-      const nameRect = nameEl.getBoundingClientRect();
-      const nx = nameRect.left - wrapRect.left + nameRect.width / 2;
-      const ny = nameRect.top - wrapRect.top + nameRect.height / 2;
-      ctx.font = `bold 10px 'Barlow Condensed', sans-serif`;
-      ctx.textAlign = 'center';
-      const tw = ctx.measureText(nameEl.textContent).width + 10;
-      ctx.fillStyle = 'rgba(0,0,0,0.6)';
-      ctx.beginPath();
-      if (ctx.roundRect) ctx.roundRect(nx - tw/2, ny - 7, tw, 14, 3);
-      else ctx.rect(nx - tw/2, ny - 7, tw, 14);
-      ctx.fill();
-      ctx.fillStyle = '#ffffff';
-      ctx.textBaseline = 'middle';
-      ctx.fillText(nameEl.textContent, nx, ny);
-    }
-  });
-  downloadCanvas(canvas, mid);
+  const inner = document.getElementById('modal-match-inner');
+  if (!inner) { toast('Abre el partido primero'); return; }
+  // Reutiliza exportMatchSummary que captura el .modal completo con padding
+  exportMatchSummary(mid);
 }
 
 function downloadCanvas(canvas, mid) {
