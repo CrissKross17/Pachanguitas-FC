@@ -4327,24 +4327,26 @@ function downloadCanvas(canvas, mid) {
 function exportMatchSummary(mid) {
   const inner = document.getElementById('modal-match-inner');
   if (!inner) { toast('Abre el partido primero'); return; }
+  // Capture the .modal wrapper so we get its padding naturally
+  const target = inner.closest('.modal') || inner;
   toast('📸 Generando imagen...');
 
   const doCapture = () => {
-    // Temporarily hide action buttons so they don't appear in the PNG
+    // Temporarily hide action buttons and close X
     const actions = document.getElementById('match-export-actions');
     const closeBtn = inner.querySelector('.modal-close');
-    if (actions) actions.style.visibility = 'hidden';
-    if (closeBtn) closeBtn.style.visibility = 'hidden';
+    if (actions) actions.style.display = 'none';
+    if (closeBtn) closeBtn.style.display = 'none';
 
-    html2canvas(inner, {
+    html2canvas(target, {
       backgroundColor: '#12151e',
       scale: 2,
       useCORS: true,
       allowTaint: true,
       logging: false,
     }).then(canvas => {
-      if (actions) actions.style.visibility = '';
-      if (closeBtn) closeBtn.style.visibility = '';
+      if (actions) actions.style.display = '';
+      if (closeBtn) closeBtn.style.display = '';
       const m = gm(mid);
       const link = document.createElement('a');
       link.download = `pachanguitas-${m?.date||mid}.png`;
@@ -4352,8 +4354,8 @@ function exportMatchSummary(mid) {
       link.click();
       toast('📸 Imagen descargada');
     }).catch(e => {
-      if (actions) actions.style.visibility = '';
-      if (closeBtn) closeBtn.style.visibility = '';
+      if (actions) actions.style.display = '';
+      if (closeBtn) closeBtn.style.display = '';
       console.error('exportMatchSummary:', e);
       toast('⚠️ Error al generar imagen');
     });
