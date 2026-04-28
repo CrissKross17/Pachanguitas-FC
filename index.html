@@ -4,8 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pachanguitas FC</title>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/dseg@0.46.0/css/dseg.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500;600&family=JetBrains+Mono:wght@500&family=Press+Start+2P&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation/selfie_segmentation.js" crossorigin="anonymous"></script>
 <style>
 :root {
@@ -3537,43 +3536,43 @@ function openMatchSummary(mid) {
     <div style="background:#030508;border:2px solid #0f1e10;border-radius:14px;margin-bottom:14px;overflow:hidden;box-shadow:0 0 20px rgba(0,0,0,0.8);">
       <div style="background-image:radial-gradient(circle,rgba(40,210,80,0.09) 1px,transparent 1px);background-size:5px 5px;padding:14px 16px;">
         <!-- header -->
-        <div style="text-align:center;font-size:7px;color:rgba(40,210,80,0.22);font-family:'Courier New',monospace;font-weight:700;letter-spacing:4px;margin-bottom:12px;">— PACHANGUITAS FC —</div>
+        <div style="text-align:center;font-size:7px;color:rgba(40,210,80,0.65);font-family:'Courier New',monospace;font-weight:700;letter-spacing:4px;margin-bottom:12px;">— PACHANGUITAS FC —</div>
         ${m.scoreA2!==undefined?`
           <!-- Dos partidos: fila P1 -->
           <div style="display:flex;align-items:center;background:rgba(0,0,0,0.3);border:1px solid #0d1a0e;border-radius:10px;padding:10px 12px;margin-bottom:8px;">
             <div style="flex:1;text-align:center;">
-              <div style="font-size:9px;color:rgba(40,210,80,0.65);font-family:'Courier New',monospace;font-weight:700;letter-spacing:1.5px;margin-bottom:6px;">⬜ ${getCfg('teamWhite')}</div>
-              <div style="font-family:'DSEG7 Classic',monospace;font-size:48px;line-height:1;color:#28c050;text-shadow:0 0 8px rgba(40,192,80,0.5);">${m.scoreA}</div>
+              <div style="font-size:9px;color:rgba(40,210,80,0.65);font-family:'Courier New',monospace;font-weight:700;letter-spacing:1.5px;margin-bottom:8px;">⬜ ${getCfg('teamWhite')}</div>
+              <div style="font-family:'Press Start 2P',monospace;font-size:36px;line-height:1;color:#2edc60;text-shadow:0 0 8px rgba(46,220,96,0.5);">${m.scoreA}</div>
             </div>
             <div style="text-align:center;padding:0 10px;min-width:72px;">
-              <div style="font-size:7px;color:rgba(40,210,80,0.2);font-family:'Courier New',monospace;font-weight:700;letter-spacing:3px;">PARTIDO 1</div>
+              <div style="font-size:7px;color:rgba(40,210,80,0.28);font-family:'Courier New',monospace;font-weight:700;letter-spacing:3px;">PARTIDO 1</div>
               <div style="color:rgba(40,210,80,0.12);font-size:26px;font-weight:900;line-height:1;margin:4px 0;">—</div>
-              <div style="font-size:8px;font-weight:700;letter-spacing:1px;font-family:'Courier New',monospace;color:rgba(40,210,80,0.5);">${m.scoreA>m.scoreB?'⬜ GANA':m.scoreB>m.scoreA?'⬛ GANA':'EMPATE'}</div>
+              <div style="font-size:8px;font-weight:700;letter-spacing:1px;font-family:'Courier New',monospace;color:rgba(40,210,80,0.72);">${m.scoreA>m.scoreB?'⬜ GANA':m.scoreB>m.scoreA?'⬛ GANA':'EMPATE'}</div>
             </div>
             <div style="flex:1;text-align:center;">
-              <div style="font-size:9px;color:rgba(40,210,80,0.65);font-family:'Courier New',monospace;font-weight:700;letter-spacing:1.5px;margin-bottom:6px;">⬛ ${getCfg('teamBlack')}</div>
-              <div style="font-family:'DSEG7 Classic',monospace;font-size:48px;line-height:1;color:#28c050;text-shadow:0 0 8px rgba(40,192,80,0.5);">${m.scoreB}</div>
+              <div style="font-size:9px;color:rgba(40,210,80,0.65);font-family:'Courier New',monospace;font-weight:700;letter-spacing:1.5px;margin-bottom:8px;">⬛ ${getCfg('teamBlack')}</div>
+              <div style="font-family:'Press Start 2P',monospace;font-size:36px;line-height:1;color:#2edc60;text-shadow:0 0 8px rgba(46,220,96,0.5);">${m.scoreB}</div>
             </div>
           </div>
           <!-- fila P2 -->
           <div style="display:flex;align-items:center;background:rgba(0,0,0,0.3);border:1px solid #0d1a0e;border-radius:10px;padding:10px 12px;margin-bottom:8px;">
             <div style="flex:1;text-align:center;">
-              <div style="font-size:9px;color:rgba(40,210,80,0.65);font-family:'Courier New',monospace;font-weight:700;letter-spacing:1.5px;margin-bottom:6px;">⬜ ${getCfg('teamWhite')}</div>
-              <div style="font-family:'DSEG7 Classic',monospace;font-size:48px;line-height:1;color:#28c050;text-shadow:0 0 8px rgba(40,192,80,0.5);">${m.scoreA2}</div>
+              <div style="font-size:9px;color:rgba(40,210,80,0.65);font-family:'Courier New',monospace;font-weight:700;letter-spacing:1.5px;margin-bottom:8px;">⬜ ${getCfg('teamWhite')}</div>
+              <div style="font-family:'Press Start 2P',monospace;font-size:36px;line-height:1;color:#2edc60;text-shadow:0 0 8px rgba(46,220,96,0.5);">${m.scoreA2}</div>
             </div>
             <div style="text-align:center;padding:0 10px;min-width:72px;">
-              <div style="font-size:7px;color:rgba(40,210,80,0.2);font-family:'Courier New',monospace;font-weight:700;letter-spacing:3px;">PARTIDO 2</div>
+              <div style="font-size:7px;color:rgba(40,210,80,0.28);font-family:'Courier New',monospace;font-weight:700;letter-spacing:3px;">PARTIDO 2</div>
               <div style="color:rgba(40,210,80,0.12);font-size:26px;font-weight:900;line-height:1;margin:4px 0;">—</div>
-              <div style="font-size:8px;font-weight:700;letter-spacing:1px;font-family:'Courier New',monospace;color:rgba(40,210,80,0.5);">${m.scoreA2>m.scoreB2?'⬜ GANA':m.scoreB2>m.scoreA2?'⬛ GANA':'EMPATE'}</div>
+              <div style="font-size:8px;font-weight:700;letter-spacing:1px;font-family:'Courier New',monospace;color:rgba(40,210,80,0.72);">${m.scoreA2>m.scoreB2?'⬜ GANA':m.scoreB2>m.scoreA2?'⬛ GANA':'EMPATE'}</div>
             </div>
             <div style="flex:1;text-align:center;">
-              <div style="font-size:9px;color:rgba(40,210,80,0.65);font-family:'Courier New',monospace;font-weight:700;letter-spacing:1.5px;margin-bottom:6px;">⬛ ${getCfg('teamBlack')}</div>
-              <div style="font-family:'DSEG7 Classic',monospace;font-size:48px;line-height:1;color:#28c050;text-shadow:0 0 8px rgba(40,192,80,0.5);">${m.scoreB2}</div>
+              <div style="font-size:9px;color:rgba(40,210,80,0.65);font-family:'Courier New',monospace;font-weight:700;letter-spacing:1.5px;margin-bottom:8px;">⬛ ${getCfg('teamBlack')}</div>
+              <div style="font-family:'Press Start 2P',monospace;font-size:36px;line-height:1;color:#2edc60;text-shadow:0 0 8px rgba(46,220,96,0.5);">${m.scoreB2}</div>
             </div>
           </div>
           <!-- resultado jornada -->
           <div style="text-align:center;padding:6px 0 2px;border-top:1px solid #0d1a0e;">
-            <div style="font-size:9px;font-weight:700;letter-spacing:2px;font-family:'Courier New',monospace;color:rgba(40,210,80,0.5);">
+            <div style="font-size:9px;font-weight:700;letter-spacing:2px;font-family:'Courier New',monospace;color:rgba(40,210,80,0.72);">
               ${(()=>{const aW=(m.aMatchWins||0),bW=(m.bMatchWins||0);if(aW>bW)return'🏆 ⬜ '+getCfg('teamWhite')+' GANA LA JORNADA ('+aW+'–'+bW+')';if(bW>aW)return'🏆 ⬛ '+getCfg('teamBlack')+' GANA LA JORNADA ('+bW+'–'+aW+')';return'🤝 EMPATE DE JORNADA (1–1)';})()}
             </div>
           </div>
@@ -3581,21 +3580,21 @@ function openMatchSummary(mid) {
           <!-- Partido único: layout horizontal -->
           <div style="display:flex;align-items:center;justify-content:space-between;gap:6px;">
             <div style="flex:1;text-align:center;">
-              <div style="font-size:10px;color:rgba(40,210,80,0.7);font-family:'Courier New',monospace;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;">⬜ ${getCfg('teamWhite')}</div>
-              <div style="font-family:'DSEG7 Classic',monospace;font-size:74px;line-height:1;color:#28c050;text-shadow:0 0 10px rgba(40,192,80,0.45);">${m.scoreA}</div>
+              <div style="font-size:10px;color:rgba(40,210,80,0.7);font-family:'Courier New',monospace;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;">⬜ ${getCfg('teamWhite')}</div>
+              <div style="font-family:'Press Start 2P',monospace;font-size:56px;line-height:1;color:#2edc60;text-shadow:0 0 10px rgba(46,220,96,0.45);">${m.scoreA}</div>
             </div>
             <div style="text-align:center;min-width:50px;">
-              <div style="font-size:7px;color:rgba(40,210,80,0.18);font-family:'Courier New',monospace;font-weight:700;letter-spacing:3px;margin-bottom:10px;">FIN</div>
+              <div style="font-size:7px;color:rgba(40,210,80,0.3);font-family:'Courier New',monospace;font-weight:700;letter-spacing:3px;margin-bottom:10px;">FIN</div>
               <div style="color:rgba(40,210,80,0.12);font-size:36px;font-weight:900;line-height:1;">—</div>
-              ${m.duration?`<div style="font-size:11px;color:rgba(40,210,80,0.5);font-family:'Courier New',monospace;font-weight:700;letter-spacing:1px;margin-top:10px;">⏱ ${m.duration}</div>`:''}
+              ${m.duration?`<div style="font-size:11px;color:rgba(40,210,80,0.72);font-family:'Courier New',monospace;font-weight:700;letter-spacing:1px;margin-top:10px;">⏱ ${m.duration}</div>`:''}
             </div>
             <div style="flex:1;text-align:center;">
-              <div style="font-size:10px;color:rgba(40,210,80,0.7);font-family:'Courier New',monospace;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;">⬛ ${getCfg('teamBlack')}</div>
-              <div style="font-family:'DSEG7 Classic',monospace;font-size:74px;line-height:1;color:#28c050;text-shadow:0 0 10px rgba(40,192,80,0.45);">${m.scoreB}</div>
+              <div style="font-size:10px;color:rgba(40,210,80,0.7);font-family:'Courier New',monospace;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;">⬛ ${getCfg('teamBlack')}</div>
+              <div style="font-family:'Press Start 2P',monospace;font-size:56px;line-height:1;color:#2edc60;text-shadow:0 0 10px rgba(46,220,96,0.45);">${m.scoreB}</div>
             </div>
           </div>
           <div style="text-align:center;margin-top:10px;padding-top:8px;border-top:1px solid #0d1a0e;">
-            <div style="font-size:9px;font-weight:700;letter-spacing:2px;font-family:'Courier New',monospace;color:rgba(40,210,80,0.55);">${m.scoreA>m.scoreB?'⬜ '+getCfg('teamWhite')+' GANA':m.scoreB>m.scoreA?'⬛ '+getCfg('teamBlack')+' GANA':'— EMPATE —'}</div>
+            <div style="font-size:9px;font-weight:700;letter-spacing:2px;font-family:'Courier New',monospace;color:rgba(40,210,80,0.72);">${m.scoreA>m.scoreB?'⬜ '+getCfg('teamWhite')+' GANA':m.scoreB>m.scoreA?'⬛ '+getCfg('teamBlack')+' GANA':'— EMPATE —'}</div>
           </div>
         `}
       </div>
