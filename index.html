@@ -4256,6 +4256,11 @@ function exportMatchSummary(mid) {
     const closeBtn = inner.querySelector('.modal-close');
     if (actions) actions.style.display = 'none';
     if (closeBtn) closeBtn.style.display = 'none';
+    // Remove max-height/overflow so the full content renders (no bottom cut-off)
+    const prevMaxH = target.style.maxHeight;
+    const prevOverflow = target.style.overflow;
+    target.style.maxHeight = 'none';
+    target.style.overflow = 'visible';
 
     html2canvas(target, {
       backgroundColor: '#12151e',
@@ -4264,6 +4269,8 @@ function exportMatchSummary(mid) {
       allowTaint: true,
       logging: false,
     }).then(canvas => {
+      target.style.maxHeight = prevMaxH;
+      target.style.overflow = prevOverflow;
       if (actions) actions.style.display = '';
       if (closeBtn) closeBtn.style.display = '';
       const m = gm(mid);
@@ -4273,6 +4280,8 @@ function exportMatchSummary(mid) {
       link.click();
       toast('📸 Imagen descargada');
     }).catch(e => {
+      target.style.maxHeight = prevMaxH;
+      target.style.overflow = prevOverflow;
       if (actions) actions.style.display = '';
       if (closeBtn) closeBtn.style.display = '';
       console.error('exportMatchSummary:', e);
