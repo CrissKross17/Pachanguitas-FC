@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pachanguitas FC</title>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500;600&family=JetBrains+Mono:wght@500&family=Bebas+Neue&display=swap" rel="stylesheet">
 <style>
 @font-face {
   font-family: 'DSEG7';
@@ -516,6 +516,7 @@ input:focus,select:focus{border-color:var(--green);}
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
     import { getDatabase, ref, set, onValue } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
+    import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 
     const firebaseConfig = {
       apiKey: "AIzaSyBETz59-ROzmnv66NZ6MoVoOiYvD41xdFg",
@@ -529,6 +530,43 @@ input:focus,select:focus{border-color:var(--green);}
 
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
+    const auth = getAuth(app);
+    const googleProvider = new GoogleAuthProvider();
+
+    // ── AUTH HELPERS ──────────────────────────────────────────────
+    window._authSignInGoogle = () => signInWithPopup(auth, googleProvider);
+    window._authSignOut = () => signOut(auth);
+    window._currentUser = () => auth.currentUser;
+
+    // ── AUTH STATE ────────────────────────────────────────────────
+    onAuthStateChanged(auth, user => {
+      window._authUser = user;
+      const authScreen = document.getElementById('auth-screen');
+      const appRoot    = document.getElementById('app-root');
+      if (user) {
+        if (authScreen) authScreen.style.display = 'none';
+        if (appRoot)    appRoot.style.display     = '';
+        // Google photo or initial
+        const av = document.getElementById('nav-avatar');
+        if (av) {
+          if (user.photoURL) {
+            av.innerHTML = `<img src="${user.photoURL}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;" referrerpolicy="no-referrer">`;
+          } else {
+            av.textContent = user.displayName ? user.displayName[0].toUpperCase() : '?';
+          }
+        }
+        const menuName = document.getElementById('user-menu-name');
+        if (menuName) menuName.textContent = user.displayName || user.email;
+        // ¿Quién eres? — se activa cuando los datos estén cargados
+        window._pendingAuthUser = user;
+      } else {
+        const splash = document.getElementById('splash');
+        if (splash && splash.parentNode) splash.remove();
+        if (authScreen) authScreen.style.display = 'flex';
+        if (appRoot)    appRoot.style.display     = 'none';
+        window._pendingAuthUser = null;
+      }
+    });
 
     // Expose to global scope
     window._fbRef = ref;
@@ -576,10 +614,58 @@ input:focus,select:focus{border-color:var(--green);}
       // Hide splash screen once Firebase data loads
       const splash = document.getElementById('splash');
       if (splash && splash.parentNode) { splash.style.opacity='0'; setTimeout(()=>{if(splash.parentNode)splash.remove();},500); }
+      // ¿Quién eres? — comprobar una vez que los datos estén listos
+      if (window._pendingAuthUser) {
+        const u = window._pendingAuthUser;
+        window._pendingAuthUser = null;
+        setTimeout(() => checkWhoAreYou(u), 100);
+      }
     });
   </script>
 </head>
 <body>
+
+<!-- AUTH SCREEN -->
+<div id="auth-screen" style="display:none;position:fixed;inset:0;z-index:99998;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;background:#060a06;">
+
+  <!-- Contenido centrado -->
+  <div style="position:relative;z-index:10;width:100%;display:flex;flex-direction:column;align-items:center;padding:20px;box-sizing:border-box;">
+
+    <!-- Logo texto Bebas Neue -->
+    <div style="text-align:center;margin-bottom:36px;">
+      <div style="font-size:60px;margin-bottom:8px;">⚽</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:48px;letter-spacing:6px;line-height:1;background:linear-gradient(180deg,#fff 0%,#c8c8c8 45%,#888 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 14px rgba(74,222,128,0.35));">PACHANGUITAS</div>
+      <div style="display:flex;align-items:center;justify-content:center;gap:12px;margin-top:2px;">
+        <div style="height:2px;width:55px;background:linear-gradient(90deg,transparent,rgba(74,222,128,0.8));"></div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:40px;letter-spacing:10px;color:#4ade80;text-shadow:0 0 20px rgba(74,222,128,0.9),0 0 50px rgba(74,222,128,0.4);line-height:1.1;">FC</div>
+        <div style="height:2px;width:55px;background:linear-gradient(90deg,rgba(74,222,128,0.8),transparent);"></div>
+      </div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;color:#5599dd;letter-spacing:3px;margin-top:8px;text-shadow:0 0 10px rgba(85,153,221,0.6);">FÚTBOL ENTRE COLEGAS, SIN EXCUSAS.</div>
+    </div>
+
+    <!-- Botón Google -->
+    <button id="google-signin-btn" onclick="authSignInGoogle()" style="display:flex;align-items:center;justify-content:center;gap:12px;padding:15px 36px;background:#fff;color:#1a1a1a;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;box-shadow:0 4px 24px rgba(0,0,0,0.5);transition:transform .15s;" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform=''">
+      <svg width="22" height="22" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+      ENTRAR CON GOOGLE
+    </button>
+    <div id="auth-error" style="margin-top:14px;font-size:12px;color:#f87171;min-height:16px;text-align:center;"></div>
+  </div>
+</div><!-- /auth-screen -->
+
+<!-- MODAL ¿QUIÉN ERES? -->
+<div id="who-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:99999;flex-direction:column;align-items:center;justify-content:center;padding:20px;">
+  <div style="width:100%;max-width:400px;background:#0e180e;border:1px solid #1e3a1e;border-radius:18px;padding:28px 24px;">
+    <div style="text-align:center;margin-bottom:24px;">
+      <div style="font-size:32px;margin-bottom:8px;">👤</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;letter-spacing:2px;color:#fff;">¿QUIÉN ERES?</div>
+      <div style="font-size:13px;color:#4a7a4a;margin-top:6px;">Selecciona tu jugador</div>
+    </div>
+    <div id="who-player-list" style="display:flex;flex-direction:column;gap:10px;max-height:60vh;overflow-y:auto;"></div>
+  </div>
+</div>
+
+<!-- APP ROOT -->
+<div id="app-root" style="display:none;">
 
 <!-- SPLASH SCREEN -->
 <div id="splash" style="position:fixed;inset:0;background:#080c08;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .5s ease;">
@@ -623,6 +709,14 @@ input:focus,select:focus{border-color:var(--green);}
       <span id="adminLabelDesktop">Admin</span>
     </div>
     <button onclick="openTutorial()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:20px;padding:4px 8px;line-height:1;" title="¿Cómo funciona?">❓</button>
+    <!-- Avatar usuario -->
+    <div id="nav-avatar-wrap" style="position:relative;">
+      <div id="nav-avatar" onclick="toggleUserMenu()" style="width:32px;height:32px;border-radius:50%;background:#1a3a1a;border:2px solid #4ade80;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:15px;color:#4ade80;cursor:pointer;user-select:none;">?</div>
+      <div id="user-menu" style="display:none;position:absolute;right:0;top:40px;background:#0e180e;border:1px solid #1e3a1e;border-radius:10px;min-width:160px;overflow:hidden;z-index:1000;box-shadow:0 8px 24px rgba(0,0,0,0.6);">
+        <div id="user-menu-name" style="padding:10px 14px;font-size:12px;color:#4ade80;font-weight:700;border-bottom:1px solid #1e3a1e;font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;"></div>
+        <button onclick="authLogout()" style="width:100%;padding:10px 14px;background:none;border:none;color:#f87171;font-size:13px;text-align:left;cursor:pointer;font-family:'Barlow',sans-serif;">🚪 Cerrar sesión</button>
+      </div>
+    </div>
   </div>
 </nav>
 
@@ -6749,5 +6843,92 @@ S.matches.filter(m=>m.status==='playing').forEach(m=>{
     </div>
   </div>
 </div>
+
+</div><!-- /app-root -->
+
+<script>
+// ── GOOGLE AUTH ───────────────────────────────────────────────────
+function authSignInGoogle() {
+  const err = document.getElementById('auth-error');
+  const btn = document.getElementById('google-signin-btn');
+  if (err) err.textContent = '';
+  if (btn) { btn.disabled = true; btn.style.opacity = '0.6'; }
+  window._authSignInGoogle().catch(e => {
+    if (btn) { btn.disabled = false; btn.style.opacity = '1'; }
+    if (e.code !== 'auth/popup-closed-by-user' && e.code !== 'auth/cancelled-popup-request') {
+      if (err) err.textContent = 'Error al iniciar sesión. Inténtalo de nuevo.';
+    }
+  });
+}
+
+function authLogout() {
+  if (window._authSignOut) window._authSignOut();
+}
+
+// Avatar menú
+function toggleUserMenu() {
+  const menu = document.getElementById('user-menu');
+  if (menu) menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+}
+document.addEventListener('click', e => {
+  const menu = document.getElementById('user-menu');
+  if (menu && !e.target.closest('#nav-avatar-wrap')) menu.style.display = 'none';
+});
+
+// ── ¿QUIÉN ERES? ─────────────────────────────────────────────────
+function checkWhoAreYou(user) {
+  if (!user || !S.players || S.players.length === 0) return;
+  // ¿Ya tiene jugador vinculado?
+  const linked = S.players.find(p => p.uid === user.uid);
+  if (linked) {
+    // Si es admin, activar modo admin automáticamente
+    if (linked.isAdmin) {
+      S.isAdmin = true;
+      sessionStorage.setItem('pfc_admin', '1');
+      if (typeof updateAdminUI === 'function') updateAdminUI();
+    }
+    return;
+  }
+  // ¿Quedan jugadores sin reclamar (fijos, sin uid)?
+  const unlinked = S.players.filter(p => !p.isRandom && !p.uid);
+  if (unlinked.length === 0) return; // todos reclamados → entra directamente
+  showWhoModal(unlinked);
+}
+
+function showWhoModal(players) {
+  const modal = document.getElementById('who-modal');
+  const list  = document.getElementById('who-player-list');
+  if (!modal || !list) return;
+  list.innerHTML = players.map(p => {
+    const photo = p.photo
+      ? `<img src="${p.photo}" style="width:36px;height:36px;border-radius:50%;object-fit:cover;border:2px solid #2d5a2d;">`
+      : `<div style="width:36px;height:36px;border-radius:50%;background:#1a3a1a;border:2px solid #2d5a2d;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-weight:900;color:#4ade80;font-size:15px;">${p.name[0].toUpperCase()}</div>`;
+    return `<button onclick="claimPlayer('${p.id}')" style="display:flex;align-items:center;gap:14px;width:100%;padding:12px 16px;background:#131a13;border:1px solid #1e3a1e;border-radius:10px;cursor:pointer;transition:background .15s,border-color .15s;text-align:left;" onmouseover="this.style.background='#1a2e1a';this.style.borderColor='#4ade80'" onmouseout="this.style.background='#131a13';this.style.borderColor='#1e3a1e'">
+      ${photo}
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:700;color:#e0e0e0;letter-spacing:1px;">${p.name}</span>
+    </button>`;
+  }).join('');
+  modal.style.display = 'flex';
+}
+
+async function claimPlayer(playerId) {
+  const user = window._authUser;
+  if (!user) return;
+  const idx = S.players.findIndex(p => p.id === playerId);
+  if (idx === -1) return;
+  // Vincular uid al jugador en Firebase
+  try {
+    await window._fbSet(window._fbRef(window._fbDb, `pfcv2/players/${idx}/uid`), user.uid);
+    S.players[idx].uid = user.uid;
+  } catch(e) { console.error('Error vinculando jugador:', e); }
+  // Si el jugador reclamado es admin, activar modo admin
+  if (S.players[idx].isAdmin) {
+    S.isAdmin = true;
+    sessionStorage.setItem('pfc_admin', '1');
+    if (typeof updateAdminUI === 'function') updateAdminUI();
+  }
+  document.getElementById('who-modal').style.display = 'none';
+}
+</script>
 </body>
 </html>
