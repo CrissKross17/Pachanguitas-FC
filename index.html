@@ -90,17 +90,6 @@ nav{
 }
 .nav-btn:hover{color:var(--text);background:var(--surface2);}
 .nav-btn.active{color:var(--bg);background:var(--green);}
-.admin-toggle{
-  display:flex;align-items:center;gap:8px;
-  padding:5px 12px;border-radius:20px;
-  background:var(--surface2);border:1px solid var(--border);
-  cursor:pointer;font-size:12px;font-weight:600;
-  color:var(--muted);transition:all .2s;
-  font-family:'Barlow',sans-serif;
-}
-.admin-toggle.on{background:rgba(250,204,21,0.15);border-color:var(--accent);color:var(--accent);}
-.admin-dot{width:7px;height:7px;border-radius:50%;background:var(--muted);}
-.admin-toggle.on .admin-dot{background:var(--accent);}
 
 /* ===== NAV DESKTOP ===== */
 @media(min-width:641px){
@@ -450,7 +439,6 @@ input:focus,select:focus{border-color:var(--green);}
   .logo-ball{width:22px;height:22px;font-size:11px;}
   .nav-links{display:flex;width:100%;border-top:1px solid var(--border);gap:0;overflow:visible;}
   .nav-btn{flex:1;padding:7px 2px;font-size:11px;white-space:nowrap;border-radius:0;text-align:center;}
-  .admin-toggle{padding:4px 10px;font-size:11px;gap:5px;flex-shrink:0;}
   .page{padding:12px;}
   .page-title{font-size:28px;}
   .page-sub{font-size:12px;}
@@ -692,10 +680,6 @@ input:focus,select:focus{border-color:var(--green);}
       PACHANGUITAS <span>FC</span>
     </div>
     <div style="display:flex;align-items:center;gap:6px;">
-      <div class="admin-toggle" id="adminToggle" onclick="toggleAdmin()">
-        <div class="admin-dot"></div>
-        <span id="adminLabel">Admin</span>
-      </div>
       <button onclick="openTutorial()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:20px;padding:4px 8px;line-height:1;" title="¿Cómo funciona?">❓</button>
     </div>
   </div>
@@ -706,12 +690,8 @@ input:focus,select:focus{border-color:var(--green);}
     <button class="nav-btn" id="nav-ranking" onclick="nav('ranking')">Ranking</button>
     <button class="nav-btn" id="nav-admin-btn" style="display:none;color:var(--accent);" id="nav-admin" onclick="nav('admin')">⚡ Admin</button>
   </div>
-  <!-- Solo visible en desktop: admin + tutorial a la derecha -->
+  <!-- Solo visible en desktop: tutorial a la derecha -->
   <div class="nav-right">
-    <div class="admin-toggle" id="adminToggleDesktop" onclick="toggleAdmin()">
-      <div class="admin-dot" id="adminDotDesktop"></div>
-      <span id="adminLabelDesktop">Admin</span>
-    </div>
     <button onclick="openTutorial()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:20px;padding:4px 8px;line-height:1;" title="¿Cómo funciona?">❓</button>
     <!-- Avatar usuario -->
     <div id="nav-avatar-wrap" style="position:relative;">
@@ -1098,26 +1078,6 @@ input:focus,select:focus{border-color:var(--green);}
   </div>
 </div>
 
-<!-- MODAL: ADMIN PASSWORD -->
-<div class="overlay" id="modal-admin-pwd">
-  <div class="modal" style="max-width:360px;">
-    <button class="modal-close" onclick="closeModal('modal-admin-pwd')">×</button>
-    <div style="text-align:center;margin-bottom:20px;">
-      <div style="font-size:40px;margin-bottom:8px;">🔒</div>
-      <div class="modal-title" style="margin-bottom:4px;">ACCESO ADMIN</div>
-      <div style="font-size:13px;color:var(--muted);">Introduce la contraseña de administrador</div>
-    </div>
-    <div class="fg">
-      <input type="password" id="admin-pwd-input" placeholder="Contraseña..."
-        onkeydown="if(event.key==='Enter') submitAdminPwd()"
-        style="text-align:center;font-size:18px;letter-spacing:4px;">
-    </div>
-    <div id="admin-pwd-error" style="display:none;color:var(--red);font-size:13px;text-align:center;margin-bottom:12px;font-weight:600;">
-      ❌ Contraseña incorrecta
-    </div>
-    <button class="btn btn-primary" style="width:100%;font-size:15px;" onclick="submitAdminPwd()">Entrar</button>
-  </div>
-</div>
 
 <script>
 // ============================================================
@@ -1523,52 +1483,11 @@ function updatePendingBadge() {
 // ============================================================
 // ADMIN
 // ============================================================
-function toggleAdmin() {
-  if (S.isAdmin) {
-    S.isAdmin = false;
-    try { sessionStorage.removeItem('pfc_admin'); } catch(e) {}
-    updateAdminUI();
-    toast('Modo admin desactivado');
-    return;
-  }
-  // Show password modal
-  document.getElementById('admin-pwd-input').value = '';
-  document.getElementById('admin-pwd-error').style.display = 'none';
-  openModal('modal-admin-pwd');
-  setTimeout(() => document.getElementById('admin-pwd-input').focus(), 100);
-}
-
-function submitAdminPwd() {
-  const val = document.getElementById('admin-pwd-input').value;
-  if (val === (getCfg('adminPassword') || 'Monster')) {
-    S.isAdmin = true;
-    try { sessionStorage.setItem('pfc_admin', '1'); } catch(e) {}
-    closeModal('modal-admin-pwd');
-    updateAdminUI();
-    toast('Modo admin activado ✓');
-  } else {
-    document.getElementById('admin-pwd-error').style.display = 'block';
-    document.getElementById('admin-pwd-input').value = '';
-    document.getElementById('admin-pwd-input').focus();
-  }
-}
-
 function updateAdminUI() {
-  const t = document.getElementById('adminToggle');
-  const l = document.getElementById('adminLabel');
-  t.className = 'admin-toggle'+(S.isAdmin?' on':'');
-  l.textContent = S.isAdmin ? 'Admin ON' : 'Admin';
-
-  // Sincronizar toggle desktop
-  const td = document.getElementById('adminToggleDesktop');
-  const ld = document.getElementById('adminLabelDesktop');
-  if(td) td.className = 'admin-toggle'+(S.isAdmin?' on':'');
-  if(ld) ld.textContent = S.isAdmin ? 'Admin ON' : 'Admin';
-
-  document.getElementById('nav-admin-btn').style.display = S.isAdmin?'block':'none';
-  if(!S.isAdmin) { // if admin turned off and on admin page, go back to inicio
+  document.getElementById('nav-admin-btn').style.display = S.isAdmin ? 'block' : 'none';
+  if (!S.isAdmin) {
     const adminPage = document.getElementById('page-admin');
-    if(adminPage && adminPage.classList.contains('active')) nav('inicio');
+    if (adminPage && adminPage.classList.contains('active')) nav('inicio');
   }
   renderAll();
 }
