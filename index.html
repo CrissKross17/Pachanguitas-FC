@@ -6811,11 +6811,27 @@ function checkWhoAreYou(user) {
   // ¿Ya tiene jugador vinculado?
   const linked = S.players.find(p => p.uid === user.uid);
   if (linked) {
-    // Si es admin, activar modo admin automáticamente
     if (linked.isAdmin) {
+      // Admin confirmado en Firebase → activar
       S.isAdmin = true;
       sessionStorage.setItem('pfc_admin', '1');
       if (typeof updateAdminUI === 'function') updateAdminUI();
+    } else {
+      // Bootstrap: si no hay ningún admin en el grupo, este jugador vinculado se convierte en admin
+      const hasAnyAdmin = S.players.some(p => p.isAdmin);
+      if (!hasAnyAdmin) {
+        const idx = S.players.indexOf(linked);
+        linked.isAdmin = true;
+        S.isAdmin = true;
+        sessionStorage.setItem('pfc_admin', '1');
+        // Escribir isAdmin:true en Firebase para persistirlo
+        if (window._fbReady) {
+          window._fbSet(window._fbRef(window._fbDb, `pfcv2/players/${idx}/isAdmin`), true)
+            .catch(e => console.warn('Error escribiendo isAdmin:', e));
+        }
+        if (typeof updateAdminUI === 'function') updateAdminUI();
+        toast('⚡ Eres el primer admin del grupo');
+      }
     }
     return;
   }
