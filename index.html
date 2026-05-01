@@ -557,8 +557,17 @@ input:focus,select:focus{border-color:var(--green);}
         }
         const menuName = document.getElementById('user-menu-name');
         if (menuName) menuName.textContent = user.displayName || user.email;
-        // ¿Quién eres? — se activa cuando los datos estén cargados
+        // ¿Quién eres? — poll hasta que S.players esté cargado
         window._pendingAuthUser = user;
+        (function poll(n) {
+          if (window._pendingAuthUser !== user) return; // ya gestionado
+          if (S.players && S.players.length > 0) {
+            window._pendingAuthUser = null;
+            if (typeof window.checkWhoAreYou === 'function') window.checkWhoAreYou(user);
+          } else if (n > 0) {
+            setTimeout(() => poll(n - 1), 300);
+          }
+        })(20); // hasta 6 segundos de espera
       } else {
         const splash = document.getElementById('splash');
         if (splash && splash.parentNode) splash.remove();
@@ -614,12 +623,7 @@ input:focus,select:focus{border-color:var(--green);}
       // Hide splash screen once Firebase data loads
       const splash = document.getElementById('splash');
       if (splash && splash.parentNode) { splash.style.opacity='0'; setTimeout(()=>{if(splash.parentNode)splash.remove();},500); }
-      // ¿Quién eres? — comprobar una vez que los datos estén listos
-      if (window._pendingAuthUser) {
-        const u = window._pendingAuthUser;
-        window._pendingAuthUser = null;
-        setTimeout(() => checkWhoAreYou(u), 100);
-      }
+      // (¿Quién eres? gestionado por el poll en onAuthStateChanged)
     });
   </script>
 </head>
