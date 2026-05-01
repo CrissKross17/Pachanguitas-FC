@@ -2697,9 +2697,16 @@ function openEditPlayer(pid) {
   const prev = document.getElementById('photoPreview');
   if(p.photo){ prev.src=p.photo; prev.style.display='block'; }
   else { prev.style.display='none'; }
-  // Mostrar foto en edición
+  // Mostrar foto solo si es el propio jugador o admin
   const photoWrap = document.getElementById('photo-upload-wrap');
-  if (photoWrap) photoWrap.style.display = 'block';
+  const isOwnPlayer = window._authUser && p.uid && p.uid === window._authUser.uid;
+  if (photoWrap) {
+    if (S.isAdmin || isOwnPlayer) {
+      photoWrap.style.display = 'block';
+    } else {
+      photoWrap.style.display = 'none';
+    }
+  }
   closeModal('modal-player-detail');
   openModal('modal-player');
 }
@@ -3204,7 +3211,7 @@ function openPlayerDetail(pid) {
     })()}
 
     <div class="btn-row">
-      <button class="btn btn-secondary btn-sm" onclick="openEditPlayer('${p.id}')">Editar</button>
+      ${(S.isAdmin || (window._authUser && p.uid && p.uid === window._authUser.uid)) ? `<button class="btn btn-secondary btn-sm" onclick="openEditPlayer('${p.id}')">Editar</button>` : ''}
       ${S.isAdmin?`<button class="btn btn-danger btn-sm" onclick="deletePlayer('${p.id}')">Eliminar</button>`:''}
     </div>
     </div><!-- /pd-panel-stats -->
