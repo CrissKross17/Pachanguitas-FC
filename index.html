@@ -1674,7 +1674,7 @@ function renderDashDuplaJinetes() {
             <img src="${bestPair.a ? getCardBg(computeOVR(bestPair.a.id)) : FUT_BG}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;">
             <div style="position:absolute;top:7%;left:8%;width:84%;height:54%;z-index:1;overflow:hidden;">${photoA}</div>
             <div style="position:absolute;bottom:0;left:0;right:0;z-index:2;background:linear-gradient(to top,rgba(0,0,0,0.85) 0%,transparent 100%);padding:3px;text-align:center;">
-              <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:900;color:#fff;">${bestPair.a.name.split(' ')[0]}</div>
+              <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:900;color:#fff;">${esc(bestPair.a.name.split(' ')[0])}</div>
             </div>
           </div>
           <!-- Stats -->
@@ -1689,7 +1689,7 @@ function renderDashDuplaJinetes() {
             <img src="${bestPair.b ? getCardBg(computeOVR(bestPair.b.id)) : FUT_BG}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;">
             <div style="position:absolute;top:7%;left:8%;width:84%;height:54%;z-index:1;overflow:hidden;">${photoB}</div>
             <div style="position:absolute;bottom:0;left:0;right:0;z-index:2;background:linear-gradient(to top,rgba(0,0,0,0.85) 0%,transparent 100%);padding:3px;text-align:center;">
-              <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:900;color:#fff;">${bestPair.b.name.split(' ')[0]}</div>
+              <div style="font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:900;color:#fff;">${esc(bestPair.b.name.split(' ')[0])}</div>
             </div>
           </div>
         </div>
@@ -1912,7 +1912,7 @@ function renderDashExtra() {
                 <div style="position:absolute;top:7%;left:8%;width:84%;height:54%;z-index:1;overflow:hidden;">${photoB}</div>
               </div>
             </div>
-            <div style="font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:900;">${topRivalPair.a.name.split(' ')[0]} vs ${topRivalPair.b.name.split(' ')[0]}</div>
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:900;">${esc(topRivalPair.a.name.split(' ')[0])} vs ${esc(topRivalPair.b.name.split(' ')[0])}</div>
             <div style="font-size:12px;color:var(--red);font-weight:600;">${topRivalPair.rivals} veces rivales</div>
           </div>`;
         }
@@ -1954,7 +1954,7 @@ function renderDashExtra() {
             </div>
             <div style="flex:1;">
               <div style="font-weight:700;font-size:14px;">${esc(shortName(p.name))}</div>
-              <div style="font-size:11px;color:var(--muted);">${p.pos}</div>
+              <div style="font-size:11px;color:var(--muted);">${esc(p.pos)}</div>
             </div>
             <div style="font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;color:var(--green);">${computePartidos(p.id)}</div>
           </div>`;
@@ -2370,7 +2370,7 @@ function renderInicio() {
     <div class="card" style="cursor:pointer;" onclick="openMatch('${last.id}')">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
         <div>
-          <div style="font-weight:700;font-size:16px;">${last.place||'Sin ubicación'}</div>
+          <div style="font-weight:700;font-size:16px;">${esc(last.place||'Sin ubicación')}</div>
           <div style="font-size:12px;color:var(--muted);">${fmtDate(last.date)}</div>
         </div>
         <span class="match-status-pill ${(()=>{const el=(last.players||[]).filter(pid=>!gp(pid)?.isRandom);const vt=Object.keys(last.votes||{});const allV=el.length>0&&el.every(p=>vt.includes(p));return last.status==='done'?(allV?'pill-done':'pill-pending'):'pill-pending';})()}">${statusLabel(last.status,last)}</span>
@@ -2448,7 +2448,7 @@ function renderInicio() {
             <div style="position:relative;width:56px;height:74px;border-radius:6px;overflow:hidden;margin:0 auto 8px;box-shadow:0 3px 12px rgba(0,0,0,0.5);">
               <img src="${player ? getCardBg(computeOVR(player.id)) : FUT_BG}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;">${ph}
             </div>
-            <div style="font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:900;">${player.name}</div>
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:900;">${esc(player.name)}</div>
             <div style="font-size:11px;color:${borderColor};font-weight:600;margin-top:2px;">${sublabel}</div>
           </div>`;
         };
@@ -2482,7 +2482,7 @@ function awardCardFull(icon, label, player, sub) {
       </div>
       <!-- Bottom gradient + name -->
       <div style="position:absolute;bottom:0;left:0;right:0;z-index:2;background:linear-gradient(to top,rgba(0,0,0,0.85) 0%,rgba(0,0,0,0.4) 60%,transparent 100%);padding:6px 4px 4px;">
-        <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:900;color:#fff;text-transform:uppercase;text-align:center;">${player.name.split(' ')[0]}</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:900;color:#fff;text-transform:uppercase;text-align:center;">${esc(player.name.split(' ')[0])}</div>
       </div>
     </div>` : `<div style="width:90px;height:118px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);margin:0 auto 12px;display:flex;align-items:center;justify-content:center;"><span style="font-size:11px;font-weight:700;color:var(--muted);letter-spacing:1px;text-transform:uppercase;">Sin datos</span></div>`;
 
@@ -2491,7 +2491,7 @@ function awardCardFull(icon, label, player, sub) {
        onmouseover="this.style.borderColor='var(--green)'" onmouseout="this.style.borderColor='var(--border)'">
     ${futCard}
     <div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px;">${label}</div>
-    <div style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;line-height:1.1;">${player?player.name.split(' ')[0]:'—'}</div>
+    <div style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;line-height:1.1;">${player?esc(player.name.split(' ')[0]):'—'}</div>
     <div style="font-size:12px;color:var(--green);font-weight:600;margin-top:4px;">${sub}</div>
   </div>`;
 }
@@ -3050,7 +3050,7 @@ function openPlayerDetail(pid) {
       ${photoHtml}
       <div>
         <div style="font-family:'Barlow Condensed',sans-serif;font-size:30px;font-weight:900;">${esc(p.name)}</div>
-        <div style="color:var(--muted);font-size:13px;">${p.pos}</div>
+        <div style="color:var(--muted);font-size:13px;">${esc(p.pos)}</div>
         ${(()=>{
           if (p.isRandom) return '';
           const abs = getConsecutiveAbsences(p.id);
@@ -3617,7 +3617,7 @@ function openMatchSummary(mid) {
         <img src="${CARD_SVG.red}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;">
         <div style="position:absolute;top:7%;left:8%;width:84%;height:54%;z-index:1;overflow:hidden;">${ph}</div>
       </div>
-      <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:900;">${player.name}</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:900;">${esc(player.name)}</div>
       <div style="font-size:11px;color:${borderColor};font-weight:600;margin-top:2px;">${sub}</div>
     </div>`;
   };
@@ -3628,7 +3628,7 @@ function openMatchSummary(mid) {
     <!-- Header -->
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
       <div>
-        <div style="font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:900;">${m.place||'Partido'}</div>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:900;">${esc(m.place||'Partido')}</div>
         <div style="font-size:12px;color:var(--muted);">${fmtDate(m.date)}</div>
       </div>
       <span class="match-status-pill pill-done">✓ Finalizado</span>
@@ -3772,10 +3772,10 @@ function openMatch(mid) {
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px;flex-wrap:wrap;gap:8px;">
       <div>
         <div style="display:flex;align-items:center;gap:8px;">
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;">${m.place||'Partido'}</div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;">${esc(m.place||'Partido')}</div>
           <button onclick="openEditMatch('${m.id}')" style="background:none;border:none;cursor:pointer;font-size:15px;opacity:0.5;padding:2px 4px;line-height:1;" title="Editar lugar y hora">✏️</button>
         </div>
-        <div style="font-size:12px;color:var(--muted);">${fmtDate(m.date)}${m.time?' · 🕐 '+m.time:''} · ${votesCount}/${m.players.length} votos${m.createdBy&&gp(m.createdBy)?' · Creado por '+gp(m.createdBy).name:''}</div>
+        <div style="font-size:12px;color:var(--muted);">${fmtDate(m.date)}${m.time?' · 🕐 '+m.time:''} · ${votesCount}/${m.players.length} votos${m.createdBy&&gp(m.createdBy)?' · Creado por '+esc(gp(m.createdBy).name):''}</div>
       </div>
       <span class="match-status-pill ${m.status==='done'?'pill-done':m.status==='voting'?'pill-voting':'pill-pending'}">${statusLabel(m.status,m)}</span>
     </div>
@@ -5255,7 +5255,7 @@ function renderAdminVotes() {
     return `<div class="card" style="margin-bottom:10px;">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
         <div>
-          <div style="font-weight:700;">${m.place||'Partido'} · ${fmtDate(m.date)}</div>
+          <div style="font-weight:700;">${esc(m.place||'Partido')} · ${fmtDate(m.date)}</div>
           <div style="font-size:12px;color:var(--muted);">${voted.length}/${m.players.length} votos</div>
         </div>
         <span class="match-status-pill ${m.status==='playing'?'pill-voting':'pill-pending'}">${statusLabel(m.status,m)}</span>
@@ -5264,7 +5264,7 @@ function renderAdminVotes() {
         <div style="font-size:11px;color:var(--red);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">⏳ Pendientes</div>
         <div style="display:flex;flex-wrap:wrap;gap:6px;">
           ${missing.map(pid=>`<span style="background:rgba(248,113,113,0.15);color:var(--red);border:1px solid rgba(248,113,113,0.3);padding:3px 10px;border-radius:20px;font-size:12px;display:flex;align-items:center;gap:6px;">
-            ${gp(pid)?.name||pid}
+            ${esc(gp(pid)?.name||pid)}
             <button onclick="adminEditVote('${m.id}','${pid}')" style="background:none;border:none;color:var(--accent);cursor:pointer;font-size:11px;padding:0;" title="Votar por él">🗳️</button>
           </span>`).join('')}
         </div>
@@ -5276,7 +5276,7 @@ function renderAdminVotes() {
             const goles = m.matchStats?.[pid]?.goles;
             const golesLabel = (goles!=null) ? `<span style="background:rgba(74,222,128,0.15);color:var(--green);border-radius:10px;padding:1px 6px;font-size:10px;font-weight:700;">⚽${goles}</span>` : '';
             return `<span style="background:rgba(74,222,128,0.1);color:var(--green);border:1px solid rgba(74,222,128,0.2);padding:3px 10px;border-radius:20px;font-size:12px;display:flex;align-items:center;gap:6px;">
-            ${gp(pid)?.name||pid}${golesLabel}
+            ${esc(gp(pid)?.name||pid)}${golesLabel}
             <button onclick="adminEditVote('${m.id}','${pid}')" style="background:none;border:none;color:var(--accent);cursor:pointer;font-size:11px;padding:0;line-height:1;" title="Editar voto">✏️</button>
             <button onclick="deleteVote('${m.id}','${pid}')" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:14px;padding:0;line-height:1;" title="Borrar voto">×</button>
           </span>`;}).join('')}
@@ -5342,7 +5342,7 @@ function renderAdminMatches() {
     <div class="card" style="margin-bottom:10px;">
       <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
         <div style="flex:1;">
-          <div style="font-weight:700;">${m.place||'Sin lugar'} · ${fmtDate(m.date)}</div>
+          <div style="font-weight:700;">${esc(m.place||'Sin lugar')} · ${fmtDate(m.date)}</div>
           <div style="font-size:12px;color:var(--muted);">⬜ ${m.teamA.map(id=>esc(gp(id)?.name||'?')).join(', ')}</div>
           <div style="font-size:12px;color:var(--muted);">⬛ ${m.teamB.map(id=>esc(gp(id)?.name||'?')).join(', ')}</div>
           ${m.scoreA!=null?`<div style="font-size:12px;color:var(--green);font-weight:700;margin-top:2px;">${m.scoreA} — ${m.scoreB}</div>`:''}
@@ -5732,7 +5732,7 @@ function openSwapPlayers(mid) {
       <div style="display:flex;flex-wrap:wrap;gap:6px;">
         ${ids.map(pid=>`<div onclick="selectSwapPlayer('${pid}')" id="swap-pill-${pid}"
           style="padding:6px 14px;border-radius:20px;border:1px solid var(--border);font-size:13px;cursor:pointer;transition:all .15s;">
-          ${gp(pid)?.name||pid}
+          ${esc(gp(pid)?.name||pid)}
         </div>`).join('')}
       </div>
     </div>`;
@@ -6101,7 +6101,7 @@ function renderH2H() {
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
           <div style="display:flex;align-items:center;gap:6px;flex:1;">
             ${avatarSmall(b)}
-            <span style="font-weight:700;font-size:13px;${bLeads?'color:var(--green)':''}">${b.name}</span>
+            <span style="font-weight:700;font-size:13px;${bLeads?'color:var(--green)':''}">${esc(b.name)}</span>
           </div>
           <div style="text-align:center;">
             <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;line-height:1;letter-spacing:2px;">
@@ -6207,8 +6207,8 @@ function renderQuimica() {
               : 'rgba(250,204,21,0.12)';
     const col = pct>=60 ? 'var(--green)' : pct<=40 ? 'var(--red)' : 'var(--accent)';
     const msg = pct>=60 ? 'Siempre juntos 🤝' : pct<=40 ? 'Siempre rivales ⚔️' : 'Equilibrado ⚖️';
-    const aName = a.name.replace(/'/g,"\'");
-    const bName = b.name.replace(/'/g,"\'");
+    const aName = esc(a.name).replace(/'/g,"&#39;");
+    const bName = esc(b.name).replace(/'/g,"&#39;");
     return `<td style="width:${cellSize}px;height:${cellSize}px;text-align:center;vertical-align:middle;background:${bg};border-radius:4px;cursor:pointer;"
       onclick="showQuimicaTooltip(event,'${aName} & ${bName}','${together[a.id][b.id]} de ${t} partidos juntos · ${pct}%','${msg}','${col}')">
       <div style="font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:900;color:${col};line-height:1;">${pct}%</div>
@@ -6232,7 +6232,7 @@ function renderQuimica() {
         <tbody>
           ${players.map(a=>`<tr>
             <td style="padding:2px 10px 2px 0;white-space:nowrap;">
-              <div style="display:flex;align-items:center;gap:6px;">${avatarSmall(a)}<span style="font-size:11px;font-weight:700;">${a.name.split(' ')[0]}</span></div>
+              <div style="display:flex;align-items:center;gap:6px;">${avatarSmall(a)}<span style="font-size:11px;font-weight:700;">${esc(a.name.split(' ')[0])}</span></div>
             </td>
             ${players.map(b=>cell(a,b)).join('')}
           </tr>`).join('')}
@@ -6992,7 +6992,7 @@ function showWhoModal(players, user) {
       : `<div style="width:36px;height:36px;border-radius:50%;background:#1a3a1a;border:2px solid #2d5a2d;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-weight:900;color:#4ade80;font-size:15px;">${p.name[0].toUpperCase()}</div>`;
     return `<button onclick="claimPlayer('${p.id}')" style="display:flex;align-items:center;gap:14px;width:100%;padding:12px 16px;background:#131a13;border:1px solid #1e3a1e;border-radius:10px;cursor:pointer;transition:background .15s,border-color .15s;text-align:left;" onmouseover="this.style.background='#1a2e1a';this.style.borderColor='#4ade80'" onmouseout="this.style.background='#131a13';this.style.borderColor='#1e3a1e'">
       ${photo}
-      <span style="font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:700;color:#e0e0e0;letter-spacing:1px;">${p.name}</span>
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:700;color:#e0e0e0;letter-spacing:1px;">${esc(p.name)}</span>
     </button>`;
   }).join('');
   // Botón "No estoy en la lista"
