@@ -969,9 +969,15 @@ input:focus,select:focus{border-color:var(--green);}
     <div id="voting-funny-msg" style="font-size:15px;font-weight:700;text-align:center;padding:10px;background:var(--surface2);border-radius:8px;margin-bottom:14px;color:var(--accent);"></div>
     <div id="voting-already-warned" style="display:none;background:rgba(248,113,113,0.15);border:1px solid rgba(248,113,113,0.4);border-radius:8px;padding:10px;text-align:center;font-size:13px;font-weight:700;color:var(--red);margin-bottom:14px;">⚠️ Ya has votado en este partido — no puedes votar dos veces</div>
     <div id="vote-countdown-banner" style="display:none;text-align:center;font-size:13px;font-weight:700;margin-bottom:10px;padding:6px 12px;background:var(--surface2);border-radius:8px;"></div>
-    <div class="fg">
-      <label>¿Quién eres?</label>
-      <select id="voter-sel" onchange="renderVoteRows()"></select>
+    <div id="voter-identity-banner" style="display:none;margin-bottom:14px;padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;gap:10px;">
+      <span style="font-size:20px;">👤</span>
+      <div>
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;font-weight:700;">Votando como</div>
+        <div id="voter-identity-name" style="font-weight:700;font-size:15px;color:var(--text);font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;"></div>
+      </div>
+    </div>
+    <div id="voter-not-in-match" style="display:none;padding:12px 16px;background:rgba(248,113,113,0.1);border:1px solid rgba(248,113,113,0.3);border-radius:10px;font-size:13px;color:#f87171;font-weight:600;margin-bottom:14px;text-align:center;">
+      ⚽ No participaste en este partido
     </div>
     <div style="font-size:12px;color:var(--muted);margin-bottom:14px;padding:8px 12px;background:var(--surface2);border-radius:8px;">
       Puntúa del <strong>1 al 5</strong> en campo y portería · Añade tus goles abajo
@@ -4410,13 +4416,26 @@ function openVoting(mid) {
   activeVotingMatchId = mid;
   const m = gm(mid);
   currentFieldVotes = {}; currentGKVotes = {};
-  // Exclude random players from voting
-  const eligibleVoters = m.players.filter(pid => !gp(pid)?.isRandom);
-  document.getElementById('voter-sel').innerHTML = eligibleVoters.map(pid=>{
-    const p=gp(pid);
-    const hasVoted = m.votes?.[pid] !== undefined;
-    return `<option value="${pid}">${p?.name||pid}${hasVoted?' ✓ (ya votó)':''}</option>`;
-  }).join('');
+
+  // Auto-detect voter from logged-in user
+  const linkedPlayer = S.players.find(p => p.uid && window._authUser && p.uid === window._authUser.uid);
+  const isInMatch = linkedPlayer && (m.players||[]).includes(linkedPlayer.id);
+
+  window._currentVoterId = isInMatch ? linkedPlayer.id : null;
+
+  // Identity banner
+  const banner = document.getElementById('voter-identity-banner');
+  const bannerName = document.getElementById('voter-identity-name');
+  const notInMatch = document.getElementById('voter-not-in-match');
+  if (isInMatch) {
+    if (banner) { banner.style.display = 'flex'; }
+    if (bannerName) bannerName.textContent = linkedPlayer.name;
+    if (notInMatch) notInMatch.style.display = 'none';
+  } else {
+    if (banner) banner.style.display = 'none';
+    if (notInMatch) notInMatch.style.display = S.isAdmin ? 'none' : 'block';
+  }
+
   renderVoteRows();
   closeModal('modal-match');
   document.getElementById('voting-funny-msg').textContent = getFunnyMsg();
@@ -4479,7 +4498,7 @@ function getFunnyMsg() { return funnyMsgs[Math.floor(Math.random()*funnyMsgs.len
 function renderVoteRows() {
   const mid = activeVotingMatchId;
   const m = gm(mid);
-  const voterId = document.getElementById('voter-sel').value;
+  const voterId = window._currentVoterId;
   currentFieldVotes = {}; currentGKVotes = {};
   // Clear error on voter change
   const errEl = document.getElementById('vote-error-msg');
@@ -4639,7 +4658,7 @@ function updateGolesRestantes() {
   const hintEl = document.getElementById('goles-hint');
   const btnPlus = document.getElementById('btn-goles-plus');
   if (!hintEl || !m || total === null) return;
-  const voterId = document.getElementById('voter-sel')?.value;
+  const voterId = window._currentVoterId;
   let yaRegistrados = 0;
   Object.entries(m.matchStats||{}).forEach(([pid, ms]) => {
     if (pid !== voterId) yaRegistrados += (ms.goles||0);
@@ -4662,7 +4681,7 @@ function updateGolesRestantes() {
 
 function fillTestVote() {
   const m = gm(activeVotingMatchId);
-  const voterId = document.getElementById('voter-sel').value;
+  const voterId = window._currentVoterId;
   const others = m.players.filter(pid => pid !== voterId);
 
   // Rate all players randomly
@@ -4805,7 +4824,8 @@ function submitVote(){
   if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'Enviando...'; }
 
   const m = gm(activeVotingMatchId);
-  const voterId = document.getElementById('voter-sel').value;
+  const voterId = window._currentVoterId;
+  if (!voterId) { toast('⚠️ No se pudo identificar al votante'); if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'Enviar puntuaciones'; } return; }
   if(!m.votes) m.votes={};
   // Block double voting
   if(m.votes[voterId] && !S.isAdmin) {
@@ -5213,13 +5233,8 @@ function adminEditVote(mid, pid) {
   currentGKVotes = existing ? {...existing.gk} : {};
   window._voterGoles = m.matchStats?.[pid]?.goles || 0;
 
-  // Set voter selector to this player
-  const eligibleVoters = m.players.filter(p => !gp(p)?.isRandom);
-  document.getElementById('voter-sel').innerHTML = eligibleVoters.map(p => {
-    const pl = gp(p);
-    const hasVoted = m.votes?.[p] !== undefined;
-    return `<option value="${p}" ${p===pid?'selected':''}>${pl?.name||p}${hasVoted?' ✓':''}</option>`;
-  }).join('');
+  // Setear el votante actual para esta edición de admin
+  window._currentVoterId = pid;
 
   // Remove vote block so admin can re-vote
   if (existing) delete m.votes[pid];
@@ -5233,8 +5248,15 @@ function adminEditVote(mid, pid) {
   }
   document.getElementById('goles-val').textContent = window._voterGoles;
 
+  // Mostrar banner de identidad con el jugador que edita el admin
+  const banner = document.getElementById('voter-identity-banner');
+  const bannerName = document.getElementById('voter-identity-name');
+  if (banner) banner.style.display = 'flex';
+  if (bannerName) bannerName.textContent = `${gp(pid)?.name||pid} ⚡ (admin)`;
+  const notInMatch = document.getElementById('voter-not-in-match');
+  if (notInMatch) notInMatch.style.display = 'none';
   closeModal('modal-match');
-  document.getElementById('voting-funny-msg').textContent = `⚡ Admin votando por ${gp(pid)?.name||pid}`;
+  document.getElementById('voting-funny-msg').textContent = `⚡ Admin editando voto de ${gp(pid)?.name||pid}`;
   openModal('modal-voting');
 }
 
