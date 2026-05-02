@@ -719,6 +719,7 @@ input:focus,select:focus{border-color:var(--green);}
       <div id="nav-avatar" onclick="toggleUserMenu()" style="width:32px;height:32px;border-radius:50%;background:#1a3a1a;border:2px solid #4ade80;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:15px;color:#4ade80;cursor:pointer;user-select:none;">?</div>
       <div id="user-menu" style="display:none;position:absolute;right:0;top:40px;background:#0e180e;border:1px solid #1e3a1e;border-radius:10px;min-width:160px;overflow:hidden;z-index:1000;box-shadow:0 8px 24px rgba(0,0,0,0.6);">
         <div id="user-menu-name" style="padding:10px 14px;font-size:12px;color:#4ade80;font-weight:700;border-bottom:1px solid #1e3a1e;font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;"></div>
+        <button id="user-menu-admin-toggle" onclick="toggleAdminView()" style="display:none;width:100%;padding:10px 14px;background:none;border:none;border-bottom:1px solid #1e3a1e;font-size:13px;text-align:left;cursor:pointer;font-family:'Barlow',sans-serif;"></button>
         <button onclick="authLogout()" style="width:100%;padding:10px 14px;background:none;border:none;color:#f87171;font-size:13px;text-align:left;cursor:pointer;font-family:'Barlow',sans-serif;">🚪 Cerrar sesión</button>
       </div>
     </div>
@@ -1516,7 +1517,34 @@ function updateAdminUI() {
     const adminPage = document.getElementById('page-admin');
     if (adminPage && adminPage.classList.contains('active')) nav('inicio');
   }
+  // Actualizar botón del menú de usuario
+  const toggleBtn = document.getElementById('user-menu-admin-toggle');
+  if (toggleBtn) {
+    const isRealAdmin = S.players.some(p => p.uid && window._authUser && p.uid === window._authUser.uid && p.isAdmin);
+    if (isRealAdmin) {
+      toggleBtn.style.display = 'block';
+      if (S.isAdmin) {
+        toggleBtn.style.color = '#facc15';
+        toggleBtn.textContent = '👤 Vista de jugador';
+      } else {
+        toggleBtn.style.color = '#facc15';
+        toggleBtn.textContent = '⚡ Activar vista admin';
+      }
+    } else {
+      toggleBtn.style.display = 'none';
+    }
+  }
   renderAll();
+}
+
+function toggleAdminView() {
+  const linkedPlayer = S.players.find(p => p.uid && window._authUser && p.uid === window._authUser.uid);
+  if (!linkedPlayer?.isAdmin) return; // solo admins reales pueden hacer esto
+  S.isAdmin = !S.isAdmin;
+  try { S.isAdmin ? sessionStorage.setItem('pfc_admin','1') : sessionStorage.removeItem('pfc_admin'); } catch(e) {}
+  document.getElementById('user-menu').style.display = 'none';
+  updateAdminUI();
+  toast(S.isAdmin ? '⚡ Vista admin activada' : '👤 Vista de jugador activada');
 }
 
 // ============================================================
