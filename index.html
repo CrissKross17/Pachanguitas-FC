@@ -526,8 +526,29 @@ input:focus,select:focus{border-color:var(--green);}
     window._authSignOut = () => signOut(auth);
     window._currentUser = () => auth.currentUser;
 
+    // ── PREVIEW BYPASS (?preview=1 en la URL salta el login) ─────
+    const _isPreview = new URLSearchParams(location.search).has('preview');
+    if (_isPreview) {
+      const _mockUser = { uid: '__preview__', displayName: 'Preview', email: 'preview@local', photoURL: null };
+      window._authUser = _mockUser;
+      window._authSignInGoogle = () => {};
+      window._authSignOut = () => location.href = location.pathname;
+      const authScreen = document.getElementById('auth-screen');
+      const appRoot    = document.getElementById('app-root');
+      if (authScreen) authScreen.style.display = 'none';
+      if (appRoot)    appRoot.style.display     = '';
+      const av = document.getElementById('nav-avatar');
+      if (av) av.textContent = '👁';
+      const menuName = document.getElementById('user-menu-name');
+      if (menuName) menuName.textContent = 'Preview';
+      // Activar admin automáticamente en preview
+      S.isAdmin = true;
+      try { sessionStorage.setItem('pfc_admin', '1'); } catch(e) {}
+    }
+
     // ── AUTH STATE ────────────────────────────────────────────────
     onAuthStateChanged(auth, user => {
+      if (_isPreview) return; // preview bypass activo, ignorar auth
       window._authUser = user;
       const authScreen = document.getElementById('auth-screen');
       const appRoot    = document.getElementById('app-root');
