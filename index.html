@@ -3821,7 +3821,7 @@ function openMatch(mid) {
           </div>
         </div>
         <div style="display:flex;gap:8px;width:100%;justify-content:center;flex-wrap:wrap;">
-          <button class="btn btn-secondary btn-sm" style="width:100%;" onclick="openVoting('${m.id}')">⭐ Puntuar este partido</button>
+          ${(S.isAdmin || currentUserMatchPlayerId(m)) ? `<button class="btn btn-secondary btn-sm" style="width:100%;" onclick="openVoting('${m.id}')">⭐ Puntuar este partido</button>` : ''}
           <button class="btn btn-secondary btn-sm" style="width:100%;" onclick="copyVotingLink('${m.id}')">🔗 Copiar enlace WhatsApp</button>
           ${(()=>{
             const eligible = (m.players||[]).filter(pid => !gp(pid)?.isRandom);
@@ -3847,7 +3847,14 @@ function openMatch(mid) {
               <div style="font-size:11px;color:var(--muted);">Todos los jugadores han puntuado</div>
             </div>
           </div>`;
-          return `<button class="btn btn-primary btn-sm" onclick="openVoting('${m.id}')">⭐ Puntuar este partido</button>
+          const _uid = currentUserMatchPlayerId(m);
+          const _hasVoted = _uid && (m.votes||{})[_uid] !== undefined;
+          const _voteBtn = S.isAdmin || _uid
+            ? (_hasVoted && !S.isAdmin
+                ? `<div style="font-size:12px;color:var(--green);font-weight:700;padding:6px 0;">✓ Ya has votado</div>`
+                : `<button class="btn btn-primary btn-sm" onclick="openVoting('${m.id}')">⭐ Puntuar este partido</button>`)
+            : '';
+          return `${_voteBtn}
           <button class="btn btn-secondary btn-sm" onclick="copyVotingLink('${m.id}')">🔗 Copiar enlace WhatsApp</button>`;
         })()}
         <button class="btn btn-secondary btn-sm" onclick="exportPitch('${m.id}')">📸 Exportar PNG</button>
@@ -4410,6 +4417,15 @@ function checkVotingHash(retries) {
     setTimeout(() => checkVotingHash((retries||0)+1), 400);
   }
   // Si después de 30 intentos no se encuentra, no hacer nada (el hash ya no importa)
+}
+
+// Devuelve el player ID del usuario logueado si está en el partido como fijo, o null
+function currentUserMatchPlayerId(m) {
+  const user = window._authUser;
+  if (!user) return null;
+  const linked = S.players.find(p => p.uid === user.uid);
+  if (!linked || linked.isRandom) return null;
+  return (m.players||[]).includes(linked.id) ? linked.id : null;
 }
 
 function openVoting(mid) {
