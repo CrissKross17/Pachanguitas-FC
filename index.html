@@ -926,7 +926,7 @@ input:focus,select:focus{border-color:var(--green);}
     <div class="fg">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
         <label style="margin:0;" id="nm-label-sel">Selecciona los jugadores</label>
-        <button class="btn btn-secondary btn-sm" onclick="openAddPlayerFromMatch()" style="flex-shrink:0;">＋ Jugador nuevo</button>
+        <button class="btn btn-secondary btn-sm" onclick="openAddPlayerFromMatch()" style="flex-shrink:0;">＋ Invitado</button>
       </div>
       <div class="chip-grid" id="nm-chips"></div>
       <div style="font-size:12px;color:var(--muted);margin-top:8px;" id="nm-sel-count">0 / 10 seleccionados</div>
@@ -3266,18 +3266,19 @@ function renderPartidos() {
 function openAddPlayerFromMatch() {
   editingPlayerId = null;
   currentPhotoData = null;
-  document.getElementById('player-modal-title').textContent = 'NUEVO JUGADOR';
+  document.getElementById('player-modal-title').textContent = 'AÑADIR INVITADO';
   document.getElementById('pf-name').value = '';
   document.getElementById('pf-name').readOnly = false;
   document.getElementById('pf-name').style.opacity = '';
   document.getElementById('pf-name').style.cursor = '';
-  document.querySelector('#pf-name-wrap label').textContent = 'Nombre';
+  document.querySelector('#pf-name-wrap label').textContent = 'Nombre del invitado';
   document.getElementById('pf-pos').value = 'Jugador de campo';
   document.getElementById('pf-admin').checked = false;
-  document.getElementById('pf-random').checked = false;
-  document.getElementById('pf-random-wrap').style.display = 'block';
+  // Siempre random — ocultar la opción, no tiene sentido elegir
+  document.getElementById('pf-random').checked = true;
+  document.getElementById('pf-random-wrap').style.display = 'none';
   document.getElementById('photoPreview').style.display = 'none';
-  document.getElementById('save-player-btn').textContent = 'Añadir y seleccionar';
+  document.getElementById('save-player-btn').textContent = '＋ Añadir invitado';
   document.getElementById('pf-error').style.display = 'none';
   window._addingFromMatch = true;
   closeModal('modal-new-match');
