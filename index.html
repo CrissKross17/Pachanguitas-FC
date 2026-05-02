@@ -621,7 +621,8 @@ input:focus,select:focus{border-color:var(--green);}
         window._pfcRestored = true;
         try {
           const savedAdmin = sessionStorage.getItem('pfc_admin');
-          if (savedAdmin === '1') { S.isAdmin = true; updateAdminUI(); }
+          const adminViewOff = sessionStorage.getItem('pfc_admin_off') === '1';
+          if (savedAdmin === '1' && !adminViewOff) { S.isAdmin = true; updateAdminUI(); }
           const savedPage = sessionStorage.getItem('pfc_page');
           const validPages = ['inicio','jugadores','partidos','ranking','admin'];
           if (savedPage && validPages.includes(savedPage) && (savedPage !== 'admin' || S.isAdmin)) {
@@ -1541,7 +1542,15 @@ function toggleAdminView() {
   const linkedPlayer = S.players.find(p => p.uid && window._authUser && p.uid === window._authUser.uid);
   if (!linkedPlayer?.isAdmin) return; // solo admins reales pueden hacer esto
   S.isAdmin = !S.isAdmin;
-  try { S.isAdmin ? sessionStorage.setItem('pfc_admin','1') : sessionStorage.removeItem('pfc_admin'); } catch(e) {}
+  try {
+    if (S.isAdmin) {
+      sessionStorage.setItem('pfc_admin', '1');
+      sessionStorage.removeItem('pfc_admin_off');
+    } else {
+      sessionStorage.removeItem('pfc_admin');
+      sessionStorage.setItem('pfc_admin_off', '1');
+    }
+  } catch(e) {}
   document.getElementById('user-menu').style.display = 'none';
   updateAdminUI();
   toast(S.isAdmin ? '⚡ Vista admin activada' : '👤 Vista de jugador activada');
@@ -6938,9 +6947,10 @@ function checkWhoAreYou(user) {
   const linked = S.players.find(p => p.uid === user.uid);
   if (linked) {
     if (linked.isAdmin) {
-      // Admin confirmado en Firebase → activar
-      S.isAdmin = true;
-      sessionStorage.setItem('pfc_admin', '1');
+      // Admin confirmado en Firebase → activar, salvo que haya elegido vista jugador
+      const playerViewChosen = sessionStorage.getItem('pfc_admin_off') === '1';
+      S.isAdmin = !playerViewChosen;
+      if (S.isAdmin) sessionStorage.setItem('pfc_admin', '1');
       if (typeof updateAdminUI === 'function') updateAdminUI();
     } else {
       // Bootstrap: si no hay ningún admin en el grupo, este jugador vinculado se convierte en admin
