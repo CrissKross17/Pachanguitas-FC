@@ -5264,21 +5264,37 @@ function renderAdminMatches() {
 }
 
 function renderAdminPlayers() {
-  const inAnyMatch = new Set(S.matches.flatMap(m=>m.players||[]));
-  const players = S.players.filter(p=>inAnyMatch.has(p.id));
+  const players = S.players;
   if (!players.length) {
     document.getElementById('admin-players-list').innerHTML = '<div style="color:var(--muted);font-size:13px;padding:12px;">No hay jugadores</div>';
     return;
   }
-  document.getElementById('admin-players-list').innerHTML = `<div class="card" style="padding:0;overflow:hidden;">
+  const linked = players.filter(p => p.uid).length;
+  document.getElementById('admin-players-list').innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px;">
+      <div style="font-size:12px;color:var(--muted);">
+        <span style="color:var(--green);font-weight:700;">${linked}</span> / ${players.length} jugadores con cuenta vinculada
+      </div>
+      ${linked === players.filter(p=>!p.isRandom).length
+        ? `<span style="font-size:11px;background:rgba(74,222,128,0.1);color:var(--green);border:1px solid rgba(74,222,128,0.3);border-radius:6px;padding:3px 10px;">✓ Todos vinculados</span>`
+        : ''}
+    </div>
+    <div class="card" style="padding:0;overflow:hidden;">
     ${players.map(p => {
       const f=computeRating(p.id)??0, g=computeGKRating(p.id)??0;
       const ovr = f>0&&g>0?f*0.85+g*0.15:f>0?f:g>0?g:0;
+      const badge = p.uid
+        ? `<span title="Cuenta vinculada" style="font-size:11px;background:rgba(74,222,128,0.12);color:var(--green);border:1px solid rgba(74,222,128,0.3);border-radius:6px;padding:2px 8px;white-space:nowrap;">✓ Vinculado</span>`
+        : `<span title="Sin cuenta" style="font-size:11px;background:rgba(248,113,113,0.1);color:#f87171;border:1px solid rgba(248,113,113,0.3);border-radius:6px;padding:2px 8px;white-space:nowrap;">⏳ Sin vincular</span>`;
       return `<div style="display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--border);flex-wrap:wrap;">
         ${avatarSmall(p)}
         <div style="flex:1;min-width:120px;">
-          <div style="font-weight:700;">${esc(p.name)}</div>
-          <div style="font-size:11px;color:var(--muted);">OVR: ${ovr>0?ovr.toFixed(1):'—'} · PJ: ${computePartidos(p.id)} · Goles: ${computeGoles(p.id)}</div>
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+            <span style="font-weight:700;">${esc(p.name)}</span>
+            ${badge}
+            ${p.isAdmin?`<span style="font-size:11px;color:var(--accent);font-weight:700;">⚡ Admin</span>`:''}
+          </div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px;">OVR: ${ovr>0?ovr.toFixed(1):'—'} · PJ: ${computePartidos(p.id)} · Goles: ${computeGoles(p.id)}</div>
         </div>
         <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;">
           ${p.isRandom
