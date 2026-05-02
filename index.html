@@ -3738,7 +3738,7 @@ function openMatch(mid) {
           <div style="font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;">${m.place||'Partido'}</div>
           <button onclick="openEditMatch('${m.id}')" style="background:none;border:none;cursor:pointer;font-size:15px;opacity:0.5;padding:2px 4px;line-height:1;" title="Editar lugar y hora">✏️</button>
         </div>
-        <div style="font-size:12px;color:var(--muted);">${fmtDate(m.date)}${m.time?' · 🕐 '+m.time:''} · ${votesCount}/${m.players.length} votos${m.createdBy&&gp(m.createdBy)?' · 🎲 '+gp(m.createdBy).name:''}</div>
+        <div style="font-size:12px;color:var(--muted);">${fmtDate(m.date)}${m.time?' · 🕐 '+m.time:''} · ${votesCount}/${m.players.length} votos${m.createdBy&&gp(m.createdBy)?' · Creado por '+gp(m.createdBy).name:''}</div>
       </div>
       <span class="match-status-pill ${m.status==='done'?'pill-done':m.status==='voting'?'pill-voting':'pill-pending'}">${statusLabel(m.status,m)}</span>
     </div>
