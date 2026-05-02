@@ -2599,19 +2599,6 @@ function openEditPlayer(pid) {
   currentPhotoData = p.photo || null;
   document.getElementById('player-modal-title').textContent = 'EDITAR JUGADOR';
   document.getElementById('pf-name').value = p.name;
-  // Lock name for non-admins
-  const nameInput = document.getElementById('pf-name');
-  if (!S.isAdmin) {
-    nameInput.readOnly = true;
-    nameInput.style.opacity = '0.5';
-    nameInput.style.cursor = 'not-allowed';
-    document.querySelector('#pf-name-wrap label').textContent = 'Nombre (solo el admin puede cambiarlo)';
-  } else {
-    nameInput.readOnly = false;
-    nameInput.style.opacity = '';
-    nameInput.style.cursor = '';
-    document.querySelector('#pf-name-wrap label').textContent = 'Nombre';
-  }
   document.getElementById('pf-pos').value = p.pos;
   document.getElementById('pf-admin').checked = p.isAdmin;
   document.getElementById('pf-random-wrap').style.display = 'none';
@@ -2620,9 +2607,23 @@ function openEditPlayer(pid) {
   const prev = document.getElementById('photoPreview');
   if(p.photo){ prev.src=p.photo; prev.style.display='block'; }
   else { prev.style.display='none'; }
-  // Mostrar foto solo si es el propio jugador o admin
-  const photoWrap = document.getElementById('photo-upload-wrap');
+  // Permisos según si es el propio jugador o admin
   const isOwnPlayer = window._authUser && p.uid && p.uid === window._authUser.uid;
+  // Nombre: editable por admin o por el propio jugador
+  const nameInput = document.getElementById('pf-name');
+  if (S.isAdmin || isOwnPlayer) {
+    nameInput.readOnly = false;
+    nameInput.style.opacity = '';
+    nameInput.style.cursor = '';
+    document.querySelector('#pf-name-wrap label').textContent = 'Nombre';
+  } else {
+    nameInput.readOnly = true;
+    nameInput.style.opacity = '0.5';
+    nameInput.style.cursor = 'not-allowed';
+    document.querySelector('#pf-name-wrap label').textContent = 'Nombre (solo el admin puede cambiarlo)';
+  }
+  // Foto: visible solo para el propio jugador o admin
+  const photoWrap = document.getElementById('photo-upload-wrap');
   if (photoWrap) {
     if (S.isAdmin || isOwnPlayer) {
       photoWrap.style.display = 'block';
@@ -2943,7 +2944,8 @@ function savePlayer() {
   if(!name){ showError('pf-error','El nombre no puede estar vacío'); return; }
   if(editingPlayerId) {
     const p = gp(editingPlayerId);
-    if (S.isAdmin) p.name = name;
+    const isOwnPlayer = window._authUser && p.uid && p.uid === window._authUser.uid;
+    if (S.isAdmin || isOwnPlayer) p.name = name;
     p.pos = document.getElementById('pf-pos').value;
     if(currentPhotoData) p.photo = currentPhotoData;
   } else {
