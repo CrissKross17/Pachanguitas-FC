@@ -4584,9 +4584,13 @@ function renderVoteRows() {
     const gStars = [1,2,3,4,5].map(n=>
       `<button class="s-btn" id="gs-${pid}-${n}" onclick="setGK('${pid}',${n})">${n}</button>`
     ).join('');
+    const golesYa = m.matchStats?.[pid]?.goles || 0;
+    const golesBadge = golesYa > 0
+      ? `<span style="display:inline-flex;align-items:center;gap:3px;margin-left:8px;font-size:12px;background:rgba(74,222,128,0.12);border:1px solid rgba(74,222,128,0.3);border-radius:6px;padding:1px 7px;color:var(--green);font-weight:700;font-family:'Barlow Condensed',sans-serif;letter-spacing:0.5px;">${'⚽'.repeat(Math.min(golesYa,5))}${golesYa>5?` +${golesYa-5}`:''}</span>`
+      : '';
     return `
     <div class="vote-block">
-      <div class="vote-player-name">${p?.name||pid}</div>
+      <div class="vote-player-name">${p?.name||pid}${golesBadge}</div>
       <div class="vote-dual">
         <div>
           <div class="vote-label" style="color:var(--accent);">⭐ Campo</div>
