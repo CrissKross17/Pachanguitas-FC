@@ -6858,13 +6858,18 @@ function checkWhoAreYou(user) {
     }
     return;
   }
-  // ¿Quedan jugadores sin reclamar (fijos, sin uid)?
+  // ¿Quedan jugadores fijos sin reclamar (los originales)?
   const unlinked = S.players.filter(p => !p.isRandom && !p.uid);
-  if (unlinked.length === 0) return; // todos reclamados → entra directamente
-  showWhoModal(unlinked);
+  if (unlinked.length === 0) {
+    // Todos los originales ya tienen dueño → crear carta nueva automáticamente
+    autoCreatePlayer(user);
+    return;
+  }
+  // Hay originales sin reclamar → preguntar (con opción de crear carta nueva)
+  showWhoModal(unlinked, user);
 }
 
-function showWhoModal(players) {
+function showWhoModal(players, user) {
   const modal = document.getElementById('who-modal');
   const list  = document.getElementById('who-player-list');
   if (!modal || !list) return;
@@ -6877,7 +6882,30 @@ function showWhoModal(players) {
       <span style="font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:700;color:#e0e0e0;letter-spacing:1px;">${p.name}</span>
     </button>`;
   }).join('');
+  // Botón "No estoy en la lista"
+  list.innerHTML += `
+    <div style="border-top:1px solid #1e3a1e;margin-top:12px;padding-top:12px;">
+      <button onclick="autoCreatePlayer(window._authUser)" style="display:flex;align-items:center;gap:10px;width:100%;padding:12px 16px;background:transparent;border:1px dashed #2d5a2d;border-radius:10px;cursor:pointer;color:#4a7a4a;font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:600;letter-spacing:1px;" onmouseover="this.style.borderColor='#4ade80';this.style.color='#4ade80'" onmouseout="this.style.borderColor='#2d5a2d';this.style.color='#4a7a4a'">
+        <span style="font-size:20px;">➕</span> No estoy en la lista — crear mi carta
+      </button>
+    </div>`;
   modal.style.display = 'flex';
+}
+
+async function autoCreatePlayer(user) {
+  if (!user || user.uid === '__preview__') return;
+  // Evitar doble creación (race condition)
+  if (S.players.find(p => p.uid === user.uid)) return;
+  // Cerrar modal si estaba abierto
+  const modal = document.getElementById('who-modal');
+  if (modal) modal.style.display = 'none';
+  // Crear carta con el nombre de Google
+  const p = mkPlayer(user.displayName || 'Nuevo jugador');
+  p.uid = user.uid;
+  S.players.push(p);
+  save();
+  toast(`⚽ ¡Bienvenido, ${p.name}! Tu carta ha sido creada.`);
+  renderAll();
 }
 
 async function claimPlayer(playerId) {
