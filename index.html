@@ -1788,7 +1788,7 @@ function renderDashPremios() {
 
   el.innerHTML = `
     <div class="section-title">${getCfg('dashLabels','premios')}</div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:16px;overflow:visible;padding:4px 4px 8px;">
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;overflow:visible;padding:4px 4px 8px;">
       ${awardCardFull('MVP','MEJOR JUGADOR', topCampo, topCampo?`Nota media: ${(computeRating(topCampo.id)??0).toFixed(1)}`:'Sin datos aún')}
       ${awardCardFull('GK','MEJOR PORTERO', topPorteria, topPorteria?`Nota portería: ${(computeGKRating(topPorteria.id)??0).toFixed(1)}`:'Sin datos aún')}
       ${awardCardFull('GOL','MÁX. GOLEADOR', topGol&&computeGoles(topGol.id)>0?topGol:null, topGol&&computeGoles(topGol.id)>0?`${computeGoles(topGol.id)} goles`:'Sin goles aún')}
@@ -2488,20 +2488,20 @@ function awardCardFull(icon, label, player, sub) {
     : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;"><span style="font-family:'Barlow Condensed',sans-serif;font-size:32px;font-weight:900;color:rgba(255,255,255,0.2);">${player?initials(player.name):icon}</span></div>`;
 
   const futCard = player ? `
-    <div style="position:relative;width:90px;height:118px;border-radius:8px;overflow:hidden;margin:0 auto 12px;box-shadow:0 4px 20px rgba(0,0,0,0.6);">
+    <div style="position:relative;width:110px;height:145px;border-radius:8px;overflow:hidden;margin:0 auto 12px;box-shadow:0 4px 20px rgba(0,0,0,0.6);">
       <img src="${getCardBg(computeOVR(player.id))}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;">
-      <!-- Photo in top 62% like real FUT card -->
-      <div style="position:absolute;top:7%;left:8%;width:84%;height:54%;z-index:1;overflow:hidden;">
+      <!-- Photo area — taller so faces show fully -->
+      <div style="position:absolute;top:5%;left:6%;width:88%;height:68%;z-index:1;overflow:hidden;">
         ${photoContent}
       </div>
       <!-- Bottom gradient + name -->
-      <div style="position:absolute;bottom:0;left:0;right:0;z-index:2;background:linear-gradient(to top,rgba(0,0,0,0.85) 0%,rgba(0,0,0,0.4) 60%,transparent 100%);padding:6px 4px 4px;">
+      <div style="position:absolute;bottom:0;left:0;right:0;z-index:2;background:linear-gradient(to top,rgba(0,0,0,0.9) 0%,rgba(0,0,0,0.5) 60%,transparent 100%);padding:7px 4px 5px;">
         <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:900;color:#fff;text-transform:uppercase;text-align:center;">${esc(player.name.split(' ')[0])}</div>
       </div>
     </div>` : `<div style="width:90px;height:118px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);margin:0 auto 12px;display:flex;align-items:center;justify-content:center;"><span style="font-size:11px;font-weight:700;color:var(--muted);letter-spacing:1px;text-transform:uppercase;">Sin datos</span></div>`;
 
   return `
-  <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;text-align:center;position:relative;transition:border-color .2s;"
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px 12px;text-align:center;position:relative;transition:border-color .2s;"
        onmouseover="this.style.borderColor='var(--green)'" onmouseout="this.style.borderColor='var(--border)'">
     ${futCard}
     <div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px;">${label}</div>
