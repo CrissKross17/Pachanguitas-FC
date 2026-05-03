@@ -434,11 +434,22 @@ input:focus,select:focus{border-color:var(--green);}
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 
 @media(max-width:640px){
-  nav{padding:0;height:auto;flex-direction:column;flex-wrap:nowrap;gap:0;overflow:visible;}
-  .nav-top-row{display:flex;align-items:center;justify-content:space-between;width:100%;padding:6px 12px;}
+  nav{
+    display:grid;
+    grid-template-columns:1fr auto;
+    grid-template-rows:auto auto;
+    grid-template-areas:"toprow navright" "navlinks navlinks";
+    padding:0;height:auto;gap:0;overflow:visible;
+  }
+  .nav-top-row{grid-area:toprow;display:flex;align-items:center;padding:6px 0 6px 12px;}
+  /* Ocultar el botón ❓ mobile en top-row (avatar visible en nav-right) */
+  .nav-top-row > div:last-child{display:none !important;}
+  /* Mostrar nav-right en móvil sólo con el avatar, sin el botón ❓ */
+  .nav-right{grid-area:navright;display:flex !important;align-items:center;padding:0 12px 0 6px;}
+  .nav-right > button{display:none !important;}
   .logo{font-size:16px;gap:6px;flex-shrink:0;}
   .logo-ball{width:22px;height:22px;font-size:11px;}
-  .nav-links{display:flex;width:100%;border-top:1px solid var(--border);gap:0;overflow:visible;}
+  .nav-links{grid-area:navlinks;display:flex;border-top:1px solid var(--border);gap:0;overflow:visible;}
   .nav-btn{flex:1;padding:7px 2px;font-size:11px;white-space:nowrap;border-radius:0;text-align:center;}
   .page{padding:12px;}
   .page-title{font-size:28px;}
