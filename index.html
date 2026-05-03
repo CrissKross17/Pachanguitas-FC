@@ -505,7 +505,7 @@ input:focus,select:focus{border-color:var(--green);}
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
     import { getDatabase, ref, set, onValue } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
-    import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+    import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut, signInAnonymously } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 
     const firebaseConfig = {
       apiKey: "AIzaSyBETz59-ROzmnv66NZ6MoVoOiYvD41xdFg",
@@ -530,6 +530,8 @@ input:focus,select:focus{border-color:var(--green);}
     // ── PREVIEW BYPASS (?preview=1 en la URL salta el login) ─────
     const _isPreview = new URLSearchParams(location.search).has('preview');
     if (_isPreview) {
+      // Sign in anonymously so Firebase Rules (auth != null) allow reads
+      signInAnonymously(auth).catch(e => console.warn('Preview anon auth:', e));
       const _mockUser = { uid: '__preview__', displayName: 'Preview', email: 'preview@local', photoURL: null };
       window._authUser = _mockUser;
       window._authSignInGoogle = () => {};
@@ -1775,7 +1777,7 @@ function renderDashPremios() {
 
   el.innerHTML = `
     <div class="section-title">${getCfg('dashLabels','premios')}</div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:16px;">
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:16px;overflow:visible;padding:4px 4px 8px;">
       ${awardCardFull('MVP','MEJOR JUGADOR', topCampo, topCampo?`Nota media: ${(computeRating(topCampo.id)??0).toFixed(1)}`:'Sin datos aún')}
       ${awardCardFull('GK','MEJOR PORTERO', topPorteria, topPorteria?`Nota portería: ${(computeGKRating(topPorteria.id)??0).toFixed(1)}`:'Sin datos aún')}
       ${awardCardFull('GOL','MÁX. GOLEADOR', topGol&&computeGoles(topGol.id)>0?topGol:null, topGol&&computeGoles(topGol.id)>0?`${computeGoles(topGol.id)} goles`:'Sin goles aún')}
@@ -1837,7 +1839,7 @@ function renderDashExtra() {
   const el = document.getElementById('home-extra');
   if (!el) return;
   el.innerHTML = `    <!-- EXTRA AWARDS ROW -->
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;">
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;overflow:visible;padding:4px 4px 8px;">
       ${(()=>{
         const inAnyMatch = new Set(S.matches.flatMap(m=>m.players||[]));
         const players = getFixedPlayers().filter(p=>inAnyMatch.has(p.id));
