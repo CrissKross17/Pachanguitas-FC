@@ -684,9 +684,9 @@ input:focus,select:focus{border-color:var(--green);}
 <div id="who-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:99999;flex-direction:column;align-items:center;justify-content:center;padding:20px;">
   <div style="width:100%;max-width:400px;background:#0e180e;border:1px solid #1e3a1e;border-radius:18px;padding:28px 24px;">
     <div style="text-align:center;margin-bottom:24px;">
-      <div style="font-size:32px;margin-bottom:8px;">👤</div>
-      <div style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;letter-spacing:2px;color:#fff;">¿QUIÉN ERES?</div>
-      <div style="font-size:13px;color:#4a7a4a;margin-top:6px;">Selecciona tu jugador</div>
+      <div style="font-size:32px;margin-bottom:8px;">👋</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;letter-spacing:2px;color:#fff;">¡BIENVENIDO!</div>
+      <div style="font-size:13px;color:#4a7a4a;margin-top:6px;">Primera vez que entras — elige cómo registrarte</div>
     </div>
     <div id="who-player-list" style="display:flex;flex-direction:column;gap:10px;max-height:60vh;overflow-y:auto;"></div>
   </div>
@@ -7000,22 +7000,43 @@ function showWhoModal(players, user) {
   const modal = document.getElementById('who-modal');
   const list  = document.getElementById('who-player-list');
   if (!modal || !list) return;
-  list.innerHTML = players.map(p => {
+
+  // Opción PRINCIPAL: crear carta nueva (para jugadores nuevos de verdad)
+  const createBtn = `
+    <button onclick="autoCreatePlayer(window._authUser)"
+      style="display:flex;align-items:center;gap:12px;width:100%;padding:14px 16px;
+             background:#1a3a1a;border:2px solid #4ade80;border-radius:12px;cursor:pointer;
+             color:#4ade80;font-family:'Barlow Condensed',sans-serif;font-size:17px;
+             font-weight:800;letter-spacing:1px;transition:background .15s;"
+      onmouseover="this.style.background='#1f4a1f'" onmouseout="this.style.background='#1a3a1a'">
+      <span style="font-size:22px;">⚽</span> Soy nuevo — crear mi carta
+    </button>`;
+
+  // Opción SECUNDARIA: soy uno de los jugadores que ya aparece en la lista
+  const existingBtns = players.map(p => {
     const photo = p.photo
-      ? `<img src="${p.photo}" style="width:36px;height:36px;border-radius:50%;object-fit:cover;border:2px solid #2d5a2d;">`
-      : `<div style="width:36px;height:36px;border-radius:50%;background:#1a3a1a;border:2px solid #2d5a2d;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-weight:900;color:#4ade80;font-size:15px;">${p.name[0].toUpperCase()}</div>`;
-    return `<button onclick="claimPlayer('${p.id}')" style="display:flex;align-items:center;gap:14px;width:100%;padding:12px 16px;background:#131a13;border:1px solid #1e3a1e;border-radius:10px;cursor:pointer;transition:background .15s,border-color .15s;text-align:left;" onmouseover="this.style.background='#1a2e1a';this.style.borderColor='#4ade80'" onmouseout="this.style.background='#131a13';this.style.borderColor='#1e3a1e'">
+      ? `<img src="${p.photo}" style="width:32px;height:32px;border-radius:50%;object-fit:cover;border:2px solid #2d5a2d;">`
+      : `<div style="width:32px;height:32px;border-radius:50%;background:#1a3a1a;border:2px solid #2d5a2d;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-weight:900;color:#4ade80;font-size:13px;">${p.name[0].toUpperCase()}</div>`;
+    return `<button onclick="claimPlayer('${p.id}')"
+      style="display:flex;align-items:center;gap:12px;width:100%;padding:10px 14px;
+             background:#131a13;border:1px solid #1e3a1e;border-radius:10px;cursor:pointer;
+             transition:background .15s,border-color .15s;text-align:left;"
+      onmouseover="this.style.background='#1a2e1a';this.style.borderColor='#4ade80'"
+      onmouseout="this.style.background='#131a13';this.style.borderColor='#1e3a1e'">
       ${photo}
-      <span style="font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:700;color:#e0e0e0;letter-spacing:1px;">${esc(p.name)}</span>
+      <span style="font-family:'Barlow Condensed',sans-serif;font-size:16px;font-weight:700;color:#e0e0e0;">${esc(p.name)}</span>
     </button>`;
   }).join('');
-  // Botón "No estoy en la lista"
-  list.innerHTML += `
-    <div style="border-top:1px solid #1e3a1e;margin-top:12px;padding-top:12px;">
-      <button onclick="autoCreatePlayer(window._authUser)" style="display:flex;align-items:center;gap:10px;width:100%;padding:12px 16px;background:transparent;border:1px dashed #2d5a2d;border-radius:10px;cursor:pointer;color:#4a7a4a;font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:600;letter-spacing:1px;" onmouseover="this.style.borderColor='#4ade80';this.style.color='#4ade80'" onmouseout="this.style.borderColor='#2d5a2d';this.style.color='#4a7a4a'">
-        <span style="font-size:20px;">➕</span> No estoy en la lista — crear mi carta
-      </button>
-    </div>`;
+
+  list.innerHTML = `
+    ${createBtn}
+    <div style="margin:16px 0 10px;display:flex;align-items:center;gap:8px;">
+      <div style="flex:1;height:1px;background:#1e3a1e;"></div>
+      <span style="font-size:11px;color:#4a7a4a;font-weight:600;letter-spacing:1px;">¿YA TIENES FICHA?</span>
+      <div style="flex:1;height:1px;background:#1e3a1e;"></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;">${existingBtns}</div>`;
+
   modal.style.display = 'flex';
 }
 
