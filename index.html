@@ -2510,25 +2510,23 @@ function awardCardFull(icon, label, player, sub) {
   </div>`;
 }
 function renderJugadores() {
-  // Show players who appear in at least one match (any status)
   const inAnyMatch = new Set(S.matches.flatMap(m => m.players || []));
-  const active = S.players.filter(p => inAnyMatch.has(p.id));
-  document.getElementById('players-sub').textContent = `${active.length} elegidos`;
+  // Mostrar todos los jugadores fijos (hayan jugado o no)
+  const allFixed = S.players.filter(p => !p.isRandom);
+  document.getElementById('players-sub').textContent = `${allFixed.length} jugadores`;
   const grid = document.getElementById('players-grid');
-  if (!active.length) {
-    grid.innerHTML = `<div class="empty" style="grid-column:1/-1;"><div class="ei">👥</div><p>Los jugadores aparecerán aquí cuando participen en su primer partido</p></div>`;
+  if (!allFixed.length) {
+    grid.innerHTML = `<div class="empty" style="grid-column:1/-1;"><div class="ei">👥</div><p>Los jugadores aparecerán aquí cuando se registren</p></div>`;
     return;
   }
-  // Sort by OVR descending — rated players first, then unrated
-  const sorted = [...active].sort((a,b) => {
-    const oA = computeRating(a.id) ?? -1;
-    const oB = computeRating(b.id) ?? -1;
-    return oB - oA;
-  });
-  grid.innerHTML = sorted.map((p,i)=>playerCardHtml(p,i)).join('');
+  // Primero los que han jugado (por OVR), luego los que aún no
+  const played   = allFixed.filter(p =>  inAnyMatch.has(p.id)).sort((a,b) => (computeRating(b.id)??-1) - (computeRating(a.id)??-1));
+  const noPlayed = allFixed.filter(p => !inAnyMatch.has(p.id));
+  const sorted = [...played, ...noPlayed];
+  grid.innerHTML = sorted.map((p,i) => playerCardHtml(p, i, !inAnyMatch.has(p.id))).join('');
 }
 
-function playerCardHtml(p,i) {
+function playerCardHtml(p, i, pending=false) {
   const avg    = computeRating(p.id) ?? 0;
   const gkavg  = computeGKRating(p.id) ?? 0;
   const pj     = computePartidos(p.id);
@@ -2579,7 +2577,8 @@ function playerCardHtml(p,i) {
   // Crown baseline is at y=18 = 4.3% of card height.
   // Photo starts at 5% to clear the crown, giving photo height 55% (5%→60%).
 
-  return `<div class="player-card" onclick="openPlayerDetail('${p.id}')" style="background:none;border:none;padding:0;">
+  return `<div class="player-card" onclick="openPlayerDetail('${p.id}')" style="background:none;border:none;padding:0;position:relative;">
+  ${pending ? `<div style="position:absolute;top:6px;right:6px;z-index:10;background:rgba(0,0,0,0.75);border:1px solid rgba(255,255,255,0.2);border-radius:6px;padding:2px 7px;font-size:9px;font-weight:700;color:#94a3b8;letter-spacing:1px;text-transform:uppercase;">Sin debut</div>` : ''}
   <div style="
       position:relative;
       border-radius:14px;
