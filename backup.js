@@ -9,10 +9,11 @@ const fs    = require('fs');
 const { execSync } = require('child_process');
 
 // firebase-tools instalado globalmente
-const FIREBASE_CLI = 'C:\\Users\\Lenovo\\AppData\\Roaming\\npm\\firebase.cmd';
-const PROJECT      = 'pachanguitas-fc';
-const DB_PATH      = '/pfcv2';
-const DB_INSTANCE  = 'pachanguitas-fc-default-rtdb';
+const FIREBASE_CLI  = 'C:\\Users\\Lenovo\\AppData\\Roaming\\npm\\firebase.cmd';
+const PROJECT       = 'pachanguitas-fc';
+const DB_PATH       = '/pfcv2';
+const DB_INSTANCE   = 'pachanguitas-fc-default-rtdb';
+const LOCAL_BACKUP  = 'C:\\Users\\Lenovo\\OneDrive\\Documentos\\Pachanguitas FC\\Backup';
 
 async function main() {
   const date = new Date().toISOString().split('T')[0];
@@ -21,8 +22,9 @@ async function main() {
 
   console.log(`\n📦 Backup Pachanguitas FC — ${date}`);
 
-  // 1. Crear carpeta si no existe
-  if (!fs.existsSync(backupDir)) fs.mkdirSync(backupDir);
+  // 1. Crear carpetas si no existen
+  if (!fs.existsSync(backupDir))  fs.mkdirSync(backupDir);
+  if (!fs.existsSync(LOCAL_BACKUP)) fs.mkdirSync(LOCAL_BACKUP, { recursive: true });
 
   // 2. Descargar datos via firebase CLI
   console.log('⬇️  Descargando datos de Firebase...');
@@ -47,6 +49,11 @@ async function main() {
   const matches   = Object.keys(data?.matches  || {}).length;
   const sizekb    = (fs.statSync(backupFile).size / 1024).toFixed(1);
   console.log(`✅ Guardado: backups/backup-${date}.json (${sizekb} KB) — ${players} jugadores, ${matches} partidos`);
+
+  // Copia también a carpeta local OneDrive
+  const localFile = path.join(LOCAL_BACKUP, `backup-${date}.json`);
+  fs.copyFileSync(backupFile, localFile);
+  console.log(`✅ Copia local: ${localFile}`);
 
   // 4. Mantener solo los últimos 30 backups
   const allBackups = fs.readdirSync(backupDir)
