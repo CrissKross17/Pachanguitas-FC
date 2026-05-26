@@ -5185,10 +5185,11 @@ function confirmDeleteMatch(){
         }
       });
     }
-    // Remove players who have never played in any other match
+    // Remove only random/placeholder players who have never played in any other match
+    // NEVER delete fixed players (isRandom !== true), even if they have no match history
     const remainingMatches = S.matches.filter(mx => mx.id !== pendingDeleteMatchId);
     const playersInOtherMatches = new Set(remainingMatches.flatMap(mx => mx.players||[]));
-    S.players = S.players.filter(p => playersInOtherMatches.has(p.id));
+    S.players = S.players.filter(p => !p.isRandom || playersInOtherMatches.has(p.id));
   }
   S.matches = S.matches.filter(mx=>mx.id!==pendingDeleteMatchId);
   // Recompute goals from scratch from remaining done matches (avoids delta drift)
