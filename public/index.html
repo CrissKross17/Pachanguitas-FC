@@ -538,8 +538,9 @@ input:focus,select:focus{border-color:var(--green);}
     window._authSignOut = () => signOut(auth);
     window._currentUser = () => auth.currentUser;
 
-    // ── PREVIEW BYPASS (?preview=1 en la URL salta el login) ─────
-    const _isPreview = new URLSearchParams(location.search).has('preview');
+    // ── PREVIEW BYPASS (dominio PRE o ?preview=1 salta el login) ────
+    const _isPreview = new URLSearchParams(location.search).has('preview')
+                    || location.hostname === 'pachanguitas-fc-pre.web.app';
     if (_isPreview) {
       // Sign in anonymously so Firebase Rules (auth != null) allow reads
       signInAnonymously(auth).catch(e => console.warn('Preview anon auth:', e));
