@@ -1,5 +1,18 @@
 {
   "projects": {
     "default": "pachanguitas-fc"
-  }
+  },
+  "targets": {
+    "pachanguitas-fc": {
+      "hosting": {
+        "pro": [
+          "pachanguitas-fc"
+        ],
+        "pre": [
+          "pachanguitas-fc-pre"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }

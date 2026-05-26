@@ -1,4 +1,9 @@
 {
+  "scripts": {
+    "deploy": "firebase deploy --only hosting:pro",
+    "deploy:pre": "firebase deploy --only hosting:pre",
+    "deploy:all": "firebase deploy --only hosting"
+  },
   "devDependencies": {
     "sharp": "^0.34.5"
   }
