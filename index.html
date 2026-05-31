@@ -515,7 +515,7 @@ input:focus,select:focus{border-color:var(--green);}
   <!-- Firebase -->
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-    import { getDatabase, ref, set, onValue } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
+    import { getDatabase, ref, set, onValue, get } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
     import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut, signInAnonymously } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 
     const firebaseConfig = {
@@ -581,19 +581,28 @@ input:focus,select:focus{border-color:var(--green);}
         }
         const menuName = document.getElementById('user-menu-name');
         if (menuName) menuName.textContent = user.displayName || user.email;
-        // ¿Quién eres? — poll hasta que S.players esté cargado (máx 10s)
+        // ¿Quién eres? — forzar lectura activa de Firebase para no depender
+        // de que onValue vuelva a disparar (no lo hace si los datos no cambiaron)
         window._pendingWhoCheck = user;
-        (function poll(n) {
-          if (window._pendingWhoCheck !== user) return;
-          if (S.players && S.players.length > 0 && typeof window.checkWhoAreYou === 'function') {
-            window._pendingWhoCheck = null;
-            window.checkWhoAreYou(user);
-          } else if (n > 0) {
-            setTimeout(() => poll(n - 1), 500);
+        get(ref(db, 'pfcv2')).then(snapshot => {
+          if (window._pendingWhoCheck !== user) return; // ya gestionado
+          window._pendingWhoCheck = null;
+          const data = snapshot.val();
+          if (data && data.players) {
+            // Actualizar S con datos frescos si estaba vacío
+            if (!S.players || S.players.length === 0) {
+              S.players = data.players || [];
+              S.matches = data.matches || [];
+              S.settings = data.settings || S.settings;
+              renderAll();
+            }
           }
-          // Si n===0 y aún no hay datos, se rendirá silenciosamente
-          // El safety net de onValue cubrirá el caso si los datos llegan después
-        })(20);
+          if (typeof window.checkWhoAreYou === 'function') window.checkWhoAreYou(user);
+        }).catch(() => {
+          // Si falla el get, intentar con lo que ya está en S
+          window._pendingWhoCheck = null;
+          if (typeof window.checkWhoAreYou === 'function') window.checkWhoAreYou(user);
+        });
       } else {
         const splash = document.getElementById('splash');
         if (splash && splash.parentNode) splash.remove();
