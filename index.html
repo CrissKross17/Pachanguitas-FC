@@ -582,12 +582,20 @@ input:focus,select:focus{border-color:var(--green);}
         const menuName = document.getElementById('user-menu-name');
         if (menuName) menuName.textContent = user.displayName || user.email;
         // ¿Quién eres? — si los datos ya están en S, resolver ahora mismo.
-        // Si no, marcar como pendiente para que onValue lo resuelva cuando lleguen.
+        // Si no, mostrar overlay de carga y marcar pendiente para que onValue lo resuelva.
         if (S.players && S.players.length > 0 && typeof window.checkWhoAreYou === 'function') {
           const alreadyHasCard = S.players.some(p => p.uid === user.uid);
           if (!alreadyHasCard) window.checkWhoAreYou(user);
         } else {
           window._pendingWhoCheck = user;
+          // Mostrar overlay mientras llegan los datos para evitar pantalla vacía
+          if (!document.getElementById('auth-data-loading')) {
+            const ov = document.createElement('div');
+            ov.id = 'auth-data-loading';
+            ov.style.cssText = 'position:fixed;inset:0;background:#080c08;z-index:9998;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;';
+            ov.innerHTML = '<div style="font-size:56px;animation:splashBounce .8s infinite alternate;">⚽</div><div style="font-family:\'Barlow Condensed\',sans-serif;font-size:18px;font-weight:700;color:#4ade80;letter-spacing:2px;">CARGANDO...</div>';
+            document.body.appendChild(ov);
+          }
         }
       } else {
         const splash = document.getElementById('splash');
@@ -642,9 +650,11 @@ input:focus,select:focus{border-color:var(--green);}
           }
         } catch(e) {}
       }
-      // Hide splash screen once Firebase data loads
+      // Hide splash + loading overlay once Firebase data loads
       const splash = document.getElementById('splash');
       if (splash && splash.parentNode) { splash.style.opacity='0'; setTimeout(()=>{if(splash.parentNode)splash.remove();},500); }
+      const authDataLoading = document.getElementById('auth-data-loading');
+      if (authDataLoading) authDataLoading.remove();
       // ¿Quién eres? — se resuelve aquí, cuando los datos ya están en S.players
       // Cubre tanto el login por popup (pendingWhoCheck) como recargas (authUser sin carta)
       const whoUser = window._pendingWhoCheck || window._authUser;
