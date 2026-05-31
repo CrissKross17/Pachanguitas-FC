@@ -581,9 +581,14 @@ input:focus,select:focus{border-color:var(--green);}
         }
         const menuName = document.getElementById('user-menu-name');
         if (menuName) menuName.textContent = user.displayName || user.email;
-        // ¿Quién eres? — se marca como pendiente y se resuelve en onValue
-        // cuando los datos ya estén cargados (evita race condition popup→datos)
-        window._pendingWhoCheck = user;
+        // ¿Quién eres? — si los datos ya están en S, resolver ahora mismo.
+        // Si no, marcar como pendiente para que onValue lo resuelva cuando lleguen.
+        if (S.players && S.players.length > 0 && typeof window.checkWhoAreYou === 'function') {
+          const alreadyHasCard = S.players.some(p => p.uid === user.uid);
+          if (!alreadyHasCard) window.checkWhoAreYou(user);
+        } else {
+          window._pendingWhoCheck = user;
+        }
       } else {
         const splash = document.getElementById('splash');
         if (splash && splash.parentNode) splash.remove();
