@@ -699,6 +699,12 @@ input:focus,select:focus{border-color:var(--green);}
       <div style="font-size:13px;color:#4a7a4a;margin-top:6px;">Primera vez que entras — elige cómo registrarte</div>
     </div>
     <div id="who-player-list" style="display:flex;flex-direction:column;gap:10px;max-height:60vh;overflow-y:auto;"></div>
+    <div style="margin-top:20px;text-align:center;border-top:1px solid #1e3a1e;padding-top:16px;">
+      <button onclick="window._authSignOut().then(()=>{document.getElementById('who-modal').style.display='none';})"
+        style="background:none;border:none;color:#4a7a4a;font-size:13px;cursor:pointer;text-decoration:underline;font-family:inherit;">
+        ↩ Cerrar sesión y usar otra cuenta
+      </button>
+    </div>
   </div>
 </div>
 
