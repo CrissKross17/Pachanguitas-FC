@@ -581,27 +581,15 @@ input:focus,select:focus{border-color:var(--green);}
         }
         const menuName = document.getElementById('user-menu-name');
         if (menuName) menuName.textContent = user.displayName || user.email;
-        // ¿Quién eres? — poll hasta que S.players esté cargado
-        window._pendingAuthUser = user;
-        (function poll(n) {
-          if (window._pendingAuthUser !== user) return; // ya gestionado
-          if (S.players && S.players.length > 0) {
-            window._pendingAuthUser = null;
-            // Pequeño delay para que la pantalla de login termine de ocultarse
-            // antes de mostrar el modal de identidad
-            setTimeout(() => {
-              if (typeof window.checkWhoAreYou === 'function') window.checkWhoAreYou(user);
-            }, 600);
-          } else if (n > 0) {
-            setTimeout(() => poll(n - 1), 300);
-          }
-        })(20); // hasta 6 segundos de espera
+        // ¿Quién eres? — se marca como pendiente y se resuelve en onValue
+        // cuando los datos ya estén cargados (evita race condition popup→datos)
+        window._pendingWhoCheck = user;
       } else {
         const splash = document.getElementById('splash');
         if (splash && splash.parentNode) splash.remove();
         if (authScreen) authScreen.style.display = 'flex';
         if (appRoot)    appRoot.style.display     = 'none';
-        window._pendingAuthUser = null;
+        window._pendingWhoCheck = null;
       }
     });
 
@@ -652,11 +640,17 @@ input:focus,select:focus{border-color:var(--green);}
       // Hide splash screen once Firebase data loads
       const splash = document.getElementById('splash');
       if (splash && splash.parentNode) { splash.style.opacity='0'; setTimeout(()=>{if(splash.parentNode)splash.remove();},500); }
-      // Safety net: si el usuario está logueado pero aún no tiene carta, comprobarlo ahora
-      // Cubre el caso en que el poll de onAuthStateChanged se disparó antes de que llegaran los datos
-      if (window._authUser && typeof window.checkWhoAreYou === 'function') {
-        const alreadyHasCard = S.players.some(p => p.uid === window._authUser.uid);
-        if (!alreadyHasCard) setTimeout(() => window.checkWhoAreYou(window._authUser), 600);
+      // ¿Quién eres? — se resuelve aquí, cuando los datos ya están en S.players
+      // Cubre tanto el login por popup (pendingWhoCheck) como recargas (authUser sin carta)
+      const whoUser = window._pendingWhoCheck || window._authUser;
+      if (whoUser && typeof window.checkWhoAreYou === 'function') {
+        const alreadyHasCard = S.players.some(p => p.uid === whoUser.uid);
+        if (!alreadyHasCard) {
+          window._pendingWhoCheck = null;
+          window.checkWhoAreYou(whoUser);
+        } else {
+          window._pendingWhoCheck = null;
+        }
       }
     });
   </script>
