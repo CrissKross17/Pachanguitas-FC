@@ -4666,13 +4666,13 @@ function voteAdvanceToRatings() {
     // Pre-rellenar campo y portería con los votos anteriores
     Object.entries(prevVote.field || {}).forEach(([pid, val]) => { if (val) setField(pid, val); });
     Object.entries(prevVote.gk    || {}).forEach(([pid, val]) => { if (val) setGK(pid, val); });
-    // Bloquear todos los botones de votación y selects
-    document.querySelectorAll('#vote-rows button, #vote-rows select').forEach(el => {
-      el.disabled = true;
-      el.style.opacity = '0.5';
-      el.style.cursor = 'not-allowed';
-      el.style.pointerEvents = 'none';
-    });
+    // Bloquear todo #vote-rows (incluye divs de tardones/fairplay)
+    const voteRows = document.getElementById('vote-rows');
+    if (voteRows) {
+      voteRows.style.pointerEvents = 'none';
+      voteRows.style.userSelect = 'none';
+      voteRows.style.opacity = '0.7';
+    }
     // Ocultar botón enviar, mostrar solo cerrar
     const submitBtn = document.getElementById('submit-vote-btn');
     if (submitBtn) submitBtn.style.display = 'none';
