@@ -4652,12 +4652,33 @@ function openVoting(mid) {
 }
 
 function voteAdvanceToRatings() {
-  // Save goals value (already in window._voterGoles via adjustGoles)
   const stepGoals = document.getElementById('vote-step-goals');
   const stepRatings = document.getElementById('vote-step-ratings');
   if (stepGoals) stepGoals.style.display = 'none';
   if (stepRatings) stepRatings.style.display = 'block';
   renderVoteRows();
+
+  // Si ya votó: pre-rellenar votos anteriores y poner en solo lectura
+  const m = gm(activeVotingMatchId);
+  const voterId = window._currentVoterId;
+  const prevVote = m?.votes?.[voterId];
+  if (prevVote) {
+    // Pre-rellenar campo y portería con los votos anteriores
+    Object.entries(prevVote.field || {}).forEach(([pid, val]) => { if (val) setField(pid, val); });
+    Object.entries(prevVote.gk    || {}).forEach(([pid, val]) => { if (val) setGK(pid, val); });
+    // Bloquear todos los botones de votación y selects
+    document.querySelectorAll('#vote-rows button, #vote-rows select').forEach(el => {
+      el.disabled = true;
+      el.style.opacity = '0.5';
+      el.style.cursor = 'not-allowed';
+      el.style.pointerEvents = 'none';
+    });
+    // Ocultar botón enviar, mostrar solo cerrar
+    const submitBtn = document.getElementById('submit-vote-btn');
+    if (submitBtn) submitBtn.style.display = 'none';
+    const backBtn = document.querySelector('#vote-step-ratings .btn-secondary');
+    if (backBtn) backBtn.textContent = '← Cerrar';
+  }
 }
 
 function voteBackToGoals() {
