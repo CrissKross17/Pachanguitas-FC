@@ -1,0 +1,44 @@
+{
+  "rules": {
+    "pfcv2": {
+      ".read": "auth != null",
+
+      "matches": {
+        ".write": "auth != null"
+      },
+
+      "players": {
+        ".write": "auth != null && root.child('pfc_admins').child(auth.uid).val() === true",
+        "$idx": {
+          ".write": "auth != null && (root.child('pfc_admins').child(auth.uid).val() === true || data.child('uid').val() === auth.uid || !data.exists())",
+          "uid": {
+            ".write": "auth != null && !data.exists() && newData.val() === auth.uid"
+          }
+        }
+      },
+
+      "settings": {
+        ".write": "auth != null && root.child('pfc_admins').child(auth.uid).val() === true"
+      },
+      "seasons": {
+        ".write": "auth != null && root.child('pfc_admins').child(auth.uid).val() === true"
+      },
+      "dashboardOrder": {
+        ".write": "auth != null && root.child('pfc_admins').child(auth.uid).val() === true"
+      }
+    },
+
+    "pfc_admins": {
+      ".read": "auth != null",
+      ".write": "auth != null && root.child('pfc_admins').child(auth.uid).val() === true",
+      "$uid": {
+        ".write": "auth != null && auth.uid === $uid && newData.val() === true && !root.child('pfc_admins').exists()"
+      }
+    },
+
+    "pfc_errors": {
+      ".read": "auth != null",
+      ".write": "auth != null"
+    }
+  }
+}
