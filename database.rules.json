@@ -39,6 +39,19 @@
     "pfc_errors": {
       ".read": "auth != null",
       ".write": "auth != null"
+    },
+
+    "pfc_tokens": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "auth != null && auth.uid === $uid"
+      }
+    },
+
+    "pfc_push_outbox": {
+      "$key": {
+        ".write": "auth != null && !data.exists()"
+      }
     }
   }
 }

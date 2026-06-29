@@ -6,7 +6,7 @@
 //    segundo plano (stale-while-revalidate).
 //  - Firebase (datos/auth) no se toca: siempre va directo a la red.
 
-const CACHE = 'pfc-v1';
+const CACHE = 'pfc-v3';
 const PRECACHE = [
   '/',
   '/bg.jpg',
@@ -15,8 +15,8 @@ const PRECACHE = [
   '/cards/card-toty.jpg',
   '/cards/card-neon.jpg',
   '/cards/card-hero.jpg',
-  '/icon-192.png',
-  '/icon-512.png'
+  '/icon-v2-192.png',
+  '/icon-v2-512.png'
 ];
 
 self.addEventListener('install', (e) => {
